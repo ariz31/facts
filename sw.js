@@ -52,7 +52,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  event.respondWith(staleWhileRevalidate(request));
+  event.respondWith(staleWhileRevalidate(event));
 });
 
 async function networkFirst(request, fallbackUrl) {
@@ -66,7 +66,8 @@ async function networkFirst(request, fallbackUrl) {
   }
 }
 
-async function staleWhileRevalidate(request) {
+async function staleWhileRevalidate(event) {
+  const request = event.request;
   const cache = await caches.open(CACHE_NAME);
   const cached = await cache.match(request);
   const networkPromise = fetch(request)
@@ -77,13 +78,9 @@ async function staleWhileRevalidate(request) {
     .catch(() => null);
 
   if (cached) {
-    eventWaitUntilSafe(networkPromise);
+    event.waitUntil(networkPromise);
     return cached;
   }
 
   return (await networkPromise) ?? new Response("Offline", { status: 503, statusText: "Offline" });
-}
-
-function eventWaitUntilSafe(promise) {
-  promise.catch(() => undefined);
 }
