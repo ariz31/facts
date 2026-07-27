@@ -3,12 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#315efb" />
     <meta
       name="description"
-      content="Facts is a card-based learning app for guided, sequential, and random study."
+      content="Facts is an offline-first card-based learning app with customizable card designs."
     />
     <title>Facts — Learn One Card at a Time</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./src/styles.css" />
+    <link rel="stylesheet" href="./src/experience.css" />
   </head>
   <body>
     <header class="topbar">
@@ -20,32 +24,69 @@
         </span>
       </a>
       <div class="topbar-actions">
+        <span id="connection-status" class="connection-status" role="status">Checking…</span>
+        <button id="install-app" class="secondary-button compact-button" type="button" hidden>Install</button>
+        <button id="open-design-studio" class="secondary-button compact-button" type="button">Customize cards</button>
         <button id="theme-toggle" class="icon-button" type="button" aria-label="Toggle theme">◐</button>
       </div>
     </header>
 
     <main class="app-shell">
-      <aside class="sidebar" aria-label="Learning controls">
+      <section id="journey-view" class="journey-view" aria-live="polite">
+        <div class="journey-shell">
+          <header class="journey-header">
+            <div>
+              <span class="eyebrow">Your learning journey</span>
+              <h1 id="journey-title">Choose a topic</h1>
+              <p id="journey-description">Pick what you want to learn. Each topic is organized as a connected sequence of cards.</p>
+            </div>
+            <div class="journey-progress" aria-label="Journey progress">
+              <span data-journey-dot="topics" class="is-active">1</span>
+              <i></i>
+              <span data-journey-dot="paths">2</span>
+              <i></i>
+              <span data-journey-dot="ready">3</span>
+            </div>
+          </header>
+
+          <section id="journey-topics" class="journey-step">
+            <div id="deck-grid" class="deck-grid"></div>
+          </section>
+
+          <section id="journey-paths" class="journey-step" hidden>
+            <button id="back-to-topics" class="journey-back" type="button">← All topics</button>
+            <div id="selected-deck-summary" class="selected-deck-summary"></div>
+            <div id="path-grid" class="path-grid"></div>
+          </section>
+
+          <section id="journey-ready" class="journey-step" hidden>
+            <button id="back-to-paths" class="journey-back" type="button">← Learning paths</button>
+            <div class="ready-card">
+              <div id="ready-summary"></div>
+              <div class="ready-options">
+                <span class="field-label">Card order</span>
+                <div class="segmented-control" role="group" aria-label="Card order">
+                  <button type="button" data-journey-study-mode="sequential" class="is-active">Sequential</button>
+                  <button type="button" data-journey-study-mode="random">Random</button>
+                </div>
+                <button id="journey-customize" class="secondary-button" type="button">Customize this deck</button>
+              </div>
+              <button id="start-learning" class="primary-button start-learning" type="button">Start learning</button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <aside class="sidebar" aria-label="Learning controls" hidden>
         <section class="control-section">
           <label for="deck-select">Topic</label>
           <select id="deck-select"></select>
         </section>
-
         <section class="control-section">
           <label for="path-select">Learning path</label>
           <select id="path-select"></select>
           <p id="path-description" class="helper-text"></p>
         </section>
-
-        <section class="control-section">
-          <span class="field-label">Study order</span>
-          <div class="segmented-control" role="group" aria-label="Study order">
-            <button type="button" data-study-mode="sequential" class="is-active">Sequential</button>
-            <button type="button" data-study-mode="random">Random</button>
-          </div>
-          <p class="helper-text">Random mode uses every visible card once before reshuffling.</p>
-        </section>
-
         <section class="control-section">
           <label for="type-filter">Card type</label>
           <select id="type-filter">
@@ -58,20 +99,10 @@
             <option value="checklist">Checklists</option>
           </select>
         </section>
-
         <section class="control-section">
           <label for="search-input">Find cards</label>
           <input id="search-input" type="search" placeholder="Search title, content, or tag" />
         </section>
-
-        <section class="control-section">
-          <span class="field-label">Display</span>
-          <div class="segmented-control" role="group" aria-label="Display mode">
-            <button type="button" data-display-mode="focus" class="is-active">Focus</button>
-            <button type="button" data-display-mode="overview">Overview</button>
-          </div>
-        </section>
-
         <section class="progress-panel" aria-labelledby="progress-heading">
           <div class="progress-heading-row">
             <strong id="progress-heading">Progress</strong>
@@ -86,16 +117,15 @@
         </section>
       </aside>
 
-      <section class="content-area" aria-live="polite">
+      <section id="content-area" class="content-area" aria-live="polite" hidden>
         <div id="deck-header" class="deck-header"></div>
-
         <section id="focus-view" class="focus-view">
           <div id="empty-state" class="empty-state" hidden>
             <h2>No cards found</h2>
-            <p>Change the path, card type, or search text to continue.</p>
+            <p>Return to the journey and choose another path.</p>
           </div>
           <article id="study-card" class="study-card" tabindex="0"></article>
-          <div id="card-actions" class="card-actions">
+          <div id="card-actions" class="card-actions" hidden>
             <button id="previous-card" class="secondary-button" type="button">← Previous</button>
             <div class="learning-actions">
               <button id="mark-review" class="secondary-button" type="button">Needs review</button>
@@ -103,14 +133,85 @@
             </div>
             <button id="next-card" class="secondary-button" type="button">Next →</button>
           </div>
-          <p class="keyboard-hint">Keyboard: ← previous · → next · Space reveal · M mastered</p>
         </section>
-
         <section id="overview-view" class="overview-view" hidden>
           <div id="card-grid" class="card-grid"></div>
         </section>
       </section>
     </main>
+
+    <dialog id="design-studio" class="design-dialog" aria-labelledby="design-title">
+      <form method="dialog" class="design-dialog-shell">
+        <header class="design-dialog-header">
+          <div>
+            <span class="eyebrow">Per-topic appearance</span>
+            <h2 id="design-title">Card Design Studio</h2>
+            <p>Customize the active topic. Settings and uploaded images remain available offline.</p>
+          </div>
+          <button class="icon-button" value="close" aria-label="Close card design studio">×</button>
+        </header>
+
+        <div class="design-dialog-body">
+          <section class="design-preview-panel">
+            <div id="design-preview" class="design-preview">
+              <span>Concept</span>
+              <strong>Preview your card style</strong>
+              <p>Colors, type, spacing, corners, shadows, and background images update immediately.</p>
+              <button type="button">Reveal answer</button>
+            </div>
+            <p id="design-message" class="design-message" role="status"></p>
+          </section>
+
+          <section class="design-controls" aria-label="Card design controls">
+            <label>
+              Design preset
+              <select id="design-preset">
+                <option value="classic">Classic</option>
+                <option value="minimal">Minimal</option>
+                <option value="editorial">Editorial</option>
+                <option value="notebook">Notebook</option>
+                <option value="neon">Neon</option>
+                <option value="photo">Photo</option>
+              </select>
+            </label>
+
+            <div class="color-controls">
+              <label>Accent <input id="design-accent" type="color" /></label>
+              <label>Background <input id="design-background" type="color" /></label>
+              <label>Text <input id="design-text" type="color" /></label>
+              <label>Muted text <input id="design-muted" type="color" /></label>
+            </div>
+
+            <div class="two-column-controls">
+              <label>Font<select id="design-font"><option value="system">System sans</option><option value="serif">Editorial serif</option><option value="mono">Monospace</option><option value="rounded">Rounded</option></select></label>
+              <label>Content spacing<select id="design-spacing"><option value="compact">Compact</option><option value="comfortable">Comfortable</option><option value="spacious">Spacious</option></select></label>
+              <label>Shadow<select id="design-shadow"><option value="none">None</option><option value="soft">Soft</option><option value="strong">Strong</option></select></label>
+              <label>Image fit<select id="design-image-fit"><option value="cover">Cover</option><option value="contain">Contain</option></select></label>
+              <label>Image position<select id="design-image-position"><option value="center">Center</option><option value="top">Top</option><option value="bottom">Bottom</option><option value="left">Left</option><option value="right">Right</option></select></label>
+              <label class="range-control">Corner radius <output id="radius-output"></output><input id="design-radius" type="range" min="0" max="40" step="1" /></label>
+              <label class="range-control">Image overlay <output id="overlay-output"></output><input id="design-overlay" type="range" min="0" max="85" step="1" /></label>
+              <label class="checkbox-control"><input id="design-image-enabled" type="checkbox" /> Show background image</label>
+            </div>
+
+            <fieldset class="background-controls">
+              <legend>Background image</legend>
+              <label class="file-control">Upload an image<input id="design-image-file" type="file" accept="image/*" /></label>
+              <div class="url-control">
+                <label for="design-image-url">Or import from a URL</label>
+                <div><input id="design-image-url" type="url" placeholder="https://example.com/image.jpg" /><button id="import-image-url" class="secondary-button" type="button">Import</button></div>
+                <p class="helper-text">The image is copied into local offline storage when the source permits it.</p>
+              </div>
+              <button id="remove-background-image" class="text-button danger-text" type="button">Remove background image</button>
+            </fieldset>
+          </section>
+        </div>
+
+        <footer class="design-dialog-footer">
+          <button id="reset-card-design" class="secondary-button" type="button">Reset topic design</button>
+          <button class="primary-button" value="close">Done</button>
+        </footer>
+      </form>
+    </dialog>
 
     <script type="module" src="./src/app.js"></script>
   </body>

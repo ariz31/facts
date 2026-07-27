@@ -1,33 +1,93 @@
 # Facts
 
-Facts is a lightweight card-based learning app. A topic is organized as a deliberate sequence of complementary cards so a learner can move from fundamentals to a practical outcome without reading one long lesson.
+Facts is an offline-first, card-based learning application. Topics are arranged as connected sequences so every card complements the next and moves the learner from foundations toward practical outcomes.
 
-## Included learning decks
+## Included topics
 
-- **Frontend Programming** — web foundations, a guided “Build Your First Web App” path, and modern frontend essentials.
-- **Backend Programming** — server foundations, a guided “Build Your First API” path, and production backend essentials.
+The starter catalog contains **10 topics**, **144 cards**, and **30 guided learning paths**:
 
-The starter data contains **48 cards** across six guided learning paths.
+1. Frontend Programming
+2. Backend Programming
+3. Data Science
+4. Statistics
+5. Python Programming
+6. Databases & SQL
+7. Machine Learning
+8. Cybersecurity Fundamentals
+9. Cloud & DevOps
+10. Git & GitHub
 
-## Learning modes
+## Learning journey
 
-- **Sequential** — follows the author-defined `sequence` so each card builds on the previous card.
-- **Random** — shuffles the visible set without repeating a card until the set has been exhausted.
-- **Focus display** — presents one large interactive card at a time.
-- **Overview display** — presents the filtered deck as a browsable card grid.
-- **Card-type filtering** — concepts, facts, questions, code, steps, and checklists.
-- **Learning-path filtering** — study the complete topic or one guided outcome.
-- **Progress tracking** — mark cards as mastered or needing review; progress is saved in local storage.
+The application uses a focused three-step journey:
+
+1. Choose a topic.
+2. Choose a complete topic or a guided learning path.
+3. Choose sequential or random order, customize the deck, and start learning.
+
+Once learning starts, the interface becomes a distraction-free full-screen card reader.
+
+### Reader gestures
+
+- Swipe left or tap the right edge for the next card.
+- Swipe right or tap the left edge for the previous card.
+- Tap the center to reveal or hide non-question answers.
+- Swipe upward to mark a card mastered.
+- Swipe downward to mark a card for review.
+- Use the subtle progress controls inside the card when preferred.
+- Keyboard: left/right arrows, Space to reveal, `M` for mastered, `R` for review, and Escape to exit.
+
+## Card design studio
+
+Each topic can have its own visual design. Available controls include:
+
+- Classic, minimal, editorial, notebook, neon, and photo presets;
+- accent, background, text, and muted-text colors;
+- system, serif, monospace, and rounded typography;
+- compact, comfortable, and spacious content density;
+- corner radius and shadow strength;
+- uploaded background images;
+- images imported from compatible URLs;
+- image fit, position, visibility, and overlay strength.
+
+Design settings are saved locally per topic. Uploaded or imported images are copied into IndexedDB so they remain available offline.
+
+## Offline-first PWA
+
+Facts includes:
+
+- a web app manifest;
+- an installable application icon;
+- a service worker;
+- pre-caching of the application shell;
+- pre-caching of all 10 learning decks;
+- stale-while-revalidate asset updates;
+- network-first navigation fallback;
+- local progress and design persistence;
+- IndexedDB storage for card background images.
+
+After the first successful visit, the application and every included topic can be opened without a network connection.
+
+## Card types
+
+- Concepts
+- Facts and statements
+- Multiple-choice questions
+- Code examples
+- Step-by-step procedures
+- Checklists
 
 ## Run locally
 
-No build step or third-party package is required for the application.
+No build step or third-party runtime package is required.
 
 ```bash
 python -m http.server 8000
 ```
 
 Open `http://localhost:8000`.
+
+Service workers require `localhost` or HTTPS.
 
 ## Validate the repository
 
@@ -37,17 +97,16 @@ Node.js 20 or newer is recommended.
 npm run check
 ```
 
-The checks validate every JSON deck and run unit tests for filtering, sequencing, randomization, navigation, and progress calculations.
+The check command validates JavaScript syntax, the 10-topic deck catalog, every card and path relationship, and the learning and design unit tests.
 
 ## Data model
 
-Decks live in `data/*.json` and contain:
+`data/decks.json` is the single catalog of topic files. Each `data/*.json` topic contains:
 
 - deck metadata;
-- guided paths and their ordered card ids;
-- cards with a unique id and numeric sequence;
-- a supported card type;
-- prompt, answer content, tags, difficulty, and path membership;
-- type-specific fields for questions, code samples, steps, or checklists.
+- guided paths and ordered card ids;
+- cards with unique ids and sequence numbers;
+- card type, title, prompt, tags, difficulty, and path membership;
+- type-specific question, code, steps, or checklist fields.
 
-To add a topic, create another JSON deck using the same schema and add its filename to `DATASETS` in `src/app.js`.
+To add another topic, create a matching JSON deck and add its filename to `data/decks.json`. The service worker reads the same catalog when pre-caching topics for offline use.
