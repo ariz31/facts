@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Facts app icon">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#315efb"/>
+      <stop offset="1" stop-color="#7d4cff"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#g)"/>
+  <path d="M150 112h235v70H230v72h132v69H230v77h-80z" fill="#fff"/>
+  <circle cx="375" cy="383" r="38" fill="#9ef0ff"/>
+</svg>

@@ -1,0 +1,19 @@
+{
+  "name": "Facts Learning Cards",
+  "short_name": "Facts",
+  "description": "Offline-first card-based learning for programming, data, statistics, security, cloud, and more.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f7fb",
+  "theme_color": "#315efb",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "./icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
