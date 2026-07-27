@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Facts is a card-based learning app for guided, sequential, and random study."
+    />
+    <title>Facts — Learn One Card at a Time</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Facts home">
+        <span class="brand-mark" aria-hidden="true">F</span>
+        <span>
+          <strong>Facts</strong>
+          <small>Learn one card at a time</small>
+        </span>
+      </a>
+      <div class="topbar-actions">
+        <button id="theme-toggle" class="icon-button" type="button" aria-label="Toggle theme">◐</button>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <aside class="sidebar" aria-label="Learning controls">
+        <section class="control-section">
+          <label for="deck-select">Topic</label>
+          <select id="deck-select"></select>
+        </section>
+
+        <section class="control-section">
+          <label for="path-select">Learning path</label>
+          <select id="path-select"></select>
+          <p id="path-description" class="helper-text"></p>
+        </section>
+
+        <section class="control-section">
+          <span class="field-label">Study order</span>
+          <div class="segmented-control" role="group" aria-label="Study order">
+            <button type="button" data-study-mode="sequential" class="is-active">Sequential</button>
+            <button type="button" data-study-mode="random">Random</button>
+          </div>
+          <p class="helper-text">Random mode uses every visible card once before reshuffling.</p>
+        </section>
+
+        <section class="control-section">
+          <label for="type-filter">Card type</label>
+          <select id="type-filter">
+            <option value="all">All card types</option>
+            <option value="concept">Concepts</option>
+            <option value="fact">Facts</option>
+            <option value="question">Questions</option>
+            <option value="code">Code</option>
+            <option value="steps">Step-by-step</option>
+            <option value="checklist">Checklists</option>
+          </select>
+        </section>
+
+        <section class="control-section">
+          <label for="search-input">Find cards</label>
+          <input id="search-input" type="search" placeholder="Search title, content, or tag" />
+        </section>
+
+        <section class="control-section">
+          <span class="field-label">Display</span>
+          <div class="segmented-control" role="group" aria-label="Display mode">
+            <button type="button" data-display-mode="focus" class="is-active">Focus</button>
+            <button type="button" data-display-mode="overview">Overview</button>
+          </div>
+        </section>
+
+        <section class="progress-panel" aria-labelledby="progress-heading">
+          <div class="progress-heading-row">
+            <strong id="progress-heading">Progress</strong>
+            <span id="progress-percent">0%</span>
+          </div>
+          <div class="progress-track" aria-hidden="true"><span id="progress-bar"></span></div>
+          <div class="progress-stats">
+            <span><strong id="mastered-count">0</strong> mastered</span>
+            <span><strong id="review-count">0</strong> review</span>
+          </div>
+          <button id="reset-progress" class="text-button" type="button">Reset this topic</button>
+        </section>
+      </aside>
+
+      <section class="content-area" aria-live="polite">
+        <div id="deck-header" class="deck-header"></div>
+
+        <section id="focus-view" class="focus-view">
+          <div id="empty-state" class="empty-state" hidden>
+            <h2>No cards found</h2>
+            <p>Change the path, card type, or search text to continue.</p>
+          </div>
+          <article id="study-card" class="study-card" tabindex="0"></article>
+          <div id="card-actions" class="card-actions">
+            <button id="previous-card" class="secondary-button" type="button">← Previous</button>
+            <div class="learning-actions">
+              <button id="mark-review" class="secondary-button" type="button">Needs review</button>
+              <button id="mark-mastered" class="primary-button" type="button">Mark mastered</button>
+            </div>
+            <button id="next-card" class="secondary-button" type="button">Next →</button>
+          </div>
+          <p class="keyboard-hint">Keyboard: ← previous · → next · Space reveal · M mastered</p>
+        </section>
+
+        <section id="overview-view" class="overview-view" hidden>
+          <div id="card-grid" class="card-grid"></div>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>
