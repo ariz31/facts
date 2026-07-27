@@ -1,0 +1,14 @@
+{
+  "decks": [
+    "frontend-programming",
+    "backend-programming",
+    "data-science",
+    "statistics",
+    "python-programming",
+    "databases-sql",
+    "machine-learning",
+    "cybersecurity",
+    "cloud-devops",
+    "git-github"
+  ]
+}
