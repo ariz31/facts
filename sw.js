@@ -1,10 +1,11 @@
-const CACHE_NAME = "facts-pwa-v2";
+const CACHE_NAME = "facts-pwa-v3";
 const CORE_ASSETS = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./icons/icon.svg",
   "./src/styles.css",
+  "./src/experience.css",
   "./src/app.js",
   "./src/learning-engine.js",
   "./src/card-design.js",
@@ -58,7 +59,7 @@ async function networkFirst(request, fallbackUrl) {
   const cache = await caches.open(CACHE_NAME);
   try {
     const response = await fetch(request);
-    if (response.ok) cache.put(request, response.clone());
+    if (response.ok) await cache.put(request, response.clone());
     return response;
   } catch {
     return (await cache.match(request)) ?? cache.match(fallbackUrl);
@@ -69,11 +70,20 @@ async function staleWhileRevalidate(request) {
   const cache = await caches.open(CACHE_NAME);
   const cached = await cache.match(request);
   const networkPromise = fetch(request)
-    .then((response) => {
-      if (response.ok) cache.put(request, response.clone());
+    .then(async (response) => {
+      if (response.ok) await cache.put(request, response.clone());
       return response;
     })
     .catch(() => null);
 
-  return cached ?? networkPromise ?? new Response("Offline", { status: 503, statusText: "Offline" });
+  if (cached) {
+    eventWaitUntilSafe(networkPromise);
+    return cached;
+  }
+
+  return (await networkPromise) ?? new Response("Offline", { status: 503, statusText: "Offline" });
+}
+
+function eventWaitUntilSafe(promise) {
+  promise.catch(() => undefined);
 }
