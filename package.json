@@ -6,7 +6,7 @@
   "scripts": {
     "test": "node --test",
     "check:data": "node scripts/validate-data.mjs",
-    "check:syntax": "node --check src/app.js && node --check src/learning-engine.js && node --check src/card-design.js && node --check src/deck-schema.js && node --check src/card-render-state.js && node --check src/offline-storage.js && node --check src/topic-expansion.js && node --check src/runtime-data.js && node --check src/ui-enhancements.js && node --check sw.js",
+    "check:syntax": "node --check src/app.js && node --check src/learning-engine.js && node --check src/card-design.js && node --check src/deck-schema.js && node --check src/card-render-state.js && node --check src/guided-content-expansion.js && node --check src/guided-runtime.js && node --check src/offline-storage.js && node --check src/topic-expansion.js && node --check src/runtime-data.js && node --check src/ui-enhancements.js && node --check sw.js",
     "check": "npm run check:syntax && npm run check:data && npm test"
   }
 }
