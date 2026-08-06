@@ -51,6 +51,7 @@ function seedDefaultDesigns() {
 }
 
 function initializeUiEnhancements() {
+  installRuntimeOverrides();
   injectReadyConfiguration();
   enhanceStudioPresets();
   observeStudyCard();
@@ -58,6 +59,32 @@ function initializeUiEnhancements() {
   bindRefreshes();
   setAnimation(read(UI_KEY, { animation: "none" }).animation);
   syncPresetButtons();
+}
+
+function installRuntimeOverrides() {
+  if (document.querySelector("#facts-ui-runtime-overrides")) return;
+  const style = document.createElement("style");
+  style.id = "facts-ui-runtime-overrides";
+  style.textContent = `
+    .gesture-copy { animation: none !important; }
+    .studio-animation-control { margin-top: -4px; }
+    @media (max-width: 760px) {
+      .ai-import-button {
+        display: inline-grid !important;
+        place-items: center;
+        min-width: 42px;
+        width: 42px;
+        padding: 0 !important;
+        font-size: 0 !important;
+      }
+      .ai-import-button::after {
+        content: "AI";
+        font-size: 0.72rem;
+        font-weight: 850;
+      }
+    }
+  `;
+  document.head.append(style);
 }
 
 function setAnimation(value) {
