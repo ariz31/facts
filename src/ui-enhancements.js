@@ -1,3 +1,5 @@
+import { extractCardBackgroundUrl, shouldReuseCardBackground } from "./card-render-state.js";
+
 const APP_KEY = "facts-learning-state-v2";
 const UI_KEY = "facts-ui-preferences-v1";
 const ANIMATIONS = [["none", "None"], ["fade", "Fade"], ["slide", "Slide"], ["zoom", "Gentle zoom"], ["flip", "Soft flip"]];
@@ -84,6 +86,13 @@ function installRuntimeOverrides() {
   style.textContent = `
     .gesture-copy { animation: none !important; }
     .studio-animation-control { margin-top: -4px; }
+    .immersive-card,
+    .immersive-card button,
+    .immersive-card [role="button"],
+    .design-preview,
+    .design-preview button {
+      -webkit-tap-highlight-color: transparent !important;
+    }
     @media (max-width: 760px) {
       .ai-import-button {
         display: inline-grid !important;
@@ -256,12 +265,25 @@ function observeBackground(element) {
 }
 
 function syncBackground(element) {
-  const value = element.style.getPropertyValue("--card-image").trim();
-  const url = value.match(/^url\(["']?(.*?)["']?\)$/)?.[1];
+  const url = extractCardBackgroundUrl(element.style.getPropertyValue("--card-image"));
+  const previousUrl = element.dataset.cardBackgroundUrl ?? "";
+
+  if (!url) {
+    element.dataset.cardBackgroundUrl = "";
+    element.classList.add("card-background-ready");
+    return;
+  }
+
+  if (shouldReuseCardBackground(previousUrl, url)) {
+    element.classList.add("card-background-ready");
+    return;
+  }
+
+  element.dataset.cardBackgroundUrl = url;
   const generation = (backgroundGenerations.get(element) ?? 0) + 1;
   backgroundGenerations.set(element, generation);
 
-  if (!url || decodedImages.has(url)) {
+  if (decodedImages.has(url)) {
     element.classList.add("card-background-ready");
     return;
   }
@@ -287,8 +309,7 @@ function syncBackground(element) {
 }
 
 function currentBackgroundUrl(element) {
-  const value = element.style.getPropertyValue("--card-image").trim();
-  return value.match(/^url\(["']?(.*?)["']?\)$/)?.[1] ?? "";
+  return extractCardBackgroundUrl(element.style.getPropertyValue("--card-image"));
 }
 
 function waitForImage(image) {
