@@ -1,4 +1,4 @@
-const CACHE_NAME = "facts-pwa-v4";
+const CACHE_NAME = "facts-pwa-v5";
 const CORE_ASSETS = [
   "./",
   "./index.html",
@@ -6,7 +6,11 @@ const CORE_ASSETS = [
   "./icons/icon.svg",
   "./src/styles.css",
   "./src/experience.css",
+  "./src/enhancements.css",
   "./src/app.js",
+  "./src/runtime-data.js",
+  "./src/ui-enhancements.js",
+  "./src/topic-expansion.js",
   "./src/learning-engine.js",
   "./src/card-design.js",
   "./src/offline-storage.js",
