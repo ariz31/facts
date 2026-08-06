@@ -23,6 +23,19 @@ export const CARD_DESIGN_PRESETS = Object.freeze({
   photo: { accent: "#ffffff", background: "#172033", text: "#ffffff", muted: "#e2e8f0", font: "system", radius: 28, spacing: "spacious", shadow: "strong", imageOverlay: 48 },
 });
 
+export const DEFAULT_CARD_PRESETS_BY_DECK = Object.freeze({
+  "frontend-programming": "notebook",
+  "backend-programming": "minimal",
+  "data-science": "editorial",
+  statistics: "classic",
+  "python-programming": "notebook",
+  "databases-sql": "minimal",
+  "machine-learning": "classic",
+  cybersecurity: "neon",
+  "cloud-devops": "minimal",
+  "git-github": "editorial",
+});
+
 const ALLOWED_FONTS = new Set(["system", "serif", "mono", "rounded"]);
 const ALLOWED_SPACING = new Set(["compact", "comfortable", "spacious"]);
 const ALLOWED_SHADOWS = new Set(["none", "soft", "strong"]);
@@ -30,12 +43,13 @@ const ALLOWED_POSITIONS = new Set(["center", "top", "bottom", "left", "right"]);
 const ALLOWED_FITS = new Set(["cover", "contain"]);
 
 export function normalizeCardDesign(design = {}) {
-  const selectedPreset = CARD_DESIGN_PRESETS[design.preset] ? design.preset : DEFAULT_CARD_DESIGN.preset;
-  const displayPreset = design.preset === "custom" ? "custom" : selectedPreset;
+  const source = design && typeof design === "object" && !Array.isArray(design) ? design : {};
+  const selectedPreset = CARD_DESIGN_PRESETS[source.preset] ? source.preset : DEFAULT_CARD_DESIGN.preset;
+  const displayPreset = source.preset === "custom" ? "custom" : selectedPreset;
   const merged = {
     ...DEFAULT_CARD_DESIGN,
     ...CARD_DESIGN_PRESETS[selectedPreset],
-    ...design,
+    ...source,
     preset: displayPreset,
   };
 
@@ -58,7 +72,12 @@ export function normalizeCardDesign(design = {}) {
 
 export function applyPreset(currentDesign, presetName) {
   if (!CARD_DESIGN_PRESETS[presetName]) return normalizeCardDesign(currentDesign);
-  return normalizeCardDesign({ ...currentDesign, ...CARD_DESIGN_PRESETS[presetName], preset: presetName });
+  return normalizeCardDesign({ ...normalizeCardDesign(currentDesign), ...CARD_DESIGN_PRESETS[presetName], preset: presetName });
+}
+
+export function defaultCardDesignForDeck(deckId) {
+  const preset = DEFAULT_CARD_PRESETS_BY_DECK[deckId] ?? DEFAULT_CARD_DESIGN.preset;
+  return applyPreset(DEFAULT_CARD_DESIGN, preset);
 }
 
 export function designToCssVariables(design, imageUrl = "") {
