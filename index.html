@@ -4,8 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#f3f5f8" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0f141c" media="(prefers-color-scheme: dark)" />
+    <meta id="theme-color" name="theme-color" content="#f3f5f8" />
     <meta
       name="description"
       content="Facts is an offline-first card-based learning app with customizable card designs."
@@ -13,15 +12,35 @@
     <title>Facts — Learn One Card at a Time</title>
     <script>
       (() => {
-        let preference = "system";
-        try {
-          preference = JSON.parse(localStorage.getItem("facts-learning-state-v2"))?.theme ?? "system";
-        } catch {
-          preference = "system";
-        }
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        document.documentElement.dataset.theme =
-          preference === "system" ? (prefersDark ? "dark" : "light") : preference;
+        const media = window.matchMedia("(prefers-color-scheme: dark)");
+        const themeColor = document.querySelector("#theme-color");
+
+        const readPreference = () => {
+          try {
+            return JSON.parse(localStorage.getItem("facts-learning-state-v2"))?.theme ?? "system";
+          } catch {
+            return "system";
+          }
+        };
+
+        const applyResolvedTheme = () => {
+          const preference = readPreference();
+          document.documentElement.dataset.theme =
+            preference === "system" ? (media.matches ? "dark" : "light") : preference;
+        };
+
+        const syncBrowserColor = () => {
+          themeColor.content =
+            document.documentElement.dataset.theme === "dark" ? "#0f141c" : "#f3f5f8";
+        };
+
+        applyResolvedTheme();
+        syncBrowserColor();
+        media.addEventListener("change", applyResolvedTheme);
+        new MutationObserver(syncBrowserColor).observe(document.documentElement, {
+          attributes: true,
+          attributeFilter: ["data-theme"],
+        });
       })();
     </script>
     <link rel="manifest" href="./manifest.webmanifest" />
