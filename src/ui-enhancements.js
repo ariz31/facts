@@ -22,27 +22,43 @@ const DEFAULTS = {
   "git-github": "editorial",
 };
 
+let animationPreference = normalizeAnimation(read(UI_KEY, {}).animation);
+const transitionTimers = new WeakMap();
+const backgroundGenerations = new WeakMap();
+const decodedImages = new Set();
+
 seedDefaultDesigns();
-setTimeout(initializeUiEnhancements, 0);
+whenDocumentReady(initializeUiEnhancements);
 
 function read(key, fallback) {
   try {
-    return JSON.parse(localStorage.getItem(key)) ?? fallback;
+    const parsed = JSON.parse(localStorage.getItem(key));
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : fallback;
   } catch {
     return fallback;
   }
 }
 
 function write(key, value) {
-  localStorage.setItem(key, JSON.stringify(value));
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function whenDocumentReady(callback) {
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", callback, { once: true });
+  else queueMicrotask(callback);
 }
 
 function seedDefaultDesigns() {
   const state = read(APP_KEY, {});
-  state.cardDesigns ??= {};
+  if (!state.cardDesigns || typeof state.cardDesigns !== "object" || Array.isArray(state.cardDesigns)) state.cardDesigns = {};
   let changed = false;
   for (const [deckId, preset] of Object.entries(DEFAULTS)) {
-    if (!state.cardDesigns[deckId]) {
+    if (!state.cardDesigns[deckId] || typeof state.cardDesigns[deckId] !== "object") {
       state.cardDesigns[deckId] = { preset };
       changed = true;
     }
@@ -57,7 +73,7 @@ function initializeUiEnhancements() {
   observeStudyCard();
   observeBackground(document.querySelector("#design-preview"));
   bindRefreshes();
-  setAnimation(read(UI_KEY, { animation: "none" }).animation);
+  setAnimation(animationPreference, { persist: false });
   syncPresetButtons();
 }
 
@@ -87,13 +103,17 @@ function installRuntimeOverrides() {
   document.head.append(style);
 }
 
-function setAnimation(value) {
-  const animation = ANIMATIONS.some(([id]) => id === value) ? value : "none";
-  write(UI_KEY, { ...read(UI_KEY, {}), animation });
+function normalizeAnimation(value) {
+  return ANIMATIONS.some(([id]) => id === value) ? value : "none";
+}
+
+function setAnimation(value, { persist = true } = {}) {
+  animationPreference = normalizeAnimation(value);
+  if (persist) write(UI_KEY, { ...read(UI_KEY, {}), animation: animationPreference });
   document.querySelectorAll("[data-animation-select]").forEach((select) => {
-    select.value = animation;
+    select.value = animationPreference;
   });
-  document.querySelector("#study-card")?.setAttribute("data-card-motion", animation);
+  document.querySelector("#study-card")?.setAttribute("data-card-motion", animationPreference);
 }
 
 function animationOptions() {
@@ -133,7 +153,7 @@ function enhanceStudioPresets() {
   motion.querySelector("select").addEventListener("change", (event) => setAnimation(event.target.value));
 
   renderPresetGallery(gallery);
-  select.addEventListener("change", syncPresetButtons);
+  select.addEventListener("change", () => queueMicrotask(syncPresetButtons));
 }
 
 function renderPresetGallery(container) {
@@ -159,13 +179,13 @@ function selectPreset(preset) {
 
 function currentPreset() {
   const state = read(APP_KEY, {});
-  const deckId = state.activeDeckId ?? "frontend-programming";
+  const deckId = typeof state.activeDeckId === "string" ? state.activeDeckId : "frontend-programming";
   const preset = state.cardDesigns?.[deckId]?.preset;
   return PRESETS[preset] ? preset : DEFAULTS[deckId] ?? "classic";
 }
 
 function syncPresetButtons(forced) {
-  const selected = forced ?? document.querySelector("#design-preset")?.value ?? currentPreset();
+  const selected = forced ?? currentPreset();
   document.querySelectorAll("[data-preset-choice]").forEach((button) => {
     const active = button.dataset.presetChoice === selected;
     button.classList.toggle("is-selected", active);
@@ -175,12 +195,12 @@ function syncPresetButtons(forced) {
 
 function bindRefreshes() {
   document.addEventListener("click", (event) => {
-    if (event.target.closest("[data-deck-id], [data-path-id], #back-to-paths, #back-to-topics")) setTimeout(syncPresetButtons, 0);
-    if (event.target.closest("#open-design-studio, #journey-customize")) setTimeout(() => {
+    if (event.target.closest("[data-deck-id], [data-path-id], #back-to-paths, #back-to-topics")) queueMicrotask(syncPresetButtons);
+    if (event.target.closest("#open-design-studio, #journey-customize")) queueMicrotask(() => {
       renderPresetGallery(document.querySelector('[data-preset-gallery="studio"]'));
-      setAnimation(read(UI_KEY, { animation: "none" }).animation);
+      setAnimation(animationPreference, { persist: false });
       syncPresetButtons();
-    }, 0);
+    });
   });
 }
 
@@ -189,31 +209,46 @@ function observeStudyCard() {
   if (!card) return;
   let previousPosition = "";
   let previousIndex = 0;
-  card.dataset.cardMotion = read(UI_KEY, { animation: "none" }).animation;
+  let previousTotal = 0;
+  card.dataset.cardMotion = animationPreference;
+
   new MutationObserver(() => {
     syncBackground(card);
     const position = card.querySelector(".card-position")?.textContent?.trim() ?? "";
     if (!position || position === previousPosition) return;
-    const index = Number(position.split("/")[0]?.trim()) || 0;
-    if (previousPosition) animateCard(card, index >= previousIndex ? "next" : "previous");
+    const [indexText, totalText] = position.split("/");
+    const index = Number(indexText?.trim()) || 0;
+    const total = Number(totalText?.trim()) || 0;
+    if (previousPosition) animateCard(card, navigationDirection(previousIndex, previousTotal, index, total));
     previousPosition = position;
     previousIndex = index;
+    previousTotal = total;
   }).observe(card, { childList: true, subtree: true, attributes: true, attributeFilter: ["style"] });
   syncBackground(card);
 }
 
-function animateCard(card, direction) {
-  const animation = read(UI_KEY, { animation: "none" }).animation;
-  card.dataset.cardMotion = animation;
-  card.dataset.cardDirection = direction;
-  card.classList.remove("is-card-transitioning");
-  if (animation === "none" || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  void card.offsetWidth;
-  card.classList.add("is-card-transitioning");
-  setTimeout(() => card.classList.remove("is-card-transitioning"), 520);
+function navigationDirection(previousIndex, previousTotal, currentIndex, currentTotal) {
+  const total = currentTotal || previousTotal;
+  if (total > 1 && previousIndex === total && currentIndex === 1) return "next";
+  if (total > 1 && previousIndex === 1 && currentIndex === total) return "previous";
+  return currentIndex >= previousIndex ? "next" : "previous";
 }
 
-const decodedImages = new Set();
+function animateCard(card, direction) {
+  card.dataset.cardMotion = animationPreference;
+  card.dataset.cardDirection = direction;
+  card.classList.remove("is-card-transitioning");
+  const previousTimer = transitionTimers.get(card);
+  if (previousTimer) clearTimeout(previousTimer);
+  if (animationPreference === "none" || globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+  void card.offsetWidth;
+  card.classList.add("is-card-transitioning");
+  transitionTimers.set(card, setTimeout(() => {
+    card.classList.remove("is-card-transitioning");
+    transitionTimers.delete(card);
+  }, 520));
+}
+
 function observeBackground(element) {
   if (!element) return;
   new MutationObserver(() => syncBackground(element)).observe(element, { attributes: true, attributeFilter: ["style"] });
@@ -223,20 +258,43 @@ function observeBackground(element) {
 function syncBackground(element) {
   const value = element.style.getPropertyValue("--card-image").trim();
   const url = value.match(/^url\(["']?(.*?)["']?\)$/)?.[1];
+  const generation = (backgroundGenerations.get(element) ?? 0) + 1;
+  backgroundGenerations.set(element, generation);
+
   if (!url || decodedImages.has(url)) {
     element.classList.add("card-background-ready");
     return;
   }
+
   element.classList.remove("card-background-ready");
   const image = new Image();
   image.decoding = "async";
   image.src = url;
-  const loaded = image.decode ? image.decode() : new Promise((resolve, reject) => {
-    image.onload = resolve;
-    image.onerror = reject;
-  });
+  const loaded = typeof image.decode === "function"
+    ? image.decode().catch(() => waitForImage(image))
+    : waitForImage(image);
+
   loaded.then(() => {
     decodedImages.add(url);
-    if (element.style.getPropertyValue("--card-image").includes(url)) element.classList.add("card-background-ready");
-  }).catch(() => element.classList.add("card-background-ready"));
+    if (backgroundGenerations.get(element) === generation && currentBackgroundUrl(element) === url) {
+      element.classList.add("card-background-ready");
+    }
+  }).catch(() => {
+    if (backgroundGenerations.get(element) === generation && currentBackgroundUrl(element) === url) {
+      element.classList.add("card-background-ready");
+    }
+  });
+}
+
+function currentBackgroundUrl(element) {
+  const value = element.style.getPropertyValue("--card-image").trim();
+  return value.match(/^url\(["']?(.*?)["']?\)$/)?.[1] ?? "";
+}
+
+function waitForImage(image) {
+  if (image.complete) return image.naturalWidth > 0 ? Promise.resolve() : Promise.reject(new Error("Image failed to load."));
+  return new Promise((resolve, reject) => {
+    image.addEventListener("load", resolve, { once: true });
+    image.addEventListener("error", () => reject(new Error("Image failed to load.")), { once: true });
+  });
 }

@@ -7,7 +7,7 @@ import {
 } from "./learning-engine.js";
 import {
   applyPreset,
-  DEFAULT_CARD_DESIGN,
+  defaultCardDesignForDeck,
   designToCssVariables,
   normalizeCardDesign,
 } from "./card-design.js";
@@ -20,6 +20,8 @@ import {
 
 const STORAGE_KEY = "facts-learning-state-v2";
 const GESTURE_DISTANCE = 58;
+const STUDY_MODES = new Set(["sequential", "random"]);
+const THEMES = new Set(["system", "light", "dark"]);
 
 const elements = {
   journeyView: document.querySelector("#journey-view"),
@@ -38,11 +40,8 @@ const elements = {
   journeyCustomize: document.querySelector("#journey-customize"),
   contentArea: document.querySelector("#content-area"),
   deckHeader: document.querySelector("#deck-header"),
-  focusView: document.querySelector("#focus-view"),
-  overviewView: document.querySelector("#overview-view"),
   studyCard: document.querySelector("#study-card"),
   emptyState: document.querySelector("#empty-state"),
-  cardGrid: document.querySelector("#card-grid"),
   connectionStatus: document.querySelector("#connection-status"),
   installApp: document.querySelector("#install-app"),
   openDesignStudio: document.querySelector("#open-design-studio"),
@@ -75,38 +74,67 @@ const elements = {
 const persisted = loadPersistedState();
 const state = {
   decks: [],
-  activeDeckId: persisted.activeDeckId ?? "frontend-programming",
-  activePathId: persisted.activePathId ?? "all",
-  studyMode: persisted.studyMode ?? "sequential",
+  activeDeckId: typeof persisted.activeDeckId === "string" ? persisted.activeDeckId : "frontend-programming",
+  activePathId: typeof persisted.activePathId === "string" ? persisted.activePathId : "all",
+  studyMode: STUDY_MODES.has(persisted.studyMode) ? persisted.studyMode : "sequential",
   orderedCards: [],
   currentIndex: 0,
   revealedCardIds: new Set(),
-  progress: persisted.progress ?? {},
-  cardDesigns: persisted.cardDesigns ?? {},
+  progress: isRecord(persisted.progress) ? persisted.progress : {},
+  cardDesigns: isRecord(persisted.cardDesigns) ? persisted.cardDesigns : {},
   backgroundUrls: {},
-  theme: persisted.theme ?? "system",
+  backgroundLoadTokens: {},
+  theme: THEMES.has(persisted.theme) ? persisted.theme : "system",
   journeyStep: "topics",
   studying: false,
   deferredInstallPrompt: null,
   pointerStart: null,
+  offlineReady: false,
+  dataWarnings: [],
 };
 
 async function loadDecks() {
   const catalogResponse = await fetch("./data/decks.json");
   if (!catalogResponse.ok) throw new Error("Unable to load the topic catalog.");
   const catalog = await catalogResponse.json();
+  if (!Array.isArray(catalog.decks) || !catalog.decks.length) throw new Error("The topic catalog is empty or invalid.");
 
-  state.decks = await Promise.all(
-    catalog.decks.map(async (deckName) => {
-      const response = await fetch(`./data/${deckName}.json`);
-      if (!response.ok) throw new Error(`Unable to load ${deckName}.json`);
-      return response.json();
-    }),
+  const names = [...new Set(catalog.decks.filter((name) => typeof name === "string" && name))];
+  const results = await Promise.allSettled(names.map(async (deckName) => {
+    const response = await fetch(`./data/${encodeURIComponent(deckName)}.json`);
+    if (!response.ok) throw new Error(`${deckName}.json returned status ${response.status}`);
+    const deck = await response.json();
+    if (!isRenderableDeck(deck)) throw new Error(`${deckName}.json is not a renderable deck`);
+    return deck;
+  }));
+
+  state.decks = results
+    .filter((result) => result.status === "fulfilled")
+    .map((result) => result.value)
+    .filter((deck, index, decks) => decks.findIndex((candidate) => candidate.id === deck.id) === index);
+  state.dataWarnings = results
+    .filter((result) => result.status === "rejected")
+    .map((result) => result.reason?.message ?? "A deck could not be loaded.");
+
+  if (!state.decks.length) throw new Error("No learning topics could be loaded.");
+  if (state.dataWarnings.length) console.warn("Some learning decks were skipped.", state.dataWarnings);
+}
+
+function isRenderableDeck(deck) {
+  return Boolean(
+    isRecord(deck)
+    && typeof deck.id === "string"
+    && typeof deck.title === "string"
+    && typeof deck.category === "string"
+    && typeof deck.description === "string"
+    && Array.isArray(deck.cards)
+    && deck.cards.length
+    && Array.isArray(deck.paths),
   );
 }
 
 function activeDeck() {
-  return state.decks.find((deck) => deck.id === state.activeDeckId) ?? state.decks[0];
+  return state.decks.find((deck) => deck.id === state.activeDeckId) ?? state.decks[0] ?? null;
 }
 
 function activePath() {
@@ -119,14 +147,15 @@ function activeCard() {
 }
 
 function progressForDeck(deckId = state.activeDeckId) {
-  return state.progress[deckId] ?? {};
+  return isRecord(state.progress[deckId]) ? state.progress[deckId] : {};
 }
 
 function designForDeck(deckId = state.activeDeckId) {
-  return normalizeCardDesign(state.cardDesigns[deckId] ?? DEFAULT_CARD_DESIGN);
+  return normalizeCardDesign(state.cardDesigns[deckId] ?? defaultCardDesignForDeck(deckId));
 }
 
-function setJourneyStep(step) {
+function setJourneyStep(requestedStep) {
+  const step = ["topics", "paths", "ready"].includes(requestedStep) ? requestedStep : "topics";
   state.journeyStep = step;
   const content = {
     topics: ["Choose a topic", "Pick what you want to learn. Each topic is organized as a connected sequence of cards."],
@@ -139,6 +168,7 @@ function setJourneyStep(step) {
   elements.journeyTopics.hidden = step !== "topics";
   elements.journeyPaths.hidden = step !== "paths";
   elements.journeyReady.hidden = step !== "ready";
+  syncDeckSelection();
 
   const order = ["topics", "paths", "ready"];
   const activeIndex = order.indexOf(step);
@@ -156,45 +186,49 @@ function renderJourney() {
 }
 
 function renderDeckGrid() {
-  elements.deckGrid.innerHTML = state.decks
-    .map((deck) => {
-      const progress = calculateProgress(deck.cards, progressForDeck(deck.id));
-      return `
-        <button class="deck-choice ${deck.id === state.activeDeckId ? "is-selected" : ""}" type="button" data-deck-id="${deck.id}">
-          <span class="deck-choice-category">${escapeHtml(deck.category)}</span>
-          <strong>${escapeHtml(deck.title)}</strong>
-          <p>${escapeHtml(deck.description)}</p>
-          <span class="deck-choice-meta">
-            <span>${deck.cards.length} cards</span>
-            <span>${deck.paths.length} paths</span>
-            <span>${progress.percent}% mastered</span>
-          </span>
-        </button>
-      `;
-    })
-    .join("");
+  elements.deckGrid.innerHTML = state.decks.map((deck) => {
+    const progress = calculateProgress(deck.cards, progressForDeck(deck.id));
+    return `
+      <button class="deck-choice ${deck.id === state.activeDeckId ? "is-selected" : ""}" type="button" data-deck-id="${escapeHtml(deck.id)}">
+        <span class="deck-choice-category">${escapeHtml(deck.category)}</span>
+        <strong>${escapeHtml(deck.title)}</strong>
+        <p>${escapeHtml(deck.description)}</p>
+        <span class="deck-choice-meta">
+          <span>${deck.cards.length} cards</span>
+          <span>${deck.paths.length} paths</span>
+          <span>${progress.percent}% mastered</span>
+        </span>
+      </button>`;
+  }).join("");
 
   elements.deckGrid.querySelectorAll("[data-deck-id]").forEach((button) => {
     button.addEventListener("click", async () => {
+      if (!state.decks.some((deck) => deck.id === button.dataset.deckId)) return;
       state.activeDeckId = button.dataset.deckId;
       state.activePathId = "all";
+      persistState();
+      syncDeckSelection();
       await loadBackgroundForDeck(state.activeDeckId);
       renderPathGrid();
-      persistState();
+      renderReadySummary();
       setJourneyStep("paths");
     });
+  });
+}
+
+function syncDeckSelection() {
+  elements.deckGrid?.querySelectorAll("[data-deck-id]").forEach((button) => {
+    button.classList.toggle("is-selected", button.dataset.deckId === state.activeDeckId);
   });
 }
 
 function renderPathGrid() {
   const deck = activeDeck();
   if (!deck) return;
-
   elements.selectedDeckSummary.innerHTML = `
     <span class="eyebrow">${escapeHtml(deck.category)}</span>
     <h2>${escapeHtml(deck.title)}</h2>
-    <p>${escapeHtml(deck.description)}</p>
-  `;
+    <p>${escapeHtml(deck.description)}</p>`;
 
   const completeChoice = {
     id: "all",
@@ -203,22 +237,19 @@ function renderPathGrid() {
     cardIds: deck.cards.map((card) => card.id),
   };
 
-  elements.pathGrid.innerHTML = [completeChoice, ...deck.paths]
-    .map(
-      (path, index) => `
-        <button class="path-choice" type="button" data-path-id="${path.id}">
-          <span>${String(index + 1).padStart(2, "0")}</span>
-          <strong>${escapeHtml(path.title)}</strong>
-          <p>${escapeHtml(path.description)}</p>
-          <small>${path.cardIds.length} cards</small>
-        </button>
-      `,
-    )
-    .join("");
+  elements.pathGrid.innerHTML = [completeChoice, ...deck.paths].map((path, index) => `
+    <button class="path-choice" type="button" data-path-id="${escapeHtml(path.id)}">
+      <span>${String(index + 1).padStart(2, "0")}</span>
+      <strong>${escapeHtml(path.title)}</strong>
+      <p>${escapeHtml(path.description)}</p>
+      <small>${Array.isArray(path.cardIds) ? path.cardIds.length : 0} cards</small>
+    </button>`).join("");
 
   elements.pathGrid.querySelectorAll("[data-path-id]").forEach((button) => {
     button.addEventListener("click", () => {
-      state.activePathId = button.dataset.pathId;
+      const pathId = button.dataset.pathId;
+      if (pathId !== "all" && !deck.paths.some((path) => path.id === pathId)) return;
+      state.activePathId = pathId;
       persistState();
       renderReadySummary();
       setJourneyStep("ready");
@@ -231,8 +262,8 @@ function renderReadySummary() {
   if (!deck) return;
   const path = activePath();
   const cardCount = path?.cardIds.length ?? deck.cards.length;
-  const estimatedMinutes = Math.max(5, Math.round(deck.estimatedMinutes * (cardCount / deck.cards.length)));
-
+  const ratio = deck.cards.length ? cardCount / deck.cards.length : 1;
+  const estimatedMinutes = Math.max(5, Math.round((Number(deck.estimatedMinutes) || 5) * ratio));
   elements.readySummary.innerHTML = `
     <span class="eyebrow">${escapeHtml(deck.title)}</span>
     <h2>${escapeHtml(path?.title ?? "Complete topic")}</h2>
@@ -241,8 +272,7 @@ function renderReadySummary() {
       <span><strong>${cardCount}</strong> cards</span>
       <span><strong>${estimatedMinutes}</strong> minutes</span>
       <span><strong>${formatMode(state.studyMode)}</strong> order</span>
-    </div>
-  `;
+    </div>`;
 }
 
 function syncJourneyModeButtons() {
@@ -253,33 +283,49 @@ function syncJourneyModeButtons() {
 
 function refreshOrder() {
   const deck = activeDeck();
+  if (!deck) {
+    state.orderedCards = [];
+    state.currentIndex = 0;
+    return;
+  }
   const cards = filterCards(deck.cards, { pathId: state.activePathId });
   state.orderedCards = buildStudyOrder(cards, state.studyMode);
   state.currentIndex = 0;
 }
 
 async function startLearning() {
-  refreshOrder();
-  state.studying = true;
-  state.journeyStep = "ready";
-  document.body.classList.add("is-studying");
-  elements.journeyView.hidden = true;
-  elements.contentArea.hidden = false;
-  elements.deckHeader.hidden = true;
-  await loadBackgroundForDeck(state.activeDeckId);
-  renderFocusCard();
-  persistState();
-  elements.studyCard.focus({ preventScroll: true });
+  if (elements.startLearning.disabled) return;
+  elements.startLearning.disabled = true;
+  try {
+    refreshOrder();
+    if (!state.orderedCards.length) {
+      elements.journeyDescription.textContent = "This path does not contain any available cards.";
+      return;
+    }
+    await loadBackgroundForDeck(state.activeDeckId);
+    state.studying = true;
+    state.journeyStep = "ready";
+    document.body.classList.add("is-studying");
+    elements.journeyView.hidden = true;
+    elements.contentArea.hidden = false;
+    elements.deckHeader.hidden = true;
+    renderFocusCard();
+    persistState();
+    elements.studyCard.focus({ preventScroll: true });
+  } finally {
+    elements.startLearning.disabled = false;
+  }
 }
 
 function exitLearning() {
   state.studying = false;
+  state.pointerStart = null;
   document.body.classList.remove("is-studying");
   elements.contentArea.hidden = true;
   elements.journeyView.hidden = false;
   renderJourney();
   setJourneyStep("ready");
-  window.scrollTo({ top: 0, behavior: "instant" });
+  window.scrollTo({ top: 0, behavior: "auto" });
 }
 
 function renderFocusCard() {
@@ -299,10 +345,7 @@ function renderFocusCard() {
       <span class="card-position">${state.currentIndex + 1} / ${state.orderedCards.length}</span>
     </div>
     <div class="card-heading">
-      <div>
-        <span class="difficulty">${escapeHtml(card.difficulty)}</span>
-        <h2>${escapeHtml(card.title)}</h2>
-      </div>
+      <div><span class="difficulty">${escapeHtml(card.difficulty)}</span><h2>${escapeHtml(card.title)}</h2></div>
       <span class="status-pill">${formatStatus(status)}</span>
     </div>
     <p class="card-prompt">${escapeHtml(card.prompt)}</p>
@@ -313,68 +356,33 @@ function renderFocusCard() {
         <button type="button" data-card-status="mastered" class="${status === "mastered" ? "is-selected" : ""}" aria-label="Mark mastered">✓</button>
       </div>
       <span class="gesture-copy">Tap edges or swipe to move</span>
-    </div>
-  `;
-
+    </div>`;
   applyDesignToElement(elements.studyCard);
   bindCardContentEvents(card);
 }
 
 function renderCardBody(card, revealed) {
   if (card.type === "question") {
-    return `
-      <div class="question-options" role="group" aria-label="Answer choices">
-        ${card.question.options
-          .map(
-            (option, index) =>
-              `<button type="button" data-answer-index="${index}"><span>${String.fromCharCode(65 + index)}</span>${escapeHtml(option)}</button>`,
-          )
-          .join("")}
-      </div>
-      <div class="answer-feedback" hidden></div>
-    `;
+    return `<div class="question-options" role="group" aria-label="Answer choices">${card.question.options.map((option, index) => `<button type="button" data-answer-index="${index}"><span>${String.fromCharCode(65 + index)}</span>${escapeHtml(option)}</button>`).join("")}</div><div class="answer-feedback" hidden></div>`;
   }
-
   if (card.type === "code") {
-    return `
-      <pre class="code-block"><code>${escapeHtml(card.code.snippet)}</code></pre>
-      <button class="reveal-button" type="button" data-reveal-card>${revealed ? "Hide explanation" : "Explain this code"}</button>
-      <div class="card-answer" ${revealed ? "" : "hidden"}>${formatText(card.content)}</div>
-    `;
+    return `<pre class="code-block"><code>${escapeHtml(card.code.snippet)}</code></pre><button class="reveal-button" type="button" data-reveal-card>${revealed ? "Hide explanation" : "Explain this code"}</button><div class="card-answer" ${revealed ? "" : "hidden"}>${formatText(card.content)}</div>`;
   }
-
   if (card.type === "steps") {
-    return `
-      <button class="reveal-button" type="button" data-reveal-card>${revealed ? "Hide steps" : "Show steps"}</button>
-      <ol class="steps-list" ${revealed ? "" : "hidden"}>${card.steps.map((step) => `<li>${escapeHtml(step)}</li>`).join("")}</ol>
-      ${revealed && card.content ? `<div class="card-note">${formatText(card.content)}</div>` : ""}
-    `;
+    return `<button class="reveal-button" type="button" data-reveal-card>${revealed ? "Hide steps" : "Show steps"}</button><ol class="steps-list" ${revealed ? "" : "hidden"}>${card.steps.map((step) => `<li>${escapeHtml(step)}</li>`).join("")}</ol>${revealed && card.content ? `<div class="card-note">${formatText(card.content)}</div>` : ""}`;
   }
-
   if (card.type === "checklist") {
-    return `
-      <button class="reveal-button" type="button" data-reveal-card>${revealed ? "Hide checklist" : "Open checklist"}</button>
-      <ul class="checklist" ${revealed ? "" : "hidden"}>${card.items
-        .map((item) => `<li><span aria-hidden="true">✓</span>${escapeHtml(item)}</li>`)
-        .join("")}</ul>
-      ${revealed && card.content ? `<div class="card-note">${formatText(card.content)}</div>` : ""}
-    `;
+    return `<button class="reveal-button" type="button" data-reveal-card>${revealed ? "Hide checklist" : "Open checklist"}</button><ul class="checklist" ${revealed ? "" : "hidden"}>${card.items.map((item) => `<li><span aria-hidden="true">✓</span>${escapeHtml(item)}</li>`).join("")}</ul>${revealed && card.content ? `<div class="card-note">${formatText(card.content)}</div>` : ""}`;
   }
-
-  return `
-    <button class="reveal-button" type="button" data-reveal-card>${revealed ? "Hide answer" : "Reveal answer"}</button>
-    <div class="card-answer" ${revealed ? "" : "hidden"}>${formatText(card.content)}</div>
-  `;
+  return `<button class="reveal-button" type="button" data-reveal-card>${revealed ? "Hide answer" : "Reveal answer"}</button><div class="card-answer" ${revealed ? "" : "hidden"}>${formatText(card.content)}</div>`;
 }
 
 function bindCardContentEvents(card) {
   elements.studyCard.querySelector("[data-exit-study]")?.addEventListener("click", exitLearning);
   elements.studyCard.querySelector("[data-reveal-card]")?.addEventListener("click", () => toggleReveal(card.id));
-
   elements.studyCard.querySelectorAll("[data-card-status]").forEach((button) => {
     button.addEventListener("click", () => setProgress(card.id, button.dataset.cardStatus));
   });
-
   elements.studyCard.querySelectorAll("[data-answer-index]").forEach((button) => {
     button.addEventListener("click", () => showQuestionFeedback(card, Number(button.dataset.answerIndex)));
   });
@@ -383,27 +391,28 @@ function bindCardContentEvents(card) {
 function showQuestionFeedback(card, selectedIndex) {
   const buttons = [...elements.studyCard.querySelectorAll("[data-answer-index]")];
   const feedback = elements.studyCard.querySelector(".answer-feedback");
+  if (!feedback || !Number.isInteger(selectedIndex)) return;
   const correct = selectedIndex === card.question.answerIndex;
-
   buttons.forEach((button, index) => {
     button.disabled = true;
     if (index === card.question.answerIndex) button.classList.add("is-correct");
     if (index === selectedIndex && !correct) button.classList.add("is-incorrect");
   });
-
   feedback.hidden = false;
   feedback.className = `answer-feedback ${correct ? "is-correct" : "is-incorrect"}`;
   feedback.innerHTML = `<strong>${correct ? "Correct." : "Not quite."}</strong> ${escapeHtml(card.question.explanation)}`;
 }
 
 function toggleReveal(cardId) {
+  if (!cardId) return;
   if (state.revealedCardIds.has(cardId)) state.revealedCardIds.delete(cardId);
   else state.revealedCardIds.add(cardId);
   renderFocusCard();
 }
 
 function setProgress(cardId, status) {
-  state.progress[state.activeDeckId] ??= {};
+  if (!cardId || !["review", "mastered"].includes(status)) return;
+  if (!isRecord(state.progress[state.activeDeckId])) state.progress[state.activeDeckId] = {};
   const current = state.progress[state.activeDeckId][cardId];
   if (current === status) delete state.progress[state.activeDeckId][cardId];
   else state.progress[state.activeDeckId][cardId] = status;
@@ -416,9 +425,7 @@ function goNext() {
   if (state.studyMode === "random" && state.currentIndex === state.orderedCards.length - 1) {
     const previousCardId = activeCard()?.id;
     refreshOrder();
-    if (state.orderedCards.length > 1 && state.orderedCards[0]?.id === previousCardId) {
-      state.orderedCards.push(state.orderedCards.shift());
-    }
+    if (state.orderedCards.length > 1 && state.orderedCards[0]?.id === previousCardId) state.orderedCards.push(state.orderedCards.shift());
   } else {
     state.currentIndex = nextIndex(state.currentIndex, state.orderedCards.length);
   }
@@ -426,58 +433,66 @@ function goNext() {
 }
 
 function goPrevious() {
+  if (!state.orderedCards.length) return;
   state.currentIndex = previousIndex(state.currentIndex, state.orderedCards.length);
   renderFocusCard();
 }
 
 function bindGestures() {
   elements.studyCard.addEventListener("pointerdown", (event) => {
-    if (event.target.closest("button, input, select, textarea, a")) return;
-    state.pointerStart = { x: event.clientX, y: event.clientY, time: Date.now() };
+    if (!event.isPrimary || event.button !== 0 || event.target.closest("button, input, select, textarea, a")) return;
+    state.pointerStart = { pointerId: event.pointerId, x: event.clientX, y: event.clientY, time: Date.now() };
   });
-
   elements.studyCard.addEventListener("pointerup", (event) => {
-    if (!state.pointerStart || event.target.closest("button, input, select, textarea, a")) {
+    if (!state.pointerStart || state.pointerStart.pointerId !== event.pointerId || event.target.closest("button, input, select, textarea, a")) {
       state.pointerStart = null;
       return;
     }
-
     const deltaX = event.clientX - state.pointerStart.x;
     const deltaY = event.clientY - state.pointerStart.y;
     const elapsed = Date.now() - state.pointerStart.time;
     state.pointerStart = null;
-
     if (Math.abs(deltaX) >= GESTURE_DISTANCE && Math.abs(deltaX) > Math.abs(deltaY)) {
       deltaX < 0 ? goNext() : goPrevious();
       return;
     }
-
     if (Math.abs(deltaY) >= GESTURE_DISTANCE && Math.abs(deltaY) > Math.abs(deltaX)) {
       if (activeCard()) setProgress(activeCard().id, deltaY < 0 ? "mastered" : "review");
       return;
     }
-
     if (elapsed > 650 || Math.abs(deltaX) > 10 || Math.abs(deltaY) > 10 || window.getSelection()?.toString()) return;
     const bounds = elements.studyCard.getBoundingClientRect();
-    const relativeX = (event.clientX - bounds.left) / bounds.width;
+    const relativeX = bounds.width ? (event.clientX - bounds.left) / bounds.width : 0.5;
     if (relativeX < 0.28) goPrevious();
     else if (relativeX > 0.72) goNext();
     else if (activeCard()?.type !== "question") toggleReveal(activeCard().id);
   });
+  for (const eventName of ["pointercancel", "lostpointercapture"]) {
+    elements.studyCard.addEventListener(eventName, () => { state.pointerStart = null; });
+  }
 }
 
 async function loadBackgroundForDeck(deckId) {
+  const token = Symbol(deckId);
+  state.backgroundLoadTokens[deckId] = token;
   try {
     const blob = await getCardBackground(deckId);
-    if (state.backgroundUrls[deckId]) URL.revokeObjectURL(state.backgroundUrls[deckId]);
-    state.backgroundUrls[deckId] = blob ? URL.createObjectURL(blob) : "";
+    if (state.backgroundLoadTokens[deckId] !== token) return;
+    const previousUrl = state.backgroundUrls[deckId];
+    const nextUrl = blob ? URL.createObjectURL(blob) : "";
+    state.backgroundUrls[deckId] = nextUrl;
+    if (previousUrl && previousUrl !== nextUrl) URL.revokeObjectURL(previousUrl);
   } catch (error) {
-    console.warn("Unable to load offline card background.", error);
+    if (state.backgroundLoadTokens[deckId] !== token) return;
+    const previousUrl = state.backgroundUrls[deckId];
+    if (previousUrl) URL.revokeObjectURL(previousUrl);
     state.backgroundUrls[deckId] = "";
+    console.warn("Unable to load offline card background.", error);
   }
 }
 
 function applyDesignToElement(element) {
+  if (!element) return;
   const variables = designToCssVariables(designForDeck(), state.backgroundUrls[state.activeDeckId]);
   Object.entries(variables).forEach(([name, value]) => element.style.setProperty(name, value));
 }
@@ -486,7 +501,7 @@ function openDesignStudio() {
   syncDesignControls();
   applyDesignToElement(elements.designPreview);
   elements.designMessage.textContent = `Customizing ${activeDeck()?.title ?? "this topic"}`;
-  elements.designStudio.showModal();
+  if (!elements.designStudio.open) elements.designStudio.showModal();
 }
 
 function syncDesignControls() {
@@ -519,7 +534,6 @@ function updateDesign(patch) {
 function bindDesignStudio() {
   elements.openDesignStudio.addEventListener("click", openDesignStudio);
   elements.journeyCustomize.addEventListener("click", openDesignStudio);
-
   elements.designPreset.addEventListener("change", () => {
     state.cardDesigns[state.activeDeckId] = applyPreset(designForDeck(), elements.designPreset.value);
     persistState();
@@ -539,7 +553,6 @@ function bindDesignStudio() {
     [elements.designImagePosition, "imagePosition", "change"],
   ];
   bindings.forEach(([element, key, eventName]) => element.addEventListener(eventName, () => updateDesign({ [key]: element.value, preset: "custom" })));
-
   elements.designRadius.addEventListener("input", () => updateDesign({ radius: Number(elements.designRadius.value), preset: "custom" }));
   elements.designOverlay.addEventListener("input", () => updateDesign({ imageOverlay: Number(elements.designOverlay.value), preset: "custom" }));
   elements.designImageEnabled.addEventListener("change", () => updateDesign({ imageEnabled: elements.designImageEnabled.checked }));
@@ -547,6 +560,7 @@ function bindDesignStudio() {
   elements.designImageFile.addEventListener("change", async () => {
     const [file] = elements.designImageFile.files;
     if (!file) return;
+    elements.designImageFile.disabled = true;
     try {
       await saveCardBackground(state.activeDeckId, file);
       await loadBackgroundForDeck(state.activeDeckId);
@@ -555,13 +569,15 @@ function bindDesignStudio() {
     } catch (error) {
       elements.designMessage.textContent = error.message;
     } finally {
+      elements.designImageFile.disabled = false;
       elements.designImageFile.value = "";
     }
   });
 
   elements.importImageUrl.addEventListener("click", async () => {
     const url = elements.designImageUrl.value.trim();
-    if (!url) return;
+    if (!url || elements.importImageUrl.disabled) return;
+    elements.importImageUrl.disabled = true;
     elements.designMessage.textContent = "Importing image…";
     try {
       await importBackgroundFromUrl(state.activeDeckId, url);
@@ -571,24 +587,42 @@ function bindDesignStudio() {
       elements.designImageUrl.value = "";
     } catch (error) {
       elements.designMessage.textContent = `Import failed: ${error.message}`;
+    } finally {
+      elements.importImageUrl.disabled = false;
     }
   });
 
   elements.removeBackgroundImage.addEventListener("click", async () => {
-    await deleteCardBackground(state.activeDeckId);
-    await loadBackgroundForDeck(state.activeDeckId);
-    applyDesignToElement(elements.designPreview);
-    elements.designMessage.textContent = "Background image removed.";
+    if (elements.removeBackgroundImage.disabled) return;
+    elements.removeBackgroundImage.disabled = true;
+    try {
+      await deleteCardBackground(state.activeDeckId);
+      await loadBackgroundForDeck(state.activeDeckId);
+      applyDesignToElement(elements.designPreview);
+      elements.designMessage.textContent = "Background image removed.";
+    } catch (error) {
+      elements.designMessage.textContent = `Unable to remove the background: ${error.message}`;
+    } finally {
+      elements.removeBackgroundImage.disabled = false;
+    }
   });
 
   elements.resetCardDesign.addEventListener("click", async () => {
-    delete state.cardDesigns[state.activeDeckId];
-    await deleteCardBackground(state.activeDeckId);
-    await loadBackgroundForDeck(state.activeDeckId);
-    persistState();
-    syncDesignControls();
-    applyDesignToElement(elements.designPreview);
-    elements.designMessage.textContent = "Topic design reset.";
+    if (elements.resetCardDesign.disabled) return;
+    elements.resetCardDesign.disabled = true;
+    try {
+      state.cardDesigns[state.activeDeckId] = defaultCardDesignForDeck(state.activeDeckId);
+      await deleteCardBackground(state.activeDeckId);
+      await loadBackgroundForDeck(state.activeDeckId);
+      persistState();
+      syncDesignControls();
+      applyDesignToElement(elements.designPreview);
+      elements.designMessage.textContent = "Topic design reset to its default preset.";
+    } catch (error) {
+      elements.designMessage.textContent = `Unable to reset the topic design: ${error.message}`;
+    } finally {
+      elements.resetCardDesign.disabled = false;
+    }
   });
 }
 
@@ -596,9 +630,9 @@ function bindJourneyEvents() {
   elements.backToTopics.addEventListener("click", () => setJourneyStep("topics"));
   elements.backToPaths.addEventListener("click", () => setJourneyStep("paths"));
   elements.startLearning.addEventListener("click", startLearning);
-
   document.querySelectorAll("[data-journey-study-mode]").forEach((button) => {
     button.addEventListener("click", () => {
+      if (!STUDY_MODES.has(button.dataset.journeyStudyMode)) return;
       state.studyMode = button.dataset.journeyStudyMode;
       persistState();
       syncJourneyModeButtons();
@@ -609,13 +643,13 @@ function bindJourneyEvents() {
 
 function bindKeyboard() {
   document.addEventListener("keydown", (event) => {
-    if (!state.studying || event.target.closest("button, input, select, textarea")) return;
+    if (!state.studying || event.target.closest?.("button, input, select, textarea")) return;
     if (event.key === "ArrowRight") goNext();
     if (event.key === "ArrowLeft") goPrevious();
     if (event.key === "Escape") exitLearning();
     if (event.key === " ") {
       event.preventDefault();
-      if (activeCard()?.type !== "question") toggleReveal(activeCard().id);
+      if (activeCard()?.type !== "question") toggleReveal(activeCard()?.id);
     }
     if (event.key.toLowerCase() === "m" && activeCard()) setProgress(activeCard().id, "mastered");
     if (event.key.toLowerCase() === "r" && activeCard()) setProgress(activeCard().id, "review");
@@ -631,37 +665,46 @@ function bindTheme() {
 }
 
 function applyTheme() {
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const prefersDark = globalThis.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false;
   document.documentElement.dataset.theme = state.theme === "system" ? (prefersDark ? "dark" : "light") : state.theme;
 }
 
 function updateConnectionStatus() {
-  elements.connectionStatus.textContent = navigator.onLine ? "Online · offline ready" : "Offline";
+  if (!navigator.onLine) elements.connectionStatus.textContent = "Offline";
+  else elements.connectionStatus.textContent = state.offlineReady ? "Online · offline ready" : "Online";
   elements.connectionStatus.classList.toggle("is-offline", !navigator.onLine);
 }
 
 function bindPwa() {
   window.addEventListener("online", updateConnectionStatus);
   window.addEventListener("offline", updateConnectionStatus);
+  window.addEventListener("beforeunload", revokeBackgroundUrls, { once: true });
   updateConnectionStatus();
-
   window.addEventListener("beforeinstallprompt", (event) => {
     event.preventDefault();
     state.deferredInstallPrompt = event;
     elements.installApp.hidden = false;
   });
-
   elements.installApp.addEventListener("click", async () => {
-    if (!state.deferredInstallPrompt) return;
-    await state.deferredInstallPrompt.prompt();
-    state.deferredInstallPrompt = null;
-    elements.installApp.hidden = true;
+    if (!state.deferredInstallPrompt || elements.installApp.disabled) return;
+    elements.installApp.disabled = true;
+    try {
+      await state.deferredInstallPrompt.prompt();
+      await state.deferredInstallPrompt.userChoice;
+      state.deferredInstallPrompt = null;
+      elements.installApp.hidden = true;
+    } finally {
+      elements.installApp.disabled = false;
+    }
   });
-
   window.addEventListener("appinstalled", () => {
     elements.installApp.hidden = true;
     state.deferredInstallPrompt = null;
   });
+}
+
+function revokeBackgroundUrls() {
+  Object.values(state.backgroundUrls).forEach((url) => { if (url) URL.revokeObjectURL(url); });
 }
 
 async function registerServiceWorker() {
@@ -669,26 +712,25 @@ async function registerServiceWorker() {
   try {
     await navigator.serviceWorker.register("./sw.js");
     await navigator.serviceWorker.ready;
+    state.offlineReady = true;
     updateConnectionStatus();
   } catch (error) {
     console.warn("Service worker registration failed.", error);
-    elements.connectionStatus.textContent = navigator.onLine ? "Online" : "Offline";
+    state.offlineReady = false;
+    updateConnectionStatus();
   }
 }
 
 function persistState() {
   try {
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        activeDeckId: state.activeDeckId,
-        activePathId: state.activePathId,
-        studyMode: state.studyMode,
-        progress: state.progress,
-        cardDesigns: state.cardDesigns,
-        theme: state.theme,
-      }),
-    );
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      activeDeckId: state.activeDeckId,
+      activePathId: state.activePathId,
+      studyMode: state.studyMode,
+      progress: state.progress,
+      cardDesigns: state.cardDesigns,
+      theme: state.theme,
+    }));
   } catch (error) {
     console.warn("Unable to save local state.", error);
   }
@@ -696,18 +738,19 @@ function persistState() {
 
 function loadPersistedState() {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) ?? {};
+    const value = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    return isRecord(value) ? value : {};
   } catch {
     return {};
   }
 }
 
 function formatType(type) {
-  return { concept: "Concept", fact: "Fact", question: "Question", code: "Code", steps: "Steps", checklist: "Checklist" }[type];
+  return { concept: "Concept", fact: "Fact", question: "Question", code: "Code", steps: "Steps", checklist: "Checklist" }[type] ?? "Card";
 }
 
 function formatStatus(status) {
-  return { mastered: "Mastered", review: "Review", untouched: "Not started" }[status];
+  return { mastered: "Mastered", review: "Review", untouched: "Not started" }[status] ?? "Not started";
 }
 
 function formatMode(mode) {
@@ -727,6 +770,10 @@ function escapeHtml(value = "") {
     .replaceAll("'", "&#039;");
 }
 
+function isRecord(value) {
+  return Boolean(value && typeof value === "object" && !Array.isArray(value));
+}
+
 async function initialize() {
   applyTheme();
   bindJourneyEvents();
@@ -744,6 +791,7 @@ async function initialize() {
     if (state.activePathId !== "all" && !deck.paths.some((path) => path.id === state.activePathId)) state.activePathId = "all";
     await loadBackgroundForDeck(state.activeDeckId);
     renderJourney();
+    persistState();
   } catch (error) {
     elements.journeyView.innerHTML = `<div class="error-panel"><h1>Unable to load learning data</h1><p>${escapeHtml(error.message)}</p><p>Reconnect once so the app can save all topics for offline study.</p></div>`;
   }
