@@ -5,16 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
     <meta id="theme-color" name="theme-color" content="#f3f5f8" />
-    <meta
-      name="description"
-      content="Facts is an offline-first card-based learning app with customizable card designs."
-    />
+    <meta name="description" content="Facts is an offline-first learning-card app with customizable decks, selectable motion, and AI-assisted deck import." />
     <title>Facts — Learn One Card at a Time</title>
     <script>
       (() => {
         const media = window.matchMedia("(prefers-color-scheme: dark)");
         const themeColor = document.querySelector("#theme-color");
-
         const readPreference = () => {
           try {
             return JSON.parse(localStorage.getItem("facts-learning-state-v2"))?.theme ?? "system";
@@ -22,67 +18,39 @@
             return "system";
           }
         };
-
         const applyResolvedTheme = () => {
           const preference = readPreference();
-          document.documentElement.dataset.theme =
-            preference === "system" ? (media.matches ? "dark" : "light") : preference;
+          document.documentElement.dataset.theme = preference === "system" ? (media.matches ? "dark" : "light") : preference;
         };
-
         const syncBrowserColor = () => {
-          themeColor.content =
-            document.documentElement.dataset.theme === "dark" ? "#0f141c" : "#f3f5f8";
+          themeColor.content = document.documentElement.dataset.theme === "dark" ? "#0f141c" : "#f3f5f8";
         };
-
         applyResolvedTheme();
         syncBrowserColor();
         media.addEventListener("change", applyResolvedTheme);
-        new MutationObserver(syncBrowserColor).observe(document.documentElement, {
-          attributes: true,
-          attributeFilter: ["data-theme"],
-        });
+        new MutationObserver(syncBrowserColor).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
       })();
     </script>
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./src/styles.css" />
     <link rel="stylesheet" href="./src/experience.css" />
+    <link rel="stylesheet" href="./src/enhancements.css" />
   </head>
   <body>
     <header class="topbar">
       <a class="brand" href="#" aria-label="Facts home">
         <span class="brand-mark" aria-hidden="true">F</span>
-        <span>
-          <strong>Facts</strong>
-          <small>Learn one card at a time</small>
-        </span>
+        <span><strong>Facts</strong><small>Learn one card at a time</small></span>
       </a>
       <div class="topbar-actions">
         <span id="connection-status" class="connection-status" role="status">Checking…</span>
         <button id="install-app" class="secondary-button compact-button" type="button" hidden>Install</button>
-        <button
-          id="open-design-studio"
-          class="secondary-button compact-button"
-          type="button"
-          aria-haspopup="dialog"
-        >
-          Card style
-        </button>
-        <button
-          id="theme-toggle"
-          class="theme-toggle"
-          type="button"
-          aria-label="Toggle color theme"
-          title="Toggle color theme"
-        >
+        <button id="open-design-studio" class="secondary-button compact-button" type="button" aria-haspopup="dialog">Card style</button>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle color theme">
           <span class="theme-toggle-icons" aria-hidden="true">
-            <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <circle cx="12" cy="12" r="3.5"></circle>
-              <path d="M12 2.5v2M12 19.5v2M4.5 12h-2M21.5 12h-2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4"></path>
-            </svg>
-            <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <path d="M20.2 15.2A8.5 8.5 0 0 1 8.8 3.8 8.5 8.5 0 1 0 20.2 15.2Z"></path>
-            </svg>
+            <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.5"></circle><path d="M12 2.5v2M12 19.5v2M4.5 12h-2M21.5 12h-2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4"></path></svg>
+            <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.2 15.2A8.5 8.5 0 0 1 8.8 3.8 8.5 8.5 0 1 0 20.2 15.2Z"></path></svg>
           </span>
           <span class="theme-toggle-label" aria-hidden="true"></span>
         </button>
@@ -99,17 +67,13 @@
               <p id="journey-description">Pick what you want to learn. Each topic is organized as a connected sequence of cards.</p>
             </div>
             <div class="journey-progress" aria-label="Journey progress">
-              <span data-journey-dot="topics" class="is-active">1</span>
-              <i></i>
-              <span data-journey-dot="paths">2</span>
-              <i></i>
+              <span data-journey-dot="topics" class="is-active">1</span><i></i>
+              <span data-journey-dot="paths">2</span><i></i>
               <span data-journey-dot="ready">3</span>
             </div>
           </header>
 
-          <section id="journey-topics" class="journey-step">
-            <div id="deck-grid" class="deck-grid"></div>
-          </section>
+          <section id="journey-topics" class="journey-step"><div id="deck-grid" class="deck-grid"></div></section>
 
           <section id="journey-paths" class="journey-step" hidden>
             <button id="back-to-topics" class="journey-back" type="button">← All topics</button>
@@ -135,103 +99,36 @@
         </div>
       </section>
 
-      <aside class="sidebar" aria-label="Learning controls" hidden>
-        <section class="control-section">
-          <label for="deck-select">Topic</label>
-          <select id="deck-select"></select>
-        </section>
-        <section class="control-section">
-          <label for="path-select">Learning path</label>
-          <select id="path-select"></select>
-          <p id="path-description" class="helper-text"></p>
-        </section>
-        <section class="control-section">
-          <label for="type-filter">Card type</label>
-          <select id="type-filter">
-            <option value="all">All card types</option>
-            <option value="concept">Concepts</option>
-            <option value="fact">Facts</option>
-            <option value="question">Questions</option>
-            <option value="code">Code</option>
-            <option value="steps">Step-by-step</option>
-            <option value="checklist">Checklists</option>
-          </select>
-        </section>
-        <section class="control-section">
-          <label for="search-input">Find cards</label>
-          <input id="search-input" type="search" placeholder="Search title, content, or tag" />
-        </section>
-        <section class="progress-panel" aria-labelledby="progress-heading">
-          <div class="progress-heading-row">
-            <strong id="progress-heading">Progress</strong>
-            <span id="progress-percent">0%</span>
-          </div>
-          <div class="progress-track" aria-hidden="true"><span id="progress-bar"></span></div>
-          <div class="progress-stats">
-            <span><strong id="mastered-count">0</strong> mastered</span>
-            <span><strong id="review-count">0</strong> review</span>
-          </div>
-          <button id="reset-progress" class="text-button" type="button">Reset this topic</button>
-        </section>
-      </aside>
-
       <section id="content-area" class="content-area" aria-live="polite" hidden>
         <div id="deck-header" class="deck-header"></div>
         <section id="focus-view" class="focus-view">
-          <div id="empty-state" class="empty-state" hidden>
-            <h2>No cards found</h2>
-            <p>Return to the journey and choose another path.</p>
-          </div>
+          <div id="empty-state" class="empty-state" hidden><h2>No cards found</h2><p>Return to the journey and choose another path.</p></div>
           <article id="study-card" class="study-card" tabindex="0"></article>
           <div id="card-actions" class="card-actions" hidden>
             <button id="previous-card" class="secondary-button" type="button">← Previous</button>
-            <div class="learning-actions">
-              <button id="mark-review" class="secondary-button" type="button">Needs review</button>
-              <button id="mark-mastered" class="primary-button" type="button">Mark mastered</button>
-            </div>
+            <div class="learning-actions"><button id="mark-review" class="secondary-button" type="button">Needs review</button><button id="mark-mastered" class="primary-button" type="button">Mark mastered</button></div>
             <button id="next-card" class="secondary-button" type="button">Next →</button>
           </div>
         </section>
-        <section id="overview-view" class="overview-view" hidden>
-          <div id="card-grid" class="card-grid"></div>
-        </section>
+        <section id="overview-view" class="overview-view" hidden><div id="card-grid" class="card-grid"></div></section>
       </section>
     </main>
 
     <dialog id="design-studio" class="design-dialog" aria-labelledby="design-title">
       <form method="dialog" class="design-dialog-shell">
         <header class="design-dialog-header">
-          <div>
-            <span class="eyebrow">Per-topic appearance</span>
-            <h2 id="design-title">Card Design Studio</h2>
-            <p>Customize the active topic. Settings and uploaded images remain available offline.</p>
-          </div>
+          <div><span class="eyebrow">Per-topic appearance</span><h2 id="design-title">Card Design Studio</h2><p>Choose a visual preset or fine-tune the active topic. Settings and uploaded images remain available offline.</p></div>
           <button class="icon-button" value="close" aria-label="Close card design studio">×</button>
         </header>
 
         <div class="design-dialog-body">
           <section class="design-preview-panel">
-            <div id="design-preview" class="design-preview">
-              <span>Concept</span>
-              <strong>Preview your card style</strong>
-              <p>Colors, type, spacing, corners, shadows, and background images update immediately.</p>
-              <button type="button">Reveal answer</button>
-            </div>
+            <div id="design-preview" class="design-preview"><span>Concept</span><strong>Preview your card style</strong><p>Colors, type, spacing, corners, shadows, and background images update immediately.</p><button type="button">Reveal answer</button></div>
             <p id="design-message" class="design-message" role="status"></p>
           </section>
 
           <section class="design-controls" aria-label="Card design controls">
-            <label>
-              Design preset
-              <select id="design-preset">
-                <option value="classic">Classic</option>
-                <option value="minimal">Minimal</option>
-                <option value="editorial">Editorial</option>
-                <option value="notebook">Notebook</option>
-                <option value="neon">Neon</option>
-                <option value="photo">Photo</option>
-              </select>
-            </label>
+            <label>Design preset<select id="design-preset"><option value="classic">Classic</option><option value="minimal">Minimal</option><option value="editorial">Editorial</option><option value="notebook">Notebook</option><option value="neon">Neon</option><option value="photo">Photo</option></select></label>
 
             <div class="color-controls">
               <label>Accent <input id="design-accent" type="color" /></label>
@@ -254,23 +151,18 @@
             <fieldset class="background-controls">
               <legend>Background image</legend>
               <label class="file-control">Upload an image<input id="design-image-file" type="file" accept="image/*" /></label>
-              <div class="url-control">
-                <label for="design-image-url">Or import from a URL</label>
-                <div><input id="design-image-url" type="url" placeholder="https://example.com/image.jpg" /><button id="import-image-url" class="secondary-button" type="button">Import</button></div>
-                <p class="helper-text">The image is copied into local offline storage when the source permits it.</p>
-              </div>
+              <div class="url-control"><label for="design-image-url">Or import from a URL</label><div><input id="design-image-url" type="url" placeholder="https://example.com/image.jpg" /><button id="import-image-url" class="secondary-button" type="button">Import</button></div><p class="helper-text">The image is copied into local offline storage when the source permits it.</p></div>
               <button id="remove-background-image" class="text-button danger-text" type="button">Remove background image</button>
             </fieldset>
           </section>
         </div>
 
-        <footer class="design-dialog-footer">
-          <button id="reset-card-design" class="secondary-button" type="button">Reset topic design</button>
-          <button class="primary-button" value="close">Done</button>
-        </footer>
+        <footer class="design-dialog-footer"><button id="reset-card-design" class="secondary-button" type="button">Reset topic design</button><button class="primary-button" value="close">Done</button></footer>
       </form>
     </dialog>
 
+    <script type="module" src="./src/runtime-data.js"></script>
+    <script type="module" src="./src/ui-enhancements.js"></script>
     <script type="module" src="./src/app.js"></script>
   </body>
 </html>
