@@ -69,6 +69,10 @@ function setAnimation(value) {
   document.querySelector("#study-card")?.setAttribute("data-card-motion", animation);
 }
 
+function animationOptions() {
+  return ANIMATIONS.map(([id, label]) => `<option value="${id}">${label}</option>`).join("");
+}
+
 function injectReadyConfiguration() {
   const options = document.querySelector(".ready-options");
   const customize = document.querySelector("#journey-customize");
@@ -79,7 +83,7 @@ function injectReadyConfiguration() {
   section.innerHTML = `
     <div class="ready-control-heading"><span class="field-label">Default card appearance</span><small>Choose before starting</small></div>
     <div class="preset-chip-grid" data-preset-gallery="ready"></div>
-    <label class="animation-control">Card transition<select data-animation-select>${ANIMATIONS.map(([id, label]) => `<option value="${id}">${label}</option>`).join("")}</select></label>`;
+    <label class="animation-control">Card transition<select data-animation-select>${animationOptions()}</select></label>`;
   options.insertBefore(section, customize);
   section.querySelector("[data-animation-select]").addEventListener("change", (event) => setAnimation(event.target.value));
   renderPresetGallery(section.querySelector("[data-preset-gallery]"));
@@ -94,6 +98,13 @@ function enhanceStudioPresets() {
   gallery.className = "preset-card-grid";
   gallery.dataset.presetGallery = "studio";
   select.closest("label")?.insertAdjacentElement("afterend", gallery);
+
+  const motion = document.createElement("label");
+  motion.className = "animation-control studio-animation-control";
+  motion.innerHTML = `Card transition<select data-animation-select>${animationOptions()}</select>`;
+  gallery.insertAdjacentElement("afterend", motion);
+  motion.querySelector("select").addEventListener("change", (event) => setAnimation(event.target.value));
+
   renderPresetGallery(gallery);
   select.addEventListener("change", syncPresetButtons);
 }
@@ -140,6 +151,7 @@ function bindRefreshes() {
     if (event.target.closest("[data-deck-id], [data-path-id], #back-to-paths, #back-to-topics")) setTimeout(syncPresetButtons, 0);
     if (event.target.closest("#open-design-studio, #journey-customize")) setTimeout(() => {
       renderPresetGallery(document.querySelector('[data-preset-gallery="studio"]'));
+      setAnimation(read(UI_KEY, { animation: "none" }).animation);
       syncPresetButtons();
     }, 0);
   });
