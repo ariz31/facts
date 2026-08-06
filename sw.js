@@ -22,10 +22,7 @@ const CORE_ASSETS = [
 self.addEventListener("install", (event) => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE_NAME);
-    const coreResults = await Promise.allSettled(CORE_ASSETS.map((asset) => cacheAsset(cache, asset)));
-    const indexPosition = CORE_ASSETS.indexOf("./index.html");
-    if (coreResults[indexPosition]?.status === "rejected") throw coreResults[indexPosition].reason;
-
+    await Promise.all(CORE_ASSETS.map((asset) => cacheAsset(cache, asset)));
     try {
       const response = await fetch("./data/decks.json", { cache: "no-store" });
       if (!response.ok) throw new Error(`Catalog returned ${response.status}.`);
@@ -52,10 +49,8 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const request = event.request;
   if (request.method !== "GET" || request.headers.has("range")) return;
-
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
-
   if (request.mode === "navigate") {
     event.respondWith(networkFirstNavigation(event));
     return;
