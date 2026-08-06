@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "facts-pwa-";
-const CACHE_NAME = `${CACHE_PREFIX}v7`;
+const CACHE_NAME = `${CACHE_PREFIX}v8`;
 const CORE_ASSETS = [
   "./",
   "./index.html",
@@ -10,6 +10,8 @@ const CORE_ASSETS = [
   "./src/enhancements.css",
   "./src/app.js",
   "./src/runtime-data.js",
+  "./src/guided-runtime.js",
+  "./src/guided-content-expansion.js",
   "./src/ui-enhancements.js",
   "./src/card-render-state.js",
   "./src/topic-expansion.js",
@@ -18,6 +20,16 @@ const CORE_ASSETS = [
   "./src/card-design.js",
   "./src/offline-storage.js",
   "./data/decks.json",
+  "./data/guided/frontend-programming.json",
+  "./data/guided/backend-programming.json",
+  "./data/guided/data-science.json",
+  "./data/guided/statistics.json",
+  "./data/guided/python-programming.json",
+  "./data/guided/databases-sql.json",
+  "./data/guided/machine-learning.json",
+  "./data/guided/cybersecurity.json",
+  "./data/guided/cloud-devops.json",
+  "./data/guided/git-github.json",
 ];
 
 self.addEventListener("install", (event) => {
