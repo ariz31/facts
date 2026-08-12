@@ -37,7 +37,7 @@ function baseDeck(id) {
   };
 }
 
-test("every built-in topic receives exactly 100 reference cards", () => {
+test("every reference-expanded topic receives exactly 100 reference cards", () => {
   for (const deckId of deckIds) {
     assert.equal(getExpansionCount(deckId), 100);
     const original = baseDeck(deckId);
