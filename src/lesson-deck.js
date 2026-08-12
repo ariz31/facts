@@ -17,15 +17,24 @@ export function isLessonFragmentManifest(value) {
 export function assembleLessonDeck(manifest, fragments) {
   if (!isLessonFragmentManifest(manifest)) throw new Error("Invalid lesson-fragment deck manifest.");
   if (!Array.isArray(fragments) || fragments.length !== manifest.fragments.length) {
-    throw new Error("Lesson-fragment count does not match the deck manifest.");
+    throw new Error("Lesson-fragment file count does not match the deck manifest.");
   }
+
+  const sourcePaths = [];
+  fragments.forEach((fragmentFile, fileIndex) => {
+    const contained = Array.isArray(fragmentFile?.paths) ? fragmentFile.paths : [fragmentFile];
+    contained.forEach((fragment, pathIndex) => sourcePaths.push({
+      fragment,
+      sourceName: contained.length === 1 ? manifest.fragments[fileIndex] : `${manifest.fragments[fileIndex]}#${pathIndex + 1}`,
+    }));
+  });
 
   const cards = [];
   const paths = [];
   let sequence = 1;
 
-  fragments.forEach((fragment, fragmentIndex) => {
-    validateFragment(fragment, manifest.fragments[fragmentIndex]);
+  sourcePaths.forEach(({ fragment, sourceName }) => {
+    validateFragment(fragment, sourceName);
     const cardIds = [];
     let codeIndex = 0;
 
