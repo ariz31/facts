@@ -4,7 +4,7 @@ Facts is an offline-first, card-based learning application. Topics are arranged 
 
 ## Included topics
 
-The starter catalog contains **10 topics**, **144 cards**, and **30 guided learning paths**:
+The authored catalog contains **11 topics**, **260 source cards**, and **42 guided learning paths**. Ten established topics also receive 100-card reference libraries at runtime, bringing the complete learning experience to **1,260 rendered cards** and **52 guided paths**:
 
 1. Frontend Programming
 2. Backend Programming
@@ -16,6 +16,9 @@ The starter catalog contains **10 topics**, **144 cards**, and **30 guided learn
 8. Cybersecurity Fundamentals
 9. Cloud & DevOps
 10. Git & GitHub
+11. Docker
+
+The Docker curriculum contains 116 authored cards across 12 focused paths covering foundations, images and Dockerfiles, runtime behavior, storage, networking, Docker Compose, development workflows, security and supply chain, production operations, troubleshooting, and hands-on Node.js/API + PostgreSQL projects.
 
 ## Learning journey
 
@@ -60,7 +63,7 @@ Facts includes:
 - an installable application icon;
 - a service worker;
 - pre-caching of the application shell;
-- pre-caching of all 10 learning decks;
+- pre-caching of all 11 learning decks;
 - stale-while-revalidate asset updates;
 - network-first navigation fallback;
 - local progress and design persistence;
@@ -97,7 +100,7 @@ Node.js 20 or newer is recommended.
 npm run check
 ```
 
-The check command validates JavaScript syntax, the 10-topic deck catalog, every card and path relationship, and the learning and design unit tests.
+The check command validates JavaScript syntax, exact parity between the built-in topic registry and the 11-topic deck catalog, every card and path relationship, runtime topic expansion, and the learning and design unit tests.
 
 ## Data model
 
@@ -109,4 +112,4 @@ The check command validates JavaScript syntax, the 10-topic deck catalog, every 
 - card type, title, prompt, tags, difficulty, and path membership;
 - type-specific question, code, steps, or checklist fields.
 
-To add another topic, create a matching JSON deck and add its filename to `data/decks.json`. The service worker reads the same catalog when pre-caching topics for offline use.
+To add another topic, create a matching JSON deck and add its filename to `data/decks.json`. Built-in topics must also be registered in `src/deck-schema.js`. The service worker reads the same catalog when pre-caching topics for offline use.
