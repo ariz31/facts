@@ -9,6 +9,7 @@ export const BUILT_IN_DECK_IDS = Object.freeze([
   "cybersecurity",
   "cloud-devops",
   "git-github",
+  "docker",
 ]);
 
 export const CARD_TYPES = Object.freeze(["concept", "fact", "question", "code", "steps", "checklist"]);

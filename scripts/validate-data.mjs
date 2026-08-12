@@ -1,11 +1,12 @@
 import { access, readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { validateDeck } from "../src/deck-schema.js";
+import { BUILT_IN_DECK_IDS, validateDeck } from "../src/deck-schema.js";
 import { expandDeck, getExpansionCount } from "../src/topic-expansion.js";
 
 const dataDirectory = new URL("../data/", import.meta.url);
 const catalog = JSON.parse(await readFile(join(dataDirectory.pathname, "decks.json"), "utf8"));
 const deckNames = catalog.decks ?? [];
+const builtInDeckNames = new Set(BUILT_IN_DECK_IDS);
 const globalDeckIds = new Set();
 const globalSourceCardIds = new Set();
 const globalRenderedCardIds = new Set();
@@ -13,8 +14,14 @@ let sourceCardCount = 0;
 let renderedCardCount = 0;
 let pathCount = 0;
 
-if (!Array.isArray(deckNames) || deckNames.length !== 10 || new Set(deckNames).size !== deckNames.length) {
-  console.error("The catalog must contain exactly 10 unique deck names.");
+if (
+  !Array.isArray(deckNames)
+  || deckNames.length !== BUILT_IN_DECK_IDS.length
+  || new Set(deckNames).size !== deckNames.length
+  || deckNames.some((name) => !builtInDeckNames.has(name))
+  || BUILT_IN_DECK_IDS.some((name) => !deckNames.includes(name))
+) {
+  console.error(`The catalog must contain exactly the ${BUILT_IN_DECK_IDS.length} built-in deck names.`);
   process.exitCode = 1;
 }
 

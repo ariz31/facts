@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - agent/add-programming-learning-modes
+      - "agent/**"
   pull_request:
     branches:
       - main
