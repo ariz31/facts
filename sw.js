@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "facts-pwa-";
-const CACHE_NAME = `${CACHE_PREFIX}v7`;
+const CACHE_NAME = `${CACHE_PREFIX}v8`;
 const CORE_ASSETS = [
   "./",
   "./index.html",
