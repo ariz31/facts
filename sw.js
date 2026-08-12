@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "facts-pwa-";
-const CACHE_NAME = `${CACHE_PREFIX}v8`;
+const CACHE_NAME = `${CACHE_PREFIX}v9`;
 const CORE_ASSETS = [
   "./",
   "./index.html",
@@ -9,6 +9,8 @@ const CORE_ASSETS = [
   "./src/experience.css",
   "./src/enhancements.css",
   "./src/app.js",
+  "./src/lesson-deck.js",
+  "./src/lesson-deck-runtime.js",
   "./src/runtime-data.js",
   "./src/ui-enhancements.js",
   "./src/card-render-state.js",
@@ -29,7 +31,10 @@ self.addEventListener("install", (event) => {
       if (!response.ok) throw new Error(`Catalog returned ${response.status}.`);
       const catalog = await response.json();
       if (Array.isArray(catalog.decks)) {
-        await Promise.allSettled(catalog.decks.map((deck) => cacheAsset(cache, `./data/${encodeURIComponent(deck)}.json`)));
+        const results = await Promise.allSettled(catalog.decks.map((deck) => cacheDeckSource(cache, deck)));
+        for (const result of results) {
+          if (result.status === "rejected") console.warn("A learning deck could not be pre-cached.", result.reason);
+        }
       }
     } catch (error) {
       console.warn("Deck pre-cache was incomplete.", error);
@@ -63,6 +68,22 @@ async function cacheAsset(cache, url) {
   const response = await fetch(url, { cache: "no-store" });
   if (!response.ok) throw new Error(`${url} returned ${response.status}.`);
   await cache.put(url, response);
+  return response;
+}
+
+async function cacheDeckSource(cache, deckName) {
+  const url = `./data/${encodeURIComponent(deckName)}.json`;
+  const response = await fetch(url, { cache: "no-store" });
+  if (!response.ok) throw new Error(`${url} returned ${response.status}.`);
+  await cache.put(url, response.clone());
+  const source = await response.json();
+  if (source?.format !== "lesson-fragments-v1" || !Array.isArray(source.fragments)) return;
+  await Promise.all(source.fragments.map((fragment) => {
+    if (typeof fragment !== "string" || !fragment || fragment.includes("..")) {
+      throw new Error(`Invalid lesson fragment path in ${deckName}.`);
+    }
+    return cacheAsset(cache, `./data/${fragment}`);
+  }));
 }
 
 async function networkFirstNavigation(event) {
