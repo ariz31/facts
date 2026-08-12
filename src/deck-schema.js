@@ -10,6 +10,7 @@ export const BUILT_IN_DECK_IDS = Object.freeze([
   "cloud-devops",
   "git-github",
   "docker",
+  "vibe-coding",
 ]);
 
 export const CARD_TYPES = Object.freeze(["concept", "fact", "question", "code", "steps", "checklist"]);
@@ -84,7 +85,7 @@ export function validateDeck(deck, { rejectBuiltInId = true } = {}) {
     if (pathIds.has(path.id)) errors.push(`Duplicate path id ${path.id}.`);
     pathIds.add(path.id);
     validateText(path.title, `Path ${path.id ?? "without id"} title`, errors, { required: true, maximum: 180 });
-    validateText(path.description, `Path ${path.id ?? "without id"} description`, errors, { required: true, maximum: 2_000 });
+    validateText(path.description, `Path ${path.id ?? "unknown"} description`, errors, { required: true, maximum: 2_000 });
     validateIdArray(path.cardIds, `Path ${path.id ?? "unknown"} cardIds`, errors, { required: true });
   }
 
