@@ -75,7 +75,7 @@ test("validation rejects unsupported difficulty and non-consecutive sequences", 
 
 test("validation rejects a built-in id and excessive card count", () => {
   const deck = validDeck();
-  deck.id = "statistics";
+  deck.id = "docker";
   deck.cards = Array.from({ length: IMPORT_LIMITS.maximumCards + 1 }, (_, index) => ({
     ...validDeck().cards[0],
     id: `card-${index + 1}`,
