@@ -72,12 +72,7 @@ export function assembleLessonDeck(manifest, fragments) {
       sequence += 1;
     });
 
-    paths.push({
-      id: normalized.id,
-      title: normalized.title,
-      description: normalized.description,
-      cardIds,
-    });
+    paths.push({ id: normalized.id, title: normalized.title, description: normalized.description, cardIds });
   });
 
   return {
@@ -96,16 +91,37 @@ function normalizeFragment(fragment, sourceName) {
   if (typeof fragment.id !== "string" || !fragment.id) throw new Error(`${sourceName} is missing an id.`);
   if (typeof fragment.title !== "string" || !fragment.title) throw new Error(`${sourceName} is missing a title.`);
   if (typeof fragment.description !== "string" || !fragment.description) throw new Error(`${sourceName} is missing a description.`);
-  if (!Array.isArray(fragment.lessons) || fragment.lessons.length !== TYPE_PATTERN.length) {
-    throw new Error(`${sourceName} must contain exactly ${TYPE_PATTERN.length} lessons.`);
+
+  const rawLessons = Array.isArray(fragment.lessons)
+    ? fragment.lessons
+    : expandTopics(fragment.topics, sourceName);
+  if (!Array.isArray(rawLessons) || rawLessons.length !== TYPE_PATTERN.length) {
+    throw new Error(`${sourceName} must contain exactly ${TYPE_PATTERN.length} lessons or 10 compact topics.`);
   }
   if (!Array.isArray(fragment.codeExamples) || fragment.codeExamples.length !== 2) {
     throw new Error(`${sourceName} must contain exactly 2 code examples.`);
   }
 
-  const lessons = fragment.lessons.map((lesson) => normalizeLesson(lesson, sourceName));
+  const lessons = rawLessons.map((lesson) => normalizeLesson(lesson, sourceName));
   const codeExamples = fragment.codeExamples.map((example) => normalizeCodeExample(example, sourceName));
   return { ...fragment, lessons, codeExamples };
+}
+
+function expandTopics(topics, sourceName) {
+  if (!Array.isArray(topics) || topics.length !== 10) {
+    throw new Error(`${sourceName} must contain exactly 10 compact topics when lessons are omitted.`);
+  }
+  return topics.flatMap((topic) => {
+    const base = normalizeLesson(topic, sourceName);
+    return [
+      base,
+      {
+        title: `${base.title}: application`,
+        principle: `Correct application of ${base.title} requires preserving its semantics under real data, errors, boundary conditions, and runtime constraints.`,
+        practice: `${base.practice} Then verify at least one boundary or failure case with the relevant browser, runtime, test, or diagnostic tooling.`,
+      },
+    ];
+  });
 }
 
 function normalizeLesson(lesson, sourceName) {
