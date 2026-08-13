@@ -1,6 +1,7 @@
 import { access, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { BUILT_IN_DECK_IDS, validateDeck } from "../src/deck-schema.js";
+import { assembleLessonDeck, isLessonFragmentManifest } from "../src/lesson-deck.js";
 import { expandDeck, getExpansionCount } from "../src/topic-expansion.js";
 
 const dataDirectory = new URL("../data/", import.meta.url);
@@ -29,7 +30,8 @@ for (const deckName of deckNames) {
   const filename = `${deckName}.json`;
   const filepath = join(dataDirectory.pathname, filename);
   await access(filepath);
-  const deck = JSON.parse(await readFile(filepath, "utf8"));
+  const source = JSON.parse(await readFile(filepath, "utf8"));
+  const deck = await assembleSourceDeck(source);
   const errors = [];
 
   if (deck.id !== deckName) errors.push(`Catalog name ${deckName} must match deck id ${deck.id}.`);
@@ -67,4 +69,21 @@ for (const deckName of deckNames) {
 
 if (!process.exitCode) {
   console.log(`✓ Validated ${sourceCardCount} source cards and ${renderedCardCount} rendered cards across ${deckNames.length} decks and ${pathCount} guided paths.`);
+}
+
+async function assembleSourceDeck(source) {
+  if (!isLessonFragmentManifest(source)) return source;
+  const fragments = [];
+  const seen = new Set();
+  for (const fragmentName of source.fragments) {
+    if (typeof fragmentName !== "string" || !fragmentName.trim()) {
+      throw new Error(`Deck ${source.id} contains an invalid fragment path.`);
+    }
+    if (seen.has(fragmentName)) throw new Error(`Deck ${source.id} contains duplicate fragment ${fragmentName}.`);
+    seen.add(fragmentName);
+    const fragmentPath = join(dataDirectory.pathname, fragmentName);
+    await access(fragmentPath);
+    fragments.push(JSON.parse(await readFile(fragmentPath, "utf8")));
+  }
+  return assembleLessonDeck(source, fragments);
 }

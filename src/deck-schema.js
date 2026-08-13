@@ -10,6 +10,7 @@ export const BUILT_IN_DECK_IDS = Object.freeze([
   "cloud-devops",
   "git-github",
   "docker",
+  "vibe-coding",
 ]);
 
 export const CARD_TYPES = Object.freeze(["concept", "fact", "question", "code", "steps", "checklist"]);
