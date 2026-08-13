@@ -4,7 +4,7 @@ Facts is an offline-first, card-based learning application. Topics are arranged 
 
 ## Included topics
 
-The authored catalog contains **12 topics**, **760 source cards**, and **67 guided learning paths**. Ten established topics also receive 100-card reference libraries at runtime, bringing the complete learning experience to **1,760 rendered cards** and **77 guided paths**:
+The authored catalog contains **12 topics**, **1,512 source cards**, and **101 authored guided learning paths**. Ten established topics also receive 100-card reference libraries at runtime, bringing the complete learning experience to **2,512 rendered cards** and **111 guided paths**:
 
 1. Frontend Programming
 2. Backend Programming
@@ -18,6 +18,10 @@ The authored catalog contains **12 topics**, **760 source cards**, and **67 guid
 10. Git & GitHub
 11. Docker
 12. Vibe Coding: AI-Assisted Software Engineering
+
+The Frontend Programming curriculum contains **400 curated cards across 20 deep paths** covering the web platform, semantic HTML, forms, CSS, layout, responsive design, visual systems, JavaScript, DOM and browser APIs, asynchronous data, state and component architecture, TypeScript and tooling, accessibility, routing and complete UX states, frontend security, performance, media and offline capabilities, testing and debugging, framework/rendering architecture, and production delivery. Its 100-card reference library brings the runtime deck to the schema maximum of **500 cards across 21 paths**.
+
+The Backend Programming curriculum contains **400 curated cards across 20 deep paths** covering server/runtime behavior, HTTP semantics, API design, Node.js concurrency, routing and middleware, validation and error contracts, relational data, transactions and migrations, caching and storage, authentication, authorization and multi-tenancy, API security and abuse resistance, configuration/secrets/TLS, durable jobs and queues, streams and file processing, realtime systems and integrations, testing and contracts, observability and reliability, deployment architecture, and backup/recovery/incident operations. Its 100-card reference library brings the runtime deck to the schema maximum of **500 cards across 21 paths**.
 
 The Docker curriculum contains 116 authored cards across 12 focused paths covering foundations, images and Dockerfiles, runtime behavior, storage, networking, Docker Compose, development workflows, security and supply chain, production operations, troubleshooting, and hands-on Node.js/API + PostgreSQL projects.
 
@@ -115,6 +119,6 @@ The check command validates JavaScript syntax, exact parity between the built-in
 - card type, title, prompt, tags, difficulty, and path membership;
 - type-specific question, code, steps, or checklist fields.
 
-Large authored curricula may use the `lesson-fragments-v1` source format. A compact topic manifest lists reviewable lesson-fragment files; `src/lesson-deck.js` deterministically assembles those fragments into the same strict deck schema before validation and learning. The service worker pre-caches both the manifest and its fragments so the assembled topic remains offline-first.
+Large authored curricula may use the `lesson-fragments-v1` source format. A compact topic manifest lists reviewable lesson-fragment files; `src/lesson-deck.js` deterministically assembles those fragments into the same strict deck schema before validation and learning. A fragment may provide 20 explicit lessons, or a technical curriculum may provide 10 compact topics that expand into paired concept/application lessons. The service worker pre-caches both the manifest and its fragments so the assembled topic remains offline-first.
 
 To add another topic, create a matching JSON deck and add its filename to `data/decks.json`. Built-in topics must also be registered in `src/deck-schema.js`. The service worker reads the same catalog when pre-caching topics for offline use.
