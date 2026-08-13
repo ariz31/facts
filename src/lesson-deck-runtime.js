@@ -17,7 +17,7 @@ function installLessonDeckFetchAdapter() {
       return nativeFetch(input, init);
     }
 
-    if (url.origin !== window.location.origin || !url.pathname.endsWith("/data/vibe-coding.json")) {
+    if (url.origin !== window.location.origin || !/\/data\/[^/]+\.json$/.test(url.pathname)) {
       return nativeFetch(input, init);
     }
 
