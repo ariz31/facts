@@ -4,7 +4,7 @@ Facts is an offline-first, card-based learning application. Topics are arranged 
 
 ## Included topics
 
-The catalog contains **16 authored topics**, **1,512 cards**, and **101 guided paths**, including **five curated Vibe Coding modules**. The three other oversized legacy curricula remain under explicitly separate compatibility limits. Previously, ten topics received 100 additional repetitive reference cards each at runtime; that automatic padding has now been retired. **Every newly generated/imported topic is limited to 100 cards** by a progressive, quality-first generation contract (see [Card generation rules](docs/CARD_GENERATION_RULES.md)). Existing larger authored curricula are preserved pending a non-destructive split into smaller topics:
+The catalog contains **12 main topics**, **1,512 authored cards**, and **101 guided subtopics/paths**, including a **single comprehensive Vibe Coding main topic** with 25 subtopics and 500 curated cards. Every main topic has **no aggregate card-count ceiling**; the hard maximum is **100 cards in each subtopic**, not the parent. The former 1,000 repetitive reference-library cards were retired. See the [card generation rules](docs/CARD_GENERATION_RULES.md).
 
 1. Frontend Programming
 2. Backend Programming
@@ -17,11 +17,7 @@ The catalog contains **16 authored topics**, **1,512 cards**, and **101 guided p
 9. Cloud & DevOps
 10. Git & GitHub
 11. Docker
-12. Vibe Coding 01 — Foundations, Product & Context
-13. Vibe Coding 02 — Architecture, Git & Agentic Workflows
-14. Vibe Coding 03 — Secure Application Engineering
-15. Vibe Coding 04 — Debugging, Review & Product Quality
-16. Vibe Coding 05 — Environments, Delivery & Production
+12. Vibe Coding: AI-Assisted Software Engineering
 
 The Frontend Programming curriculum contains **400 curated cards across 20 deep paths** covering the web platform, semantic HTML, forms, CSS, layout, responsive design, visual systems, JavaScript, DOM and browser APIs, asynchronous data, state and component architecture, TypeScript and tooling, accessibility, routing and complete UX states, frontend security, performance, media and offline capabilities, testing and debugging, framework/rendering architecture, and production delivery. It remains an existing authored masterclass of **400 cards across 20 paths**; no synthetic reference-library cards are appended.
 
@@ -29,7 +25,7 @@ The Backend Programming curriculum contains **400 curated cards across 20 deep p
 
 The Docker curriculum contains 116 authored cards across 12 focused paths covering foundations, images and Dockerfiles, runtime behavior, storage, networking, Docker Compose, development workflows, security and supply chain, production operations, troubleshooting, and hands-on Node.js/API + PostgreSQL projects.
 
-Vibe Coding has been fully revised into **five independently selectable 100-card topics**, covering its original 25 focused paths. [See the Vibe Coding curriculum and migration map](docs/VIBE_CODING_CURRICULUM.md). All 500 stable legacy card IDs are retained, but every front is now an authored retrieval question or task and every revealed answer is distinct. Each path has contextually authored scenarios, practical sequences, checks, and a code/example card paired with the corresponding lesson. The original generic 20-slot card-type template is not used for these curated decks. An explicit one-time progress migration preserves stored card statuses across the five topic IDs.
+Vibe Coding appears **once** in the main topic catalog. It contains **25 guided subtopics with 20 cards each**, for a total of 500 (the parent total is not capped). Five files under `data/vibe-coding/` are **internal storage shards, not user-visible topics or independent 100-card quotas**. [See the curriculum and migration map](docs/VIBE_CODING_CURRICULUM.md). Every stable `vc-001`–`vc-500` ID is retained with meaningful retrieval questions, distinct answers and aligned examples. A second non-destructive migration combines any mastery saved under the temporary split-topics layout of PR #13 back into the one main topic.
 
 ## Learning journey
 
@@ -74,7 +70,7 @@ Facts includes:
 - an installable application icon;
 - a service worker;
 - pre-caching of the application shell;
-- pre-caching of all 16 learning decks, including other sharded lesson sources;
+- pre-caching of all 12 main learning topics and all required internal shards;
 - stale-while-revalidate asset updates;
 - network-first navigation fallback;
 - local progress and design persistence;
@@ -111,7 +107,7 @@ Node.js 20 or newer is recommended.
 npm run check
 ```
 
-The check command validates JavaScript syntax, catalog parity, sharded lesson-deck assembly, all five Vibe Coding topic sizes and quality rules, every card and path relationship, retirement of repetitive topic expansion, the 100-card AI import limit, content-quality checks, and the learning and design unit tests.
+The check command validates JavaScript syntax, catalog parity, sharded lesson-deck assembly, the single 500-card Vibe Coding parent and independent subtopic maxima, every card and path relationship, retirement of repetitive topic expansion, the 100-card AI import limit, content-quality checks, and the learning and design unit tests.
 
 ## Data model
 
@@ -123,14 +119,14 @@ The check command validates JavaScript syntax, catalog parity, sharded lesson-de
 - card type, title, prompt, tags, difficulty, and path membership;
 - type-specific question, code, steps, or checklist fields.
 
-Large authored curricula may use the `lesson-fragments-v1` source format. A compact topic manifest lists reviewable lesson-fragment files; `src/lesson-deck.js` deterministically assembles those fragments into the same strict deck schema before validation and learning. A fragment may provide 20 explicit lessons, or a technical curriculum may provide 10 compact topics that expand into paired concept/application lessons. The service worker pre-caches both the manifest and its fragments so the assembled topic remains offline-first.
+Large authored curricula may use `lesson-fragments-v1` (legacy authored lessons) or `subtopic-fragments-v1` (one parent with multiple explicitly curated internal JSON shards). A compact topic manifest lists reviewable lesson-fragment files; `src/lesson-deck.js` deterministically assembles those fragments into the same strict deck schema before validation and learning. A fragment may provide 20 explicit lessons, or a technical curriculum may provide 10 compact topics that expand into paired concept/application lessons. The service worker pre-caches both the manifest and its fragments so the assembled topic remains offline-first.
 
 To add another topic, create a matching JSON deck and add its filename to `data/decks.json`. Built-in topics must also be registered in `src/deck-schema.js`. The service worker reads the same catalog when pre-caching topics for offline use.
 
 ## AI card-generation policy
 
-The AI Deck Import dialog offers a **maximum of 25, 50, 75, or 100 cards**, never 200; it accepts fewer when that avoids filler. Its prompt requires topic-specific prerequisites, 3–8 progressive guided paths, atomic learning objectives, a useful question/cue on the front and a **distinct, explanatory answer on the back**, realistic examples and distractors, and a self-audit before emitting JSON.
+The AI Deck Import dialog offers a **maximum of 25, 50, 75, or 100 cards PER SUBTOPIC**, never a maximum for an entire main topic; it accepts fewer in any subtopic when that avoids filler. Its prompt requires topic-specific prerequisites, 3–8 progressive guided paths, atomic learning objectives, a useful question/cue on the front and a **distinct, explanatory answer on the back**, realistic examples and distractors, and a self-audit before emitting JSON.
 
-The import validator rejects over 100 generated cards, exact/leading front-answer echoes, duplicate titles/prompts/answers, selected generic filler, duplicate multiple-choice options, and paths in the wrong teaching order. These deterministic checks complement, rather than replace, expert review of correctness, scope, and pedagogy.
+The import validator rejects subtopics containing over 100 generated cards (the main topic has no aggregate count limit), exact/leading front-answer echoes, duplicate titles/prompts/answers, selected generic filler, duplicate multiple-choice options, and paths in the wrong teaching order. These deterministic checks complement, rather than replace, expert review of correctness, scope, and pedagogy.
 
-**Legacy compatibility:** The longer existing authored Frontend, Backend, and Docker curricula remain under a separate compatibility ceiling pending a distinct content migration. All Vibe Coding modules now comply with the 100-card limit, as do all newly generated/imported topics.
+**Hierarchy:** One catalog entry is one main topic. Guided paths are its subtopics. Each subtopic has 1–100 cards, even when the parent holds hundreds or thousands; storage/payload safeguards are separate from curriculum-count rules.
