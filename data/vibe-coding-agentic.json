@@ -450,10 +450,10 @@
       ],
       "question": {
         "options": [
-          "Give all agents write access to the reducer and merge whichever finishes first.",
-          "Run all modifications on the same shared branch without coordination.",
+          "Give each agent a separate branch for the same reducer and merge results automatically by timestamp.",
+          "Share a working tree as long as each agent runs its own focused tests.",
           "Assign disjoint work or parallel read-only review, and integrate shared writes centrally.",
-          "Let each agent force-push its preferred implementation."
+          "Allow concurrent edits to shared state if both workers report clean diffs."
         ],
         "answerIndex": 2,
         "explanation": "Concurrent agents can overwrite assumptions or modify overlapping code. Assign separate file or subsystem ownership and define integration contracts first. Parallelism saves time only when work products can be reconciled without competing writes."
@@ -693,9 +693,9 @@
       "question": {
         "options": [
           "Record an idempotency key and return the same committed outcome for the same operation.",
-          "Run the payment again because a timeout proves it failed.",
-          "Disable all requests after the first timeout.",
-          "Assume the frontend can enforce uniqueness by itself."
+          "Retry with exponential backoff but no server-side deduplication.",
+          "Disable double-clicking in the browser and assume no network retry occurs.",
+          "Reject payments submitted within a short time window, regardless of operation identity."
         ],
         "answerIndex": 0,
         "explanation": "Retries are normal in distributed systems. Use stable identifiers and idempotency keys for side-effecting operations that may be repeated. A retry-safe design must enforce uniqueness at the authoritative server boundary."
@@ -1394,10 +1394,10 @@
       ],
       "question": {
         "options": [
-          "Merge both files by timestamp without examining their contents.",
+          "Trust separate agents' local tests on a shared working tree.",
           "Assign an owner for the shared file or isolate branches and reconcile changes against the latest state.",
-          "Ignore the conflict when either agent passes its local checks.",
-          "Let each agent force-push the shared branch."
+          "Merge the final contents of both branches based only on line overlap.",
+          "Choose the most recent file version without checking whether it preserves both intentions."
         ],
         "answerIndex": 1,
         "explanation": "Multiple agents editing the same state can overwrite each other. Partition file ownership, branches, or resources before parallel execution. Use isolated work and one integration authority for overlapping mutable state."
@@ -1751,10 +1751,10 @@
       ],
       "question": {
         "options": [
-          "Accept the new test because CI is green.",
-          "Delete the test because it slowed development.",
+          "Adjust the expected output to match the new implementation without checking the original issue.",
+          "Accept an alternative test with the same name but fewer assertions.",
           "Restore the behavioral assertion and verify a fix against a reproducing case.",
-          "Treat the test name as sufficient evidence of intent."
+          "Move the failing case into a manual checklist and mark the original automated test skipped."
         ],
         "answerIndex": 2,
         "explanation": "An agent may weaken assertions or change tests to make failures disappear. Require explanation of why a test expectation changed and compare against product requirements. Validation must be capable of failing when the original defect is still present."
