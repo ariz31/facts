@@ -1,0 +1,117 @@
+{
+  "id": "git-and-collaboration",
+  "title": "Git, GitHub & Team Collaboration",
+  "description": "Track changes, isolate work, review pull requests, resolve conflicts safely, and coordinate AI assistants without losing work.",
+  "lessons": [
+    {
+      "title": "Why version control matters",
+      "principle": "Version control records project evolution so changes can be compared, discussed, and restored.",
+      "practice": "Explain the difference between working tree, staging area, commits, and remote branches."
+    },
+    {
+      "title": "Protect uncommitted work",
+      "principle": "Switching or resetting in a dirty workspace can overwrite edits you intended to keep.",
+      "practice": "Inspect git status and save or safely stash relevant changes before a risky operation."
+    },
+    {
+      "title": "Initialize, clone, and inspect",
+      "principle": "A repository has history, branch refs, and a working tree; cloning copies the repository to a local environment.",
+      "practice": "Practice git clone, git status, git log, and git diff in a sample project."
+    },
+    {
+      "title": "Read history for context",
+      "principle": "Recent commits explain why a design changed and can expose related bugs or constraints.",
+      "practice": "Ask AI to examine the current branch and relevant history before rewriting a subsystem."
+    },
+    {
+      "title": "Staging and meaningful commits",
+      "principle": "A commit should represent one coherent change with an intelligible message.",
+      "practice": "Stage only relevant files and inspect the staged diff before committing."
+    },
+    {
+      "title": "Keep secrets out of Git history",
+      "principle": "Deleting a committed secret from the latest file does not necessarily remove it from past commits.",
+      "practice": "Use .gitignore, secret scanning, and immediate credential rotation for exposure events."
+    },
+    {
+      "title": "Branches and isolation",
+      "principle": "A branch points to a commit and allows an independent series of changes before integration.",
+      "practice": "Create a feature branch from a verified base for the new card deck."
+    },
+    {
+      "title": "Avoid shared-branch agent collisions",
+      "principle": "Multiple agents changing the same branch or files can invalidate one another's assumptions.",
+      "practice": "Use isolated branches or worktrees and assign clear file ownership for parallel work."
+    },
+    {
+      "title": "Pull requests and review",
+      "principle": "A pull request provides a bounded diff, rationale, checks, and a discussion before changes join the base branch.",
+      "practice": "Write a PR description with purpose, files changed, verification, and known limits."
+    },
+    {
+      "title": "Review behavior, not only syntax",
+      "principle": "A clean diff can still break an API, omit accessibility, or mishandle a failure path.",
+      "practice": "Read changed code in context, request tests, and trace affected user journeys."
+    },
+    {
+      "title": "Merge conflicts",
+      "principle": "Conflicts occur when Git cannot automatically reconcile overlapping changes or histories.",
+      "practice": "Interpret conflict markers and compare both intended behaviors."
+    },
+    {
+      "title": "Resolve rather than blindly choose",
+      "principle": "Selecting 'ours' or 'theirs' may discard a valid fix from the other side.",
+      "practice": "Reconstruct the combined intent, remove markers, run checks, and inspect the final diff."
+    },
+    {
+      "title": "Rebase and merge tradeoffs",
+      "principle": "Merge records integration and rebase rewrites a branch's commits onto a new base.",
+      "practice": "Use the collaboration policy of the project instead of rewriting shared history casually."
+    },
+    {
+      "title": "Keep remote safety in mind",
+      "principle": "Force pushing a shared branch can remove colleagues' reachable work.",
+      "practice": "Avoid force pushes unless ownership and recovery are understood; prefer safe coordination."
+    },
+    {
+      "title": "Continuous integration",
+      "principle": "Automated checks run against particular commits and configurations when configured.",
+      "practice": "Locate workflow files and identify what a green or red check actually verifies."
+    },
+    {
+      "title": "Associate results with a commit",
+      "principle": "A test result from an earlier SHA does not prove that the latest edited head passes.",
+      "practice": "Record which final commit and environment a check executed against before claiming readiness."
+    },
+    {
+      "title": "Reviewing AI-generated diffs",
+      "principle": "Generated changes can be large, redundant, or unrelated to the requested scope.",
+      "practice": "Use git diff --check and file-by-file review before accepting output."
+    },
+    {
+      "title": "Preserve provenance",
+      "principle": "Automated authorship does not eliminate responsibility for change rationale and behavior.",
+      "practice": "Explain what AI changed, what was manually verified, and what remains uncertain in the PR."
+    },
+    {
+      "title": "Merge and release discipline",
+      "principle": "Integration decisions should depend on review, checks, and a known recovery route rather than a green mergeability badge.",
+      "practice": "Verify branch freshness and acceptance before merging."
+    },
+    {
+      "title": "Separate merging from deployment",
+      "principle": "A merged commit might still require configuration, data migration, rollout, and monitoring.",
+      "practice": "Document release owner, rollback instructions, and post-deployment checks separately from the PR."
+    }
+  ],
+  "codeExamples": [
+    {
+      "language": "bash",
+      "snippet": "git status\ngit switch -c feat/task-validation\ngit diff\ngit add src/task-form.js tests/task-form.test.js\ngit diff --cached\ngit commit -m \"fix: validate task title\""
+    },
+    {
+      "language": "bash",
+      "snippet": "git fetch origin\ngit log --oneline --decorate -5\ngit diff origin/main...HEAD --stat\ngit diff --check\n# Run the repository's documented checks before requesting review."
+    }
+  ]
+}

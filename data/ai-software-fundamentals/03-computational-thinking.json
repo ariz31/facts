@@ -1,0 +1,117 @@
+{
+  "id": "computational-thinking",
+  "title": "Computational Thinking & Programming Logic",
+  "description": "Learn to reason about inputs, variables, control flow, functions, collections, algorithms, edge cases, and correctness before asking AI for code.",
+  "lessons": [
+    {
+      "title": "Input, process, and output",
+      "principle": "An algorithm accepts defined inputs, performs finite steps, and produces observable results or errors.",
+      "practice": "Explain a tip calculator as input amount and rate, a calculation, and displayed total."
+    },
+    {
+      "title": "Trace a simple calculation",
+      "principle": "Manually tracing values reveals hidden assumptions about units and rounding.",
+      "practice": "For 100 currency units with a 10 percent tip, record intermediate values and the expected 110 total."
+    },
+    {
+      "title": "Variables and types",
+      "principle": "Variables name values; types determine valid operations and representations.",
+      "practice": "Distinguish numbers, strings, booleans, null, and collections in a simple form."
+    },
+    {
+      "title": "Avoid string-number confusion",
+      "principle": "Form inputs may arrive as text even when users typed numeric characters.",
+      "practice": "Convert intentionally and reject non-finite or invalid input before arithmetic."
+    },
+    {
+      "title": "Expressions and operators",
+      "principle": "Expressions combine values using arithmetic, comparison, and logical rules.",
+      "practice": "Use parentheses to make important conditions unambiguous."
+    },
+    {
+      "title": "Respect boolean precedence",
+      "principle": "A complex condition can grant access accidentally when AND and OR are mixed.",
+      "practice": "Write a truth table for 'is owner OR is editor AND resource is public' and clarify intended grouping."
+    },
+    {
+      "title": "Conditions and branches",
+      "principle": "Conditional logic chooses behavior based on explicit predicates.",
+      "practice": "List mutually exclusive cases before writing if/else or match logic."
+    },
+    {
+      "title": "Handle the default path",
+      "principle": "An omitted else branch can silently return undefined or leave stale state.",
+      "practice": "Specify the result for unknown statuses and invalid enum values."
+    },
+    {
+      "title": "Loops and termination",
+      "principle": "Repeated work needs clear iteration bounds and an exit condition.",
+      "practice": "Trace a loop over three tasks and identify which elements are included."
+    },
+    {
+      "title": "Avoid off-by-one errors",
+      "principle": "Using an inclusive boundary instead of an exclusive one can skip or overrun elements.",
+      "practice": "Test zero, one, and last-element cases for an indexed loop."
+    },
+    {
+      "title": "Functions and parameters",
+      "principle": "Functions package behavior behind a name, inputs, return value, and side-effect contract.",
+      "practice": "Write small functions with one responsibility and named parameters."
+    },
+    {
+      "title": "Separate pure logic from I/O",
+      "principle": "Pure functions return the same output for the same inputs and are easier to test.",
+      "practice": "Move price calculation outside the DOM event handler so AI-generated UI changes cannot alter the rule."
+    },
+    {
+      "title": "Arrays, objects, and maps",
+      "principle": "Collections model ordered items, structured records, or keyed lookup with different semantics.",
+      "practice": "Choose an array for ordered tasks and an object for a task's fields."
+    },
+    {
+      "title": "Choose identifiers deliberately",
+      "principle": "Array position is not a durable identifier when items can be reordered or deleted.",
+      "practice": "Give each saved task a stable ID and use it for updates and event correlation."
+    },
+    {
+      "title": "Algorithms and pseudocode",
+      "principle": "Pseudocode expresses an approach independently of programming-language syntax.",
+      "practice": "Describe a search/filter operation in plain steps before implementing it."
+    },
+    {
+      "title": "Check algorithm invariants",
+      "principle": "An invariant is a condition that must remain true through each iteration.",
+      "practice": "When filtering tasks, ensure every emitted result matched the predicate and preserved expected order."
+    },
+    {
+      "title": "Boundaries and invalid inputs",
+      "principle": "Correctness includes empty data, missing values, duplicates, and very large or malformed inputs.",
+      "practice": "Build a test table with nominal, edge, and invalid cases."
+    },
+    {
+      "title": "AI-generated code needs counterexamples",
+      "principle": "A helpful model can still write code that only succeeds on its demonstration input.",
+      "practice": "Challenge it with empty arrays, duplicate IDs, negative values, and unexpected types."
+    },
+    {
+      "title": "Complexity and clarity",
+      "principle": "Time and memory use increase with input size; clear correct code usually comes before optimization.",
+      "practice": "Recognize linear search and nested-loop growth without premature micro-optimizing."
+    },
+    {
+      "title": "Measure before optimizing",
+      "principle": "A faster-looking alternative may introduce worse complexity, allocations, or maintenance cost.",
+      "practice": "Benchmark representative input sizes and preserve correctness tests while changing an algorithm."
+    }
+  ],
+  "codeExamples": [
+    {
+      "language": "javascript",
+      "snippet": "function totalWithTip(amount, rate) {\n  if (!Number.isFinite(amount) || amount < 0 || !Number.isFinite(rate) || rate < 0) {\n    throw new RangeError('Invalid input');\n  }\n  return amount * (1 + rate);\n}\nconsole.log(totalWithTip(100, 0.10)); // 110"
+    },
+    {
+      "language": "javascript",
+      "snippet": "const tasks = [{id:'a',done:false},{id:'b',done:true}];\nfunction remaining(items){\n  return items.filter(task => !task.done);\n}\nconsole.log(remaining(tasks)); // [{id:'a',done:false}]"
+    }
+  ]
+}

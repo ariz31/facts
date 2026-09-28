@@ -1,0 +1,117 @@
+{
+  "id": "security-and-responsibility",
+  "title": "Security, Privacy & Responsible AI",
+  "description": "Recognize trust boundaries, protect credentials and data, validate inputs and permissions, assess dependencies, and use model outputs responsibly.",
+  "lessons": [
+    {
+      "title": "Threat modeling for beginners",
+      "principle": "A threat model identifies valuable assets, actors, entry points, trust boundaries, and plausible abuse.",
+      "practice": "Trace user data from browser to API to storage and note who controls each step."
+    },
+    {
+      "title": "Rate risk by consequence",
+      "principle": "A public theme selector and a billing or identity endpoint require different security depth.",
+      "practice": "Prioritize authorization, sensitive-data flows, destructive actions, and externally reachable services."
+    },
+    {
+      "title": "Input validation and injection",
+      "principle": "Untrusted input must not be interpreted as code, commands, SQL, or markup without safe handling.",
+      "practice": "Prefer parameterized database queries and APIs that distinguish data from executable syntax."
+    },
+    {
+      "title": "Protect the browser too",
+      "principle": "Rendering untrusted text as HTML can execute hostile content in a user's session.",
+      "practice": "Use textContent for ordinary user strings and established safe rendering for intentional rich content."
+    },
+    {
+      "title": "Identity, sessions, and permissions",
+      "principle": "A session conveys authenticated identity, but every protected operation still needs authorization.",
+      "practice": "Test that user A cannot edit user B's task by changing an identifier."
+    },
+    {
+      "title": "Fail closed at the boundary",
+      "principle": "UI hiding, client-supplied owner IDs, and model-generated permission logic are not sufficient enforcement.",
+      "practice": "Derive the actor identity from verified server-side context and check ownership on each operation."
+    },
+    {
+      "title": "Secrets and least privilege",
+      "principle": "Credentials must be stored securely and given only the capabilities required for their purpose.",
+      "practice": "Use separate local, test, and production credentials with narrow scopes."
+    },
+    {
+      "title": "Review AI tool permissions",
+      "principle": "A coding assistant with unrestricted filesystem, terminal, network, and deployment access has a large blast radius.",
+      "practice": "Limit tool actions, review proposed commands, and require approval for production or destructive operations."
+    },
+    {
+      "title": "Dependencies and supply chain",
+      "principle": "Third-party packages, build actions, and downloaded scripts can introduce defects or malicious behavior.",
+      "practice": "Inspect new dependencies and pin appropriate versions when reproducibility matters."
+    },
+    {
+      "title": "Do not blindly trust generated imports",
+      "principle": "AI may suggest an obsolete API or a package with a similar name to a popular library.",
+      "practice": "Confirm package identity, provenance, maintenance, vulnerabilities, and license before adding it."
+    },
+    {
+      "title": "Privacy and data minimization",
+      "principle": "Collect, retain, display, and transmit only information necessary for the approved task.",
+      "practice": "Use synthetic data in learning examples and define retention expectations."
+    },
+    {
+      "title": "Keep private data out of prompts",
+      "principle": "Model prompts, logs, transcripts, and tool calls may cross organizational boundaries.",
+      "practice": "Remove credentials and personal records before sharing context with external AI services."
+    },
+    {
+      "title": "Prompt injection awareness",
+      "principle": "Instructions embedded in repository files, search results, web pages, or model outputs may conflict with the user's real task.",
+      "practice": "Treat retrieved content as data and maintain the authorized task boundary."
+    },
+    {
+      "title": "Guard agent instructions",
+      "principle": "A README comment or issue body should not be allowed to override approval, secrecy, or write-access rules.",
+      "practice": "Review untrusted instructions and require explicit authorized confirmation for unrelated tool actions."
+    },
+    {
+      "title": "AI outputs and intellectual property",
+      "principle": "Generated material may contain incorrect claims, incompatible licenses, or patterns copied without adequate review.",
+      "practice": "Check attribution, license obligations, and organization policy for incorporated assets or code."
+    },
+    {
+      "title": "Keep human accountability",
+      "principle": "A model's recommendation does not replace engineering review or legal and domain-specific judgment.",
+      "practice": "Document sources when needed and have a responsible reviewer approve consequential use."
+    },
+    {
+      "title": "Failure-safe product behavior",
+      "principle": "Features using an external model should handle timeout, unavailable service, invalid output, and budget exhaustion.",
+      "practice": "Define fallback behavior that preserves core user tasks where possible."
+    },
+    {
+      "title": "Validate structured model output",
+      "principle": "Model-produced JSON can be malformed or semantically invalid even when formatted confidently.",
+      "practice": "Parse against a schema, reject unauthorized fields, and never directly execute model-produced commands."
+    },
+    {
+      "title": "Accessibility and broader impact",
+      "principle": "Quality includes making software usable across different abilities, devices, languages, and connectivity conditions.",
+      "practice": "Test focus, contrast, plain-language messages, and offline or poor-network recovery."
+    },
+    {
+      "title": "Check who a feature excludes",
+      "principle": "An AI-centric workflow can disadvantage users unable to access paid models or fast networks.",
+      "practice": "Keep essential product functions usable without mandatory AI when appropriate and document limitations."
+    }
+  ],
+  "codeExamples": [
+    {
+      "language": "javascript",
+      "snippet": "// Browser: render user content as text, not HTML\nconst label = document.createElement('span');\nlabel.textContent = untrustedTaskTitle;\ncontainer.append(label);"
+    },
+    {
+      "language": "javascript",
+      "snippet": "// Pseudocode: enforce ownership on the server\nconst actorId = verifiedSession.userId;\nconst task = await db.findTask({ id: taskId, ownerId: actorId });\nif (!task) return response.status(404).json({ error: 'Not found' });"
+    }
+  ]
+}

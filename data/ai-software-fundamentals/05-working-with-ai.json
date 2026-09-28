@@ -1,0 +1,117 @@
+{
+  "id": "working-with-ai",
+  "title": "Using AI as a Development Assistant",
+  "description": "Build AI literacy through task briefs, context selection, prompting, constrained agent permissions, evidence, and review.",
+  "lessons": [
+    {
+      "title": "What coding AI can and cannot do",
+      "principle": "Models predict useful code and explanations from context, but may fabricate APIs, miss requirements, and overlook risks.",
+      "practice": "Use AI to explore, explain, draft, test, and review while keeping source code and runtime behavior authoritative."
+    },
+    {
+      "title": "Calibrate model confidence",
+      "principle": "Fluent output is not a measurement of correctness or compatibility.",
+      "practice": "Ask for exact references to repository files or docs and verify them rather than trusting stated certainty."
+    },
+    {
+      "title": "Well-formed task briefs",
+      "principle": "A strong request names the goal, context, constraints, expected output, and definition of done.",
+      "practice": "Give AI the runtime, relevant files, in-scope change, and validation commands."
+    },
+    {
+      "title": "Compare weak and strong prompts",
+      "principle": "'Make an app' leaves hundreds of uncontrolled assumptions.",
+      "practice": "Specify 'Add task creation to this static app; preserve storage format; reject blanks; add a test' instead."
+    },
+    {
+      "title": "Selecting repository context",
+      "principle": "Too much irrelevant context hides crucial constraints; missing context causes incorrect assumptions.",
+      "practice": "Provide a repository map, the affected modules, failing test, and local project rules."
+    },
+    {
+      "title": "Avoid stale context",
+      "principle": "An agent may reason from an old branch or a prior file snapshot.",
+      "practice": "Ask it to inspect the current default branch or active PR head before proposing edits."
+    },
+    {
+      "title": "Prompt decomposition",
+      "principle": "Complex work becomes reviewable when discovery, design, implementation, and verification are separate stages.",
+      "practice": "Ask first for unknowns and a bounded plan, then authorize an isolated implementation step."
+    },
+    {
+      "title": "Manage task boundaries",
+      "principle": "A single prompt that mixes redesign, dependencies, migrations, and deployment raises regression risk.",
+      "practice": "Create separate acceptance checks and file scopes for independent steps."
+    },
+    {
+      "title": "Good AI-generated explanations",
+      "principle": "A useful explanation connects each change to user behavior, data flow, and specific code paths.",
+      "practice": "Ask AI to explain the data path in simple terms after it writes a function."
+    },
+    {
+      "title": "Learn without outsourcing understanding",
+      "principle": "Accepting a patch that no human can debug creates long-term maintenance risk.",
+      "practice": "Explain one generated function back in your own words and change a test without the model."
+    },
+    {
+      "title": "Code editing with checkpoints",
+      "principle": "Small patches and focused diffs are easier to verify and reverse than sweeping rewrites.",
+      "practice": "Request one coherent behavior change, inspect the diff, and commit only after checks."
+    },
+    {
+      "title": "Preserve unmodified behavior",
+      "principle": "AI can accidentally drop error handling, accessibility, or event listeners during a rewrite.",
+      "practice": "Inspect before-and-after behavior for every touched user journey."
+    },
+    {
+      "title": "Tool access and agent permissions",
+      "principle": "Tool-enabled agents can run commands and change remote systems, making permission scope material.",
+      "practice": "Grant the minimum repository, network, deployment, and credential access needed."
+    },
+    {
+      "title": "Distinguish read from write",
+      "principle": "An agent asked to investigate does not require permission to merge, delete, deploy, or mutate user data.",
+      "practice": "Keep destructive and production actions behind explicit human-approved gates."
+    },
+    {
+      "title": "Hallucinations and documentation checks",
+      "principle": "Generated package names, APIs, arguments, URLs, and version claims may not exist or may be obsolete.",
+      "practice": "Check an unfamiliar API in official version-matched documentation."
+    },
+    {
+      "title": "Test the proposed method",
+      "principle": "A model's sample can compile while relying on wrong runtime assumptions.",
+      "practice": "Run a minimal reproduction with representative values before integrating unfamiliar code."
+    },
+    {
+      "title": "AI review as a second opinion",
+      "principle": "Independent review helps surface defects but may share the same blind spots as generation.",
+      "practice": "Ask a reviewer to look for correctness, risks, missing cases, and scope drift using the actual diff."
+    },
+    {
+      "title": "Use adversarial checks",
+      "principle": "Request counterexamples rather than only reasons why the change is good.",
+      "practice": "Ask what input, permission combination, or failure mode would break the new behavior, then test it."
+    },
+    {
+      "title": "Knowing when to stop",
+      "principle": "Repeated prompting without new evidence can degrade a correct implementation.",
+      "practice": "Use acceptance criteria and evidence as the stop condition."
+    },
+    {
+      "title": "Keep residual-risk notes",
+      "principle": "No reasonable test suite proves the absence of all defects; known limits should remain explicit.",
+      "practice": "Summarize validated behavior, untested environments, remaining risks, and the recovery plan."
+    }
+  ],
+  "codeExamples": [
+    {
+      "language": "markdown",
+      "snippet": "Goal: reject blank task titles\nContext: static JS app; localStorage data shape unchanged\nScope: task-form.js and its tests only\nAcceptance: trimmed blanks rejected; valid titles saved\nValidation: npm test; inspect final diff"
+    },
+    {
+      "language": "markdown",
+      "snippet": "Review only the current diff.\nFind: behavioral regressions, unhandled errors,\nunsafe data flow, and missing edge cases.\nFor each finding: path, evidence, impact, test.\nDo not edit or merge without authorization."
+    }
+  ]
+}

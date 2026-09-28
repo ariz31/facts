@@ -1,0 +1,117 @@
+{
+  "id": "design-and-code",
+  "title": "Readable Code, Architecture & Data Flow",
+  "description": "Learn functions, modules, interfaces, dependencies, state ownership, asynchronous behavior, and maintainable changes.",
+  "lessons": [
+    {
+      "title": "Readable code and naming",
+      "principle": "A clear name and limited responsibility reduce the effort required to understand and safely modify code.",
+      "practice": "Prefer descriptive functions over abbreviations and remove duplicated sources of truth."
+    },
+    {
+      "title": "Use AI to simplify, not obscure",
+      "principle": "Short code is not always simple code when it hides side effects or clever control flow.",
+      "practice": "Ask AI to explain every new abstraction and reject one that has no concrete reuse or isolation benefit."
+    },
+    {
+      "title": "Functions and contracts",
+      "principle": "A function contract specifies accepted input, returned output, errors, and observable side effects.",
+      "practice": "Write a short contract before implementing state-changing functions."
+    },
+    {
+      "title": "Guard inputs at trust boundaries",
+      "principle": "Validation requirements differ for internal helper arguments and untrusted external input.",
+      "practice": "Validate network and form data before converting it to domain objects."
+    },
+    {
+      "title": "Modules and separation of concerns",
+      "principle": "Modules should have cohesive responsibilities and narrow interfaces to limit coupling.",
+      "practice": "Separate UI rendering, domain rules, persistence, and service requests for a simple task app."
+    },
+    {
+      "title": "Avoid cyclic dependencies",
+      "principle": "Modules that import one another can create brittle initialization and hidden shared state.",
+      "practice": "Sketch a dependency direction and refactor cycles before adding another import."
+    },
+    {
+      "title": "Data models and identifiers",
+      "principle": "A data model describes entities, fields, relationships, and constraints across system boundaries.",
+      "practice": "Model a task with id, title, done state, and timestamps."
+    },
+    {
+      "title": "Separate display from persistence",
+      "principle": "Display ordering and formatting should not be stored as authoritative business identity.",
+      "practice": "Use stable IDs for updates and compute labels or sorted views from stored task data."
+    },
+    {
+      "title": "State and source of truth",
+      "principle": "State needs a clear authoritative owner; duplicated mutable copies become inconsistent.",
+      "practice": "Identify which component or database owns each changing value."
+    },
+    {
+      "title": "Avoid stale derived state",
+      "principle": "Totals, filtered lists, and labels can often be calculated from current primary state.",
+      "practice": "Derive 'remaining tasks' from the task collection rather than writing both values independently."
+    },
+    {
+      "title": "Error handling and contracts",
+      "principle": "Failures are part of a function or service interface and should be handled at an appropriate boundary.",
+      "practice": "Differentiate expected validation errors from unexpected system faults."
+    },
+    {
+      "title": "Keep error information useful and safe",
+      "principle": "Showing full stack traces to users may reveal implementation details while vague logs slow debugging.",
+      "practice": "Return clear user-facing messages, log diagnostic context safely, and preserve causes for maintainers."
+    },
+    {
+      "title": "Asynchronous execution",
+      "principle": "Promises and async functions represent work that may complete after the current call stack.",
+      "practice": "Identify which operations need await and how pending UI should behave."
+    },
+    {
+      "title": "Do not report success early",
+      "principle": "UI can claim a save succeeded even when persistence fails later.",
+      "practice": "Await the actual storage or network confirmation before displaying a definitive success message."
+    },
+    {
+      "title": "Dependencies and change cost",
+      "principle": "Each new package creates maintenance, supply-chain, and compatibility obligations.",
+      "practice": "Prefer existing project utilities for a small use case unless benefits justify another library."
+    },
+    {
+      "title": "Review AI package suggestions",
+      "principle": "A plausible-sounding package may be abandoned, unsafe, or unnecessary.",
+      "practice": "Check publisher, version, license, usage, transitive dependencies, and maintained alternatives."
+    },
+    {
+      "title": "Refactoring versus behavior changes",
+      "principle": "Refactoring should preserve externally observable behavior while improving internal design.",
+      "practice": "Protect behavior with tests before moving or renaming logic."
+    },
+    {
+      "title": "Avoid mixed-purpose patches",
+      "principle": "Combining a refactor with new features obscures the source of regressions.",
+      "practice": "Split mechanical renaming from behavioral changes when practical and review each separately."
+    },
+    {
+      "title": "Architecture notes and handoff",
+      "principle": "Decisions and invariants need concise documentation so later contributors and agents can preserve them.",
+      "practice": "Record module boundaries, storage assumptions, and intentional tradeoffs."
+    },
+    {
+      "title": "Give future AI accurate context",
+      "principle": "Short verified guidance is more useful than a stale dump of every file.",
+      "practice": "Maintain a current architecture note and revise it whenever a fundamental contract changes."
+    }
+  ],
+  "codeExamples": [
+    {
+      "language": "javascript",
+      "snippet": "export function normalizeTaskTitle(value) {\n  if (typeof value !== 'string') throw new TypeError('title must be text');\n  const title = value.trim();\n  if (!title) throw new RangeError('title is required');\n  return title;\n}"
+    },
+    {
+      "language": "javascript",
+      "snippet": "async function saveTask(repository, task) {\n  const saved = await repository.insert(task); // await actual persistence\n  if (!saved?.id) throw new Error('Save failed');\n  return saved;\n}"
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "id": "tools-and-environment",
+  "title": "Development Environment & Tooling",
+  "description": "Set up a safe repeatable workspace and understand files, terminals, editors, runtimes, dependencies, and build tools.",
+  "lessons": [
+    {
+      "title": "The project directory",
+      "principle": "A working directory contains source, configuration, tests, documentation, and generated output with different roles.",
+      "practice": "Identify the repository root and distinguish committed files from generated or local files."
+    },
+    {
+      "title": "Inspect before editing",
+      "principle": "A file tree conveys architecture clues but not every file is safe to modify or commit.",
+      "practice": "Read README and local contributor instructions, then ask AI to summarize the files relevant to the task."
+    },
+    {
+      "title": "Terminal basics",
+      "principle": "Commands execute programs within a current directory and environment, often with filesystem side effects.",
+      "practice": "Practice pwd, ls or dir, cd, mkdir, and reading text files on a disposable project."
+    },
+    {
+      "title": "Avoid destructive copy-paste",
+      "principle": "Shell commands from model outputs may delete files, leak data, or execute downloaded content.",
+      "practice": "Explain each unfamiliar flag before running commands; do not pipe unknown remote scripts into a shell."
+    },
+    {
+      "title": "Editors and diagnostics",
+      "principle": "A code editor exposes syntax errors, references, formatting, version history, and breakpoints.",
+      "practice": "Use project-wide search and navigate to the definitions of changed symbols."
+    },
+    {
+      "title": "Use diagnostics as evidence",
+      "principle": "Squiggles and type errors identify potential issues but do not cover all runtime behavior.",
+      "practice": "Copy exact diagnostic text into an AI request and verify its proposed fix in the editor."
+    },
+    {
+      "title": "Language and runtime",
+      "principle": "Source language, interpreter or runtime version, and operating system determine what executes.",
+      "practice": "Record required Node or Python version and the project entry point."
+    },
+    {
+      "title": "Match local and target environments",
+      "principle": "A feature that works locally may fail under a different runtime or configuration.",
+      "practice": "Pin or document supported runtime versions and test the one used for release."
+    },
+    {
+      "title": "Packages and dependency manifests",
+      "principle": "Package manifests declare direct dependencies, scripts, and metadata, while lockfiles resolve exact versions.",
+      "practice": "Explain the difference between a manifest and a generated lockfile."
+    },
+    {
+      "title": "Install reproducibly",
+      "principle": "Non-repeatable installs can produce different behavior on teammates' computers or CI.",
+      "practice": "Use the project's lockfile-aware installation command and review proposed new dependencies."
+    },
+    {
+      "title": "Environment variables and secrets",
+      "principle": "Configuration differs across environments; credentials must not become source-controlled data or browser bundles.",
+      "practice": "Use documented sample variable names with placeholder values."
+    },
+    {
+      "title": "Handle local secrets safely",
+      "principle": "A .env file is not automatically protected if it is committed, logged, or included in a build.",
+      "practice": "Ignore secret-bearing files, use secret stores in deployment, and rotate any accidentally exposed credential."
+    },
+    {
+      "title": "Local servers and ports",
+      "principle": "A development server binds to a host and port and can differ from a production web server.",
+      "practice": "Launch a minimal project and verify the actual listening URL."
+    },
+    {
+      "title": "Distinguish exposure levels",
+      "principle": "Listening only on localhost is not equivalent to exposing a service on all network interfaces.",
+      "practice": "Check bind address, firewall, authentication, and whether the test server contains real data."
+    },
+    {
+      "title": "Build, lint, and type checking",
+      "principle": "Build tools transform assets, linters flag patterns, and type checkers validate declared type relationships.",
+      "practice": "Find the project's actual scripts instead of inventing standard names."
+    },
+    {
+      "title": "Understand check limitations",
+      "principle": "A green build does not prove security, accessibility, or correct feature behavior.",
+      "practice": "Run the most relevant syntax, type, test, and browser checks and report each separately."
+    },
+    {
+      "title": "Containers at a beginner level",
+      "principle": "A container packages an application process with a defined filesystem and environment, but it is not a security boundary by itself.",
+      "practice": "Explain image, container, Dockerfile, volume, and port mapping in one example."
+    },
+    {
+      "title": "Keep mutable data separate",
+      "principle": "Container filesystems can be replaced and should not be the only home of persistent business data.",
+      "practice": "Use named volumes or external storage where appropriate and avoid baking secrets into images."
+    },
+    {
+      "title": "Reproducible onboarding",
+      "principle": "A reliable project can be cloned, configured, started, checked, and stopped by someone new.",
+      "practice": "Write a short setup guide with prerequisites and expected results."
+    },
+    {
+      "title": "Test the setup from scratch",
+      "principle": "An undocumented global package or local file can hide a broken onboarding flow.",
+      "practice": "Ask a fresh clone or isolated environment to follow README commands and record any missing steps."
+    }
+  ],
+  "codeExamples": [
+    {
+      "language": "bash",
+      "snippet": "# Run only after reviewing the repository instructions\npwd\nls -la\nnode --version\nnpm --version\nnpm run"
+    },
+    {
+      "language": "dockerfile",
+      "snippet": "FROM node:22-alpine\nWORKDIR /app\nCOPY package*.json ./\nRUN npm ci --omit=dev\nCOPY . .\nUSER node\nCMD [\"node\", \"server.js\"]"
+    }
+  ]
+}
