@@ -792,7 +792,11 @@ async function initialize() {
     migrateVibeCurriculumState(state, state.decks);
     if (!state.decks.some((deck) => deck.id === state.activeDeckId)) state.activeDeckId = state.decks[0].id;
     const deck = activeDeck();
-    if (state.activePathId !== "all" && !deck.paths.some((path) => path.id === state.activePathId)) state.activePathId = "all";
+    // Preserve an old selected Vibe path if its new topic is not yet cached.
+    const awaitingVibeMigration = state.activeDeckId === "vibe-coding"
+      && state.vibeCurriculumMigrationVersion < 1;
+    if (state.activePathId !== "all" && !deck.paths.some((path) => path.id === state.activePathId)
+      && !awaitingVibeMigration) state.activePathId = "all";
     await loadBackgroundForDeck(state.activeDeckId);
     renderJourney();
     persistState();
