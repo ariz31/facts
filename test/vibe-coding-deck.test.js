@@ -6,6 +6,7 @@ import { validateGeneratedDeckQuality } from "../src/card-generation-rules.js";
 import { assembleSubtopicDeck, isSubtopicFragmentManifest } from "../src/subtopic-deck.js";
 
 const manifest = JSON.parse(await readFile(new URL("../data/vibe-coding.json", import.meta.url), "utf8"));
+const catalog = JSON.parse(await readFile(new URL("../data/decks.json", import.meta.url), "utf8"));
 const decks = await Promise.all(manifest.fragments.map(async (path) => (
   JSON.parse(await readFile(new URL(`../data/${path}`, import.meta.url), "utf8"))
 )));
@@ -192,12 +193,21 @@ test("direct answers address the audit's formerly under-explained scenarios", ()
 });
 
 test("every subtopic independently fits the 100-card ceiling, with NO top-level duplicate entries", () => {
-  const catalog = ["vibe-coding"]; // The catalog equality is checked against data/decks.json by check:data.
-  assert.equal(catalog.filter((id) => id.startsWith("vibe-coding")).length, 1);
+  assert.deepEqual(catalog.decks.filter((id) => id.startsWith("vibe-coding")), ["vibe-coding"]);
   for (const path of parent.paths) {
     assert.ok(path.cardIds.length >= 1 && path.cardIds.length <= 100,
       `${path.id}: no subtopic may contain more than 100 cards`);
   }
   assert.equal(new Set(parent.cards.map((card) => card.id)).size, 500);
   assert.equal(parent.cards.length, parent.paths.reduce((n, path) => n + path.cardIds.length, 0));
+});
+
+test("obsolete standalone topic entries cannot reappear as root JSON sources", async () => {
+  for (const formerId of ["vibe-coding-agentic", "vibe-coding-application", "vibe-coding-quality", "vibe-coding-production"]) {
+    await assert.rejects(
+      readFile(new URL(`../data/${formerId}.json`, import.meta.url), "utf8"),
+      { code: "ENOENT" },
+      `${formerId} must remain an internal shard, not a second main topic`,
+    );
+  }
 });
