@@ -137,7 +137,7 @@ function initializeImporter() {
           <div class="ai-prompt-fields">
             <label>Topic<input id="ai-deck-topic" type="text" value="Civil engineering fundamentals" maxlength="180" /></label>
             <label>Audience<select id="ai-deck-audience"><option>Beginner</option><option>Intermediate</option><option>Advanced</option><option>Mixed levels</option></select></label>
-            <label>Maximum cards<select id="ai-deck-count">${CARD_COUNT_OPTIONS.map((number) => `<option value="${number}"${number === 100 ? " selected" : ""}>${number}</option>`).join("")}</select></label>
+            <label>Maximum cards per subtopic<select id="ai-deck-count">${CARD_COUNT_OPTIONS.map((number) => `<option value="${number}"${number === 100 ? " selected" : ""}>${number}</option>`).join("")}</select></label>
           </div>
           <label class="ai-textarea-label">Premade prompt<textarea id="ai-deck-prompt" readonly spellcheck="false"></textarea></label>
           <div class="ai-row-actions">
@@ -181,7 +181,7 @@ function refreshPrompt() {
   const topic = document.querySelector("#ai-deck-topic")?.value.trim() || "the requested topic";
   const audience = document.querySelector("#ai-deck-audience")?.value || "Mixed levels";
   const requestedCount = Number(document.querySelector("#ai-deck-count")?.value);
-  const count = CARD_COUNT_OPTIONS.includes(requestedCount) ? requestedCount : IMPORT_LIMITS.maximumCards;
+  const count = CARD_COUNT_OPTIONS.includes(requestedCount) ? requestedCount : IMPORT_LIMITS.maximumCardsPerSubtopic;
   const output = document.querySelector("#ai-deck-prompt");
   if (output) output.value = makeCardGenerationPrompt(topic, audience, count);
 }
@@ -218,8 +218,11 @@ function importDeck() {
     const errors = validateDeck(deck);
     if (errors.length) throw new Error(errors.slice(0, 8).join(" "));
     const requestedCount = Number(document.querySelector("#ai-deck-count")?.value);
-    if (Number.isInteger(requestedCount) && deck.cards.length > requestedCount) {
-      throw new Error(`The generated deck contains ${deck.cards.length} cards, but the selected maximum is ${requestedCount}.`);
+    if (Number.isInteger(requestedCount)) {
+      const oversized = deck.paths.find((path) => path.cardIds.length > requestedCount);
+      if (oversized) {
+        throw new Error(`Subtopic "${oversized.title}" has ${oversized.cardIds.length} cards; the selected maximum per subtopic is ${requestedCount}.`);
+      }
     }
 
     const { decks: imported } = readImportedDecks();
@@ -229,7 +232,7 @@ function importDeck() {
     }
     imported[deck.id] = deck;
     writeImportedDecks(imported);
-    setImportStatus(`${deck.title} ${existed ? "updated" : "imported"} with ${deck.cards.length} cards. Reloading…`, "success");
+    setImportStatus(`${deck.title} ${existed ? "updated" : "imported"} with ${deck.cards.length} cards across ${deck.paths.length} subtopics. Reloading…`, "success");
     renderImportedDecks();
     setTimeout(() => window.location.reload(), 450);
   } catch (error) {
