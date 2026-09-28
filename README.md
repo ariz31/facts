@@ -4,7 +4,7 @@ Facts is an offline-first, card-based learning application. Topics are arranged 
 
 ## Included topics
 
-The authored catalog contains **12 topics**, **1,512 source cards**, and **101 authored guided learning paths**. Ten established topics also receive 100-card reference libraries at runtime, bringing the complete learning experience to **2,512 rendered cards** and **111 guided paths**:
+The authored catalog contains **13 topics**, **1,752 source cards**, and **113 authored guided learning paths**. Ten established topics also receive 100-card reference libraries at runtime, bringing the complete learning experience to **2,752 rendered cards** and **123 guided paths**:
 
 1. Frontend Programming
 2. Backend Programming
@@ -18,6 +18,7 @@ The authored catalog contains **12 topics**, **1,512 source cards**, and **101 a
 10. Git & GitHub
 11. Docker
 12. Vibe Coding: AI-Assisted Software Engineering
+13. Fundamentals of Software Development with AI
 
 The Frontend Programming curriculum contains **400 curated cards across 20 deep paths** covering the web platform, semantic HTML, forms, CSS, layout, responsive design, visual systems, JavaScript, DOM and browser APIs, asynchronous data, state and component architecture, TypeScript and tooling, accessibility, routing and complete UX states, frontend security, performance, media and offline capabilities, testing and debugging, framework/rendering architecture, and production delivery. Its 100-card reference library brings the runtime deck to the schema maximum of **500 cards across 21 paths**.
 
@@ -26,6 +27,8 @@ The Backend Programming curriculum contains **400 curated cards across 20 deep p
 The Docker curriculum contains 116 authored cards across 12 focused paths covering foundations, images and Dockerfiles, runtime behavior, storage, networking, Docker Compose, development workflows, security and supply chain, production operations, troubleshooting, and hands-on Node.js/API + PostgreSQL projects.
 
 The Vibe Coding curriculum uses the deck schema's full **500-card** capacity across **25 focused paths**. It progresses from product framing, specifications, prompting, context engineering, planning, and architecture through frontend, backend, databases, security, testing, debugging, Git, review, dependency hygiene, performance, accessibility, reproducible environments, CI/CD, observability, agent/tool workflows, AI failure recovery, legacy refactoring, and production-readiness governance. Its source is split into reviewable lesson fragments and deterministically assembled into a normal Facts deck at runtime and during repository validation.
+
+The **Fundamentals of Software Development with AI** curriculum contains **240 explicitly authored cards across 12 sequential paths**, designed for newcomers who want to understand, build, test, and ship software with AI as an assistant. Lessons start with the development lifecycle and requirements, then introduce programming logic, tools, AI task briefs, clean code, frontend, backend and databases, collaboration, testing, security and responsible AI, and a hands-on task-tracker capstone. Every path includes principles, applied examples, knowledge checks, code snippets, step-by-step procedures, and review checklists. Unlike the advanced Vibe Coding curriculum, this deck teaches underlying software concepts before more autonomous AI workflows.
 
 ## Learning journey
 
@@ -70,7 +73,7 @@ Facts includes:
 - an installable application icon;
 - a service worker;
 - pre-caching of the application shell;
-- pre-caching of all 12 learning decks, including sharded lesson sources;
+- pre-caching of all 13 learning decks, including sharded lesson sources;
 - stale-while-revalidate asset updates;
 - network-first navigation fallback;
 - local progress and design persistence;
@@ -107,7 +110,7 @@ Node.js 20 or newer is recommended.
 npm run check
 ```
 
-The check command validates JavaScript syntax, exact parity between the built-in topic registry and the 12-topic deck catalog, sharded lesson-deck assembly, every card and path relationship, runtime topic expansion, and the learning and design unit tests.
+The check command validates JavaScript syntax, exact parity between the built-in topic registry and the 13-topic deck catalog, sharded lesson-deck assembly, every card and path relationship, runtime topic expansion, and the learning and design unit tests.
 
 ## Data model
 
