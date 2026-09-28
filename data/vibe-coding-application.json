@@ -235,10 +235,10 @@
       ],
       "question": {
         "options": [
-          "Keep div elements and add a pointer cursor.",
-          "Make every element contenteditable.",
+          "Add role=button to each div and leave keyboard behavior to the browser.",
+          "Use generic divs with both click and keydown handlers, but omit link semantics and href.",
           "Use a button for commands and an anchor with href for navigation.",
-          "Use an image with embedded labels for both controls."
+          "Turn both controls into anchors with no href to preserve their common styling."
         ],
         "answerIndex": 2,
         "explanation": "Native semantics improve accessibility and resilience. Use buttons for actions, links for navigation, labels for form controls, and landmarks for page structure. Native controls bring expected semantics, keyboard behavior, and focus handling."
@@ -998,9 +998,9 @@
       ],
       "question": {
         "options": [
-          "Always turn transactions off so requests do not block.",
-          "Use whichever isolation is easiest to configure.",
-          "Assume every database prevents all read and write anomalies by default.",
+          "Use READ COMMITTED for every workload because it is a common default.",
+          "Choose the isolation level entirely from the expected latency budget.",
+          "Assume transaction retries alone eliminate all write anomalies.",
           "Choose a level that prevents the anomalies relevant to the business invariant, then test it."
         ],
         "answerIndex": 3,
@@ -1377,10 +1377,10 @@
       ],
       "question": {
         "options": [
-          "Escape the input with a homegrown string replacement.",
-          "Hide the query from the browser.",
+          "Escape quote characters manually and keep SQL string concatenation.",
+          "Limit string length without separating input values from query syntax.",
           "Use parameterized queries or a safe query builder with input validation.",
-          "Rely on authentication alone to make SQL input safe."
+          "Require a signed-in user but keep interpolating the query directly."
         ],
         "answerIndex": 2,
         "explanation": "Untrusted input must not become executable syntax. Use parameterized queries, safe APIs, contextual output encoding, and strict command construction. Validation supports domain rules; parameter binding keeps supplied values from becoming query syntax."
@@ -1690,9 +1690,9 @@
       ],
       "question": {
         "options": [
-          "A valid owner creates a project normally.",
-          "The UI heading uses the requested font.",
-          "A success screenshot matches the mockup.",
+          "Test that an authorized user receives a normal success response.",
+          "Test that a mocked endpoint can display a generic error message.",
+          "Compare the happy-path UI snapshot before and after the change.",
           "An unauthorized caller gets denied without changing the database."
         ],
         "answerIndex": 3,
