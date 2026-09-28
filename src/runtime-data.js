@@ -1,4 +1,5 @@
 import { expandDeck } from "./topic-expansion.js";
+import { CARD_COUNT_OPTIONS, makeCardGenerationPrompt } from "./card-generation-rules.js";
 import {
   BUILT_IN_DECK_IDS,
   collectValidImportedDecks,
@@ -136,7 +137,7 @@ function initializeImporter() {
           <div class="ai-prompt-fields">
             <label>Topic<input id="ai-deck-topic" type="text" value="Civil engineering fundamentals" maxlength="180" /></label>
             <label>Audience<select id="ai-deck-audience"><option>Beginner</option><option>Intermediate</option><option>Advanced</option><option>Mixed levels</option></select></label>
-            <label>Cards<select id="ai-deck-count"><option value="25">25</option><option value="50">50</option><option value="100" selected>100</option><option value="200">200</option></select></label>
+            <label>Cards<select id="ai-deck-count">${CARD_COUNT_OPTIONS.map((number) => `<option value="${number}"${number === 100 ? " selected" : ""}>${number}</option>`).join("")}</select></label>
           </div>
           <label class="ai-textarea-label">Premade prompt<textarea id="ai-deck-prompt" readonly spellcheck="false"></textarea></label>
           <div class="ai-row-actions">
@@ -179,39 +180,10 @@ function initializeImporter() {
 function refreshPrompt() {
   const topic = document.querySelector("#ai-deck-topic")?.value.trim() || "the requested topic";
   const audience = document.querySelector("#ai-deck-audience")?.value || "Mixed levels";
-  const count = Number(document.querySelector("#ai-deck-count")?.value) || 100;
+  const requestedCount = Number(document.querySelector("#ai-deck-count")?.value);
+  const count = CARD_COUNT_OPTIONS.includes(requestedCount) ? requestedCount : IMPORT_LIMITS.maximumCards;
   const output = document.querySelector("#ai-deck-prompt");
-  if (output) output.value = makePrompt(topic, audience, count);
-}
-
-function makePrompt(topic, audience, count) {
-  return `Create a complete learning-card deck about "${topic}" for ${audience.toLowerCase()} learners.
-
-Return ONLY valid JSON. Do not use Markdown fences, commentary, placeholders, trailing commas, or references outside the JSON.
-
-Required top-level schema:
-{
-  "id": "lowercase-kebab-case",
-  "title": "Human-readable title",
-  "category": "Category",
-  "description": "One concise paragraph",
-  "estimatedMinutes": 120,
-  "paths": [{ "id": "path-id", "title": "Path title", "description": "Purpose", "cardIds": ["card-id"] }],
-  "cards": [CARD_OBJECT]
-}
-
-Create exactly ${count} cards and at least 3 guided paths. Every card must appear in at least one path. Every card.pathIds entry must point to a path containing that card id. Card ids, path ids, and sequence numbers must be unique. Sequence numbers must be consecutive starting at 1.
-
-Allowed card types and required extra fields:
-- concept or fact: content
-- question: question.options, question.answerIndex, question.explanation
-- code: content, code.language, code.snippet
-- steps: content, non-empty steps
-- checklist: content, non-empty items
-
-Every card requires id, sequence, type, title, prompt, content, tags, difficulty, and pathIds. difficulty must be beginner, intermediate, or advanced.
-
-Before returning JSON, verify exact card count, unique ids, consecutive sequences, valid answer indexes, required type-specific fields, and bidirectional path references.`;
+  if (output) output.value = makeCardGenerationPrompt(topic, audience, count);
 }
 
 async function copyPrompt() {
