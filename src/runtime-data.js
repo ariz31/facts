@@ -137,7 +137,7 @@ function initializeImporter() {
           <div class="ai-prompt-fields">
             <label>Topic<input id="ai-deck-topic" type="text" value="Civil engineering fundamentals" maxlength="180" /></label>
             <label>Audience<select id="ai-deck-audience"><option>Beginner</option><option>Intermediate</option><option>Advanced</option><option>Mixed levels</option></select></label>
-            <label>Cards<select id="ai-deck-count">${CARD_COUNT_OPTIONS.map((number) => `<option value="${number}"${number === 100 ? " selected" : ""}>${number}</option>`).join("")}</select></label>
+            <label>Maximum cards<select id="ai-deck-count">${CARD_COUNT_OPTIONS.map((number) => `<option value="${number}"${number === 100 ? " selected" : ""}>${number}</option>`).join("")}</select></label>
           </div>
           <label class="ai-textarea-label">Premade prompt<textarea id="ai-deck-prompt" readonly spellcheck="false"></textarea></label>
           <div class="ai-row-actions">
@@ -218,8 +218,8 @@ function importDeck() {
     const errors = validateDeck(deck);
     if (errors.length) throw new Error(errors.slice(0, 8).join(" "));
     const requestedCount = Number(document.querySelector("#ai-deck-count")?.value);
-    if (Number.isInteger(requestedCount) && deck.cards.length !== requestedCount) {
-      throw new Error(`The generated deck contains ${deck.cards.length} cards, but the prompt requested ${requestedCount}.`);
+    if (Number.isInteger(requestedCount) && deck.cards.length > requestedCount) {
+      throw new Error(`The generated deck contains ${deck.cards.length} cards, but the selected maximum is ${requestedCount}.`);
     }
 
     const { decks: imported } = readImportedDecks();
