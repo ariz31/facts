@@ -21,7 +21,7 @@ export function makeCardGenerationPrompt(topic, audience = "Mixed levels", count
 
   return `You are an expert subject-matter educator and instructional designer. Author a rigorous, accurate, progressive learning-card curriculum for the topic ${JSON.stringify(subject)}. Target audience: ${audience}.
 
-CARD LIMIT: Produce exactly ${count} substantial, NON-REPETITIVE cards for this topic. NEVER exceed ${MAX_GENERATED_CARDS} cards in one topic/deck. Quality, conceptual coverage, and progression take priority over filler. For a larger subject, scope this deck to a coherent part and make any additional parts separate topics (each up to ${MAX_GENERATED_CARDS} cards).
+CARD LIMIT: Produce UP TO ${count} substantial, NON-REPETITIVE cards for this topic. Generate fewer when the subject cannot sustain the selected maximum without filler; never pad just to reach a number. NEVER exceed ${MAX_GENERATED_CARDS} cards in one topic/deck. Quality, conceptual coverage, and progression take priority over quantity. For a larger subject, scope this deck to a coherent part and make any additional parts separate topics (each up to ${MAX_GENERATED_CARDS} cards).
 
 PLAN THE TEACHING SEQUENCE BEFORE WRITING THE JSON (do not output the plan):
 1. Identify the topic-specific prerequisite concepts and assess the audience; do not blindly apply the same outline to every subject.
@@ -52,7 +52,7 @@ Additional type fields: question requires question.options (2–12 unique choice
 Every card must appear in at least one path; every path.cardIds entry must point to an existing card that lists that path in its pathIds. Sequence numbers and card IDs must be unique. Within each path, cardIds MUST follow ascending global sequence; arrange paths in teaching order. A learner studying the full deck must not encounter prerequisites after dependent concepts.
 
 FINAL SELF-AUDIT BEFORE RETURNING JSON:
-- Exactly ${count} cards; no more than ${MAX_GENERATED_CARDS}; correct schema and valid JSON.
+- Between 1 and ${count} cards; no more than ${MAX_GENERATED_CARDS}; correct schema and valid JSON. Fewer high-quality cards are preferable to padding.
 - Every front asks or cues something specific and every revealed answer adds knowledge rather than repeating the front.
 - No duplicate titles, prompts, answers, near-duplicate explanations or generic templated application cards.
 - Prerequisites precede applications; each path progresses from fundamentals toward an authentic outcome.
