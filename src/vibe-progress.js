@@ -17,17 +17,25 @@ export function migrateVibeCurriculumState(state, availableDecks) {
     return false; // Wait for all five decks; never silently lose statuses when an offline fetch failed.
   }
 
-  const progress = state.progress && typeof state.progress === "object" && !Array.isArray(state.progress)
-    ? state.progress : (state.progress = {});
-  const historicalStatuses = progress["vibe-coding"];
+  // Do not mark migration complete against partial, mixed-version, or corrupt caches.
+  // Validate all 500 historical IDs BEFORE modifying any stored progress.
   const cardOwners = new Map();
-
-  for (const deck of availableDecks.filter((candidate) => VIBE_CURRICULUM_IDS.includes(candidate?.id))) {
-    for (const card of deck.cards ?? []) {
-      if (cardOwners.has(card.id)) throw new Error(`Duplicate Vibe Coding card id during migration: ${card.id}`);
+  for (const deckId of VIBE_CURRICULUM_IDS) {
+    const deck = availableDecks.find((candidate) => candidate?.id === deckId);
+    if (!Array.isArray(deck?.cards) || deck.cards.length !== 100) return false;
+    for (const card of deck.cards) {
+      if (typeof card?.id !== "string" || cardOwners.has(card.id)) return false;
       cardOwners.set(card.id, deck.id);
     }
   }
+  if (cardOwners.size !== 500) return false;
+  for (let index = 1; index <= 500; index += 1) {
+    if (!cardOwners.has(`vc-${String(index).padStart(3, "0")}`)) return false;
+  }
+
+  const progress = state.progress && typeof state.progress === "object" && !Array.isArray(state.progress)
+    ? state.progress : (state.progress = {});
+  const historicalStatuses = progress["vibe-coding"];
 
   if (historicalStatuses && typeof historicalStatuses === "object" && !Array.isArray(historicalStatuses)) {
     for (const [cardId, status] of Object.entries(historicalStatuses)) {
