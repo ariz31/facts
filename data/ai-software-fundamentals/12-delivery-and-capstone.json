@@ -1,0 +1,117 @@
+{
+  "id": "delivery-and-capstone",
+  "title": "Deployment, Maintenance & Guided Capstone",
+  "description": "Move a small AI-assisted task application from specification to verified release with monitoring, rollback, and a practical capstone rubric.",
+  "lessons": [
+    {
+      "title": "From local to deployed",
+      "principle": "A deployment publishes a particular artifact to an environment with configuration, network access, and data dependencies.",
+      "practice": "List what must differ between local development and production."
+    },
+    {
+      "title": "Choose a minimal hosting pattern",
+      "principle": "A static UI, a server-backed application, and a background worker have different runtime needs.",
+      "practice": "Match the hosting approach to actual compute, storage, authentication, and availability requirements."
+    },
+    {
+      "title": "Configuration and environments",
+      "principle": "Development, staging, and production need explicit settings and separation of sensitive state.",
+      "practice": "Maintain a sample configuration without embedding working credentials."
+    },
+    {
+      "title": "Avoid environment drift",
+      "principle": "Undocumented production-only changes complicate incident recovery and reproduce failures poorly.",
+      "practice": "Version safe configuration, secure secrets separately, and test with staging-like settings."
+    },
+    {
+      "title": "Build and release gates",
+      "principle": "Releases should originate from known source commits and reproducible build steps.",
+      "practice": "Run the documented checks and record the tested artifact or commit."
+    },
+    {
+      "title": "Distinguish checked from unchecked",
+      "principle": "A green earlier branch run says nothing definitive about later edits or untested deployment configuration.",
+      "practice": "Require the final intended revision to satisfy relevant quality and approval gates."
+    },
+    {
+      "title": "Continuous integration basics",
+      "principle": "CI automates repeatable checks on contributions and helps surface defects early.",
+      "practice": "Configure or locate syntax, test, and build jobs appropriate to the project."
+    },
+    {
+      "title": "Keep CI failures actionable",
+      "principle": "A failing check needs its job, command, log, and affected commit identified.",
+      "practice": "Fix the underlying cause and rerun against the updated head instead of ignoring a red gate."
+    },
+    {
+      "title": "Database release planning",
+      "principle": "Schema changes may require backward compatibility, migrations, backups, and rollback limits.",
+      "practice": "Plan additive changes before removing fields used by deployed clients."
+    },
+    {
+      "title": "Separate code rollback from data rollback",
+      "principle": "Reverting a commit does not reverse every schema or data transformation safely.",
+      "practice": "Record migration order, compatibility window, backup point, and recovery procedure."
+    },
+    {
+      "title": "Monitoring and incidents",
+      "principle": "Logs, metrics, alerts, and health signals help operators see what users experience after release.",
+      "practice": "Track failed saves, API error rate, latency, and availability without logging private content."
+    },
+    {
+      "title": "Write a small incident runbook",
+      "principle": "During an incident, operators need known symptoms, owners, mitigation, and escalation paths.",
+      "practice": "Describe how to detect failed task creation, disable the feature, restore service, and communicate status."
+    },
+    {
+      "title": "Capstone scope: task tracker",
+      "principle": "An end-to-end task tracker is a bounded project that exercises UI, validation, storage, testing, and release.",
+      "practice": "Commit to create, list, complete, and reload tasks as the initial deliverable."
+    },
+    {
+      "title": "Make AI optional to product runtime",
+      "principle": "Using AI to develop the application does not require sending users' tasks to a third-party model.",
+      "practice": "Use AI for planning, code explanation, cases, and review while keeping the core tracker functional offline if chosen."
+    },
+    {
+      "title": "Capstone build in slices",
+      "principle": "A vertical slice makes one real journey work before adding optional features.",
+      "practice": "Build task creation end to end, then listing, completion, persistence, and failure messages."
+    },
+    {
+      "title": "Write a checkpoint for each slice",
+      "principle": "A slice is complete only when its requirement, code, and observable test agree.",
+      "practice": "Commit independently verifiable changes and retain a short checklist of what remains."
+    },
+    {
+      "title": "Capstone acceptance and review",
+      "principle": "Demonstrated behavior is stronger evidence than a generated code listing or polished mockup.",
+      "practice": "Test blank-title rejection, stable IDs, create/reload/complete, error feedback, and keyboard interaction."
+    },
+    {
+      "title": "Conduct an AI-assisted final review",
+      "principle": "The model should inspect the actual diff and look for risks and missing cases, not merely praise its own output.",
+      "practice": "Assign a human to inspect findings and validate fixes on the intended final revision."
+    },
+    {
+      "title": "Operations and continued learning",
+      "principle": "Shipping begins maintenance; feedback and telemetry inform future iterations without overriding product scope.",
+      "practice": "Record known issues, supported platforms, setup, and recovery notes."
+    },
+    {
+      "title": "Choose a next learning path deliberately",
+      "principle": "A finished beginner project can branch into frontend, backend, SQL, Git, Docker, or advanced AI workflows.",
+      "practice": "Select the next Facts topic based on the weakest tested competency and the needs of your next project."
+    }
+  ],
+  "codeExamples": [
+    {
+      "language": "markdown",
+      "snippet": "Release checklist\n[ ] Final requirements and scope reviewed\n[ ] Automated checks run on final SHA\n[ ] Manual UI/keyboard flow checked\n[ ] Secrets and permissions reviewed\n[ ] Recovery or rollback documented"
+    },
+    {
+      "language": "markdown",
+      "snippet": "Capstone demonstration\n1. Create a task with valid input.\n2. Reject an all-whitespace title.\n3. Reload and preserve a stable task ID.\n4. Complete the same task.\n5. Simulate save failure and show honest feedback.\n6. Review the diff and document residual risk."
+    }
+  ]
+}
