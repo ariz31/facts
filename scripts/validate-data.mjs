@@ -3,6 +3,8 @@ import { join } from "node:path";
 import { BUILT_IN_DECK_IDS, validateDeck } from "../src/deck-schema.js";
 import { assembleLessonDeck, isLessonFragmentManifest } from "../src/lesson-deck.js";
 import { expandDeck, getExpansionCount } from "../src/topic-expansion.js";
+import { validateGeneratedDeckQuality } from "../src/card-generation-rules.js";
+import { VIBE_CURRICULUM_IDS } from "../src/vibe-progress.js";
 
 const dataDirectory = new URL("../data/", import.meta.url);
 const catalog = JSON.parse(await readFile(join(dataDirectory.pathname, "decks.json"), "utf8"));
@@ -39,6 +41,11 @@ for (const deckName of deckNames) {
   globalDeckIds.add(deck.id);
 
   errors.push(...validateDeck(deck, { rejectBuiltInId: false }));
+  if (VIBE_CURRICULUM_IDS.includes(deck.id)) {
+    if (source.format || source.fragments) errors.push("Vibe Coding v2 must use explicit authored cards rather than generated lesson templates.");
+    if (deck.cards.length > 100) errors.push("Vibe Coding must contain at most 100 cards per topic.");
+    errors.push(...validateGeneratedDeckQuality(deck).map((error) => `Vibe Coding content: ${error}`));
+  }
   for (const card of deck.cards ?? []) {
     sourceCardCount += 1;
     if (globalSourceCardIds.has(card.id)) errors.push(`Duplicate source card id across decks: ${card.id}`);

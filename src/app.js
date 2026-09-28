@@ -17,6 +17,7 @@ import {
   importBackgroundFromUrl,
   saveCardBackground,
 } from "./offline-storage.js";
+import { migrateVibeCurriculumState } from "./vibe-progress.js";
 
 const STORAGE_KEY = "facts-learning-state-v2";
 const GESTURE_DISTANCE = 58;
@@ -81,6 +82,7 @@ const state = {
   currentIndex: 0,
   revealedCardIds: new Set(),
   progress: isRecord(persisted.progress) ? persisted.progress : {},
+  vibeCurriculumMigrationVersion: persisted.vibeCurriculumMigrationVersion === 1 ? 1 : 0,
   cardDesigns: isRecord(persisted.cardDesigns) ? persisted.cardDesigns : {},
   backgroundUrls: {},
   backgroundLoadTokens: {},
@@ -728,6 +730,7 @@ function persistState() {
       activePathId: state.activePathId,
       studyMode: state.studyMode,
       progress: state.progress,
+      vibeCurriculumMigrationVersion: state.vibeCurriculumMigrationVersion,
       cardDesigns: state.cardDesigns,
       theme: state.theme,
     }));
@@ -786,9 +789,14 @@ async function initialize() {
 
   try {
     await loadDecks();
+    migrateVibeCurriculumState(state, state.decks);
     if (!state.decks.some((deck) => deck.id === state.activeDeckId)) state.activeDeckId = state.decks[0].id;
     const deck = activeDeck();
-    if (state.activePathId !== "all" && !deck.paths.some((path) => path.id === state.activePathId)) state.activePathId = "all";
+    // Preserve an old selected Vibe path if its new topic is not yet cached.
+    const awaitingVibeMigration = state.activeDeckId === "vibe-coding"
+      && state.vibeCurriculumMigrationVersion < 1;
+    if (state.activePathId !== "all" && !deck.paths.some((path) => path.id === state.activePathId)
+      && !awaitingVibeMigration) state.activePathId = "all";
     await loadBackgroundForDeck(state.activeDeckId);
     renderJourney();
     persistState();

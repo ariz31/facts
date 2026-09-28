@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "facts-pwa-";
-const CACHE_NAME = `${CACHE_PREFIX}v11`;
+const CACHE_NAME = `${CACHE_PREFIX}v12`;
 const CORE_ASSETS = [
   "./",
   "./index.html",
@@ -13,6 +13,7 @@ const CORE_ASSETS = [
   "./src/lesson-deck-runtime.js",
   "./src/runtime-data.js",
   "./src/card-generation-rules.js",
+  "./src/vibe-progress.js",
   "./src/ui-enhancements.js",
   "./src/card-render-state.js",
   "./src/topic-expansion.js",

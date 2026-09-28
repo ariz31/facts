@@ -13,6 +13,10 @@ export const BUILT_IN_DECK_IDS = Object.freeze([
   "git-github",
   "docker",
   "vibe-coding",
+  "vibe-coding-agentic",
+  "vibe-coding-application",
+  "vibe-coding-quality",
+  "vibe-coding-production",
 ]);
 
 export const CARD_TYPES = Object.freeze(["concept", "fact", "question", "code", "steps", "checklist"]);
@@ -33,6 +37,8 @@ export const IMPORT_LIMITS = Object.freeze({
 const ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const RESERVED_IDS = new Set(["constructor", "prototype", "__proto__"]);
 const BUILT_IN_IDS = new Set(BUILT_IN_DECK_IDS);
+// Historical oversized courses remain intact until separately curated; all five Vibe Coding decks use the 100-card limit.
+const LEGACY_OVERSIZED_IDS = new Set(["frontend-programming", "backend-programming", "docker"]);
 const ALLOWED_CARD_TYPES = new Set(CARD_TYPES);
 const ALLOWED_DIFFICULTIES = new Set(DIFFICULTIES);
 
@@ -67,7 +73,7 @@ export function validateDeck(deck, { rejectBuiltInId = true } = {}) {
   }
 
   if (!Array.isArray(deck.cards) || !deck.cards.length) errors.push("The deck needs at least one card.");
-  const maximumCards = !rejectBuiltInId && BUILT_IN_IDS.has(deck.id)
+  const maximumCards = !rejectBuiltInId && LEGACY_OVERSIZED_IDS.has(deck.id)
     ? IMPORT_LIMITS.maximumLegacyBuiltInCards
     : IMPORT_LIMITS.maximumCards;
   if (Array.isArray(deck.cards) && deck.cards.length > maximumCards) {
