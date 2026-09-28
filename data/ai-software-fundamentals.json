@@ -1,0 +1,24 @@
+{
+  "id": "ai-software-fundamentals",
+  "title": "Fundamentals of Software Development with AI",
+  "category": "AI-Assisted Development",
+  "description": "A beginner-to-practical, AI-assisted software development course: the software lifecycle, requirements and UX, programming logic, tooling, prompt and context discipline, maintainable code, frontend, backend and databases, Git collaboration, testing, privacy and security, deployment, and an independently verifiable task-tracker capstone. AI accelerates learning and implementation without replacing engineering judgment.",
+  "estimatedMinutes": 720,
+  "format": "lesson-fragments-v1",
+  "lessonStyle": "technical",
+  "cardPrefix": "sda",
+  "fragments": [
+    "ai-software-fundamentals/01-software-lifecycle.json",
+    "ai-software-fundamentals/02-requirements-and-scope.json",
+    "ai-software-fundamentals/03-computational-thinking.json",
+    "ai-software-fundamentals/04-tools-and-environment.json",
+    "ai-software-fundamentals/05-working-with-ai.json",
+    "ai-software-fundamentals/06-design-and-code.json",
+    "ai-software-fundamentals/07-frontend-fundamentals.json",
+    "ai-software-fundamentals/08-backend-and-data.json",
+    "ai-software-fundamentals/09-git-and-collaboration.json",
+    "ai-software-fundamentals/10-testing-and-debugging.json",
+    "ai-software-fundamentals/11-security-and-responsibility.json",
+    "ai-software-fundamentals/12-delivery-and-capstone.json"
+  ]
+}
