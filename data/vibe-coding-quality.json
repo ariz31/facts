@@ -901,7 +901,7 @@
       "type": "code",
       "title": "Verify package identity",
       "prompt": "What can npm view and the lockfile diff establish about an AI-proposed dependency, and what do they NOT prove?",
-      "content": "Models can hallucinate packages or suggest lookalikes. Check the official registry, publisher, repository, documentation, and package name before installing.",
+      "content": "Models can hallucinate packages or suggest lookalikes. Check the official registry, publisher, repository, documentation, and package name before installing. npm view provides registry metadata for the named package, while the lockfile diff shows resolved version and dependency-tree changes. Neither proves the package is benign, maintained, API-compatible, or safe to install without further review.",
       "tags": [
         "vibe-coding-quality",
         "dependencies",
@@ -1930,7 +1930,7 @@
       "type": "concept",
       "title": "Localize validation thoughtfully",
       "prompt": "What contextual information must localized validation messages preserve?",
-      "content": "Input formats and names vary across cultures. Avoid assumptions about postal codes, names, phone numbers, and date entry beyond business requirements.",
+      "content": "Input formats and names vary across cultures. Avoid assumptions about postal codes, names, phone numbers, and date entry beyond business requirements. A localized validation message should retain the field name, violated rule, locale-appropriate expected format or limit, and an actionable correction; translation must not silently alter the underlying business constraint.",
       "tags": [
         "vibe-coding-quality",
         "accessibility-i18n",
