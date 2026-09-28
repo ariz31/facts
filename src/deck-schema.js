@@ -13,20 +13,14 @@ export const BUILT_IN_DECK_IDS = Object.freeze([
   "git-github",
   "docker",
   "vibe-coding",
-  "vibe-coding-agentic",
-  "vibe-coding-application",
-  "vibe-coding-quality",
-  "vibe-coding-production",
 ]);
 
 export const CARD_TYPES = Object.freeze(["concept", "fact", "question", "code", "steps", "checklist"]);
 export const DIFFICULTIES = Object.freeze(["beginner", "intermediate", "advanced"]);
 export const IMPORT_LIMITS = Object.freeze({
   maximumDecks: 20,
-  maximumCards: 100,
-  // Temporary compatibility ceiling for existing authored masterclasses; never used for AI imports.
-  maximumLegacyBuiltInCards: 500,
-  maximumPaths: 50,
+  // A parent topic has NO card-count ceiling; enforce this for each guided subtopic.
+  maximumCardsPerSubtopic: 100,
   maximumJsonCharacters: 3_000_000,
   maximumTextCharacters: 12_000,
   maximumCodeCharacters: 60_000,
@@ -37,8 +31,6 @@ export const IMPORT_LIMITS = Object.freeze({
 const ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const RESERVED_IDS = new Set(["constructor", "prototype", "__proto__"]);
 const BUILT_IN_IDS = new Set(BUILT_IN_DECK_IDS);
-// Historical oversized courses remain intact until separately curated; all five Vibe Coding decks use the 100-card limit.
-const LEGACY_OVERSIZED_IDS = new Set(["frontend-programming", "backend-programming", "docker"]);
 const ALLOWED_CARD_TYPES = new Set(CARD_TYPES);
 const ALLOWED_DIFFICULTIES = new Set(DIFFICULTIES);
 
@@ -73,16 +65,8 @@ export function validateDeck(deck, { rejectBuiltInId = true } = {}) {
   }
 
   if (!Array.isArray(deck.cards) || !deck.cards.length) errors.push("The deck needs at least one card.");
-  const maximumCards = !rejectBuiltInId && LEGACY_OVERSIZED_IDS.has(deck.id)
-    ? IMPORT_LIMITS.maximumLegacyBuiltInCards
-    : IMPORT_LIMITS.maximumCards;
-  if (Array.isArray(deck.cards) && deck.cards.length > maximumCards) {
-    errors.push(`A deck can contain at most ${maximumCards} cards.`);
-  }
-  if (!Array.isArray(deck.paths) || !deck.paths.length) errors.push("The deck needs at least one guided path.");
-  if (Array.isArray(deck.paths) && deck.paths.length > IMPORT_LIMITS.maximumPaths) {
-    errors.push(`A deck can contain at most ${IMPORT_LIMITS.maximumPaths} paths.`);
-  }
+  if (!Array.isArray(deck.paths) || !deck.paths.length) errors.push("The deck needs at least one guided subtopic.");
+  // No aggregate card limit is imposed here; input-size safeguards are separate.
   if (errors.length || !Array.isArray(deck.cards) || !Array.isArray(deck.paths)) return unique(errors);
 
   const cardIds = new Set();
@@ -100,6 +84,9 @@ export function validateDeck(deck, { rejectBuiltInId = true } = {}) {
     validateText(path.title, `Path ${path.id ?? "without id"} title`, errors, { required: true, maximum: 180 });
     validateText(path.description, `Path ${path.id ?? "without id"} description`, errors, { required: true, maximum: 2_000 });
     validateIdArray(path.cardIds, `Path ${path.id ?? "unknown"} cardIds`, errors, { required: true });
+    if (Array.isArray(path.cardIds) && path.cardIds.length > IMPORT_LIMITS.maximumCardsPerSubtopic) {
+      errors.push(`Subtopic ${path.id ?? "unknown"} can contain at most ${IMPORT_LIMITS.maximumCardsPerSubtopic} cards.`);
+    }
   }
 
   for (const card of deck.cards) {
@@ -146,10 +133,13 @@ export function validateDeck(deck, { rejectBuiltInId = true } = {}) {
     errors.push("Sequences must be unique and consecutive starting at 1.");
   }
 
+  // Preindex relationships: validation remains linear for main topics with many subtopics.
+  const cardsById = new Map(deck.cards.filter(isRecord).map((card) => [card.id, card]));
+  const pathsById = new Map(deck.paths.filter(isRecord).map((path) => [path.id, path]));
   for (const path of deck.paths) {
     if (!isRecord(path) || !Array.isArray(path.cardIds)) continue;
     for (const cardId of path.cardIds) {
-      const card = deck.cards.find((candidate) => candidate?.id === cardId);
+      const card = cardsById.get(cardId);
       if (!card) errors.push(`Path ${path.id ?? "unknown"} references missing card ${cardId}.`);
       else if (!card.pathIds?.includes(path.id)) errors.push(`Path ${path.id} and card ${cardId} are not linked both ways.`);
     }
@@ -158,7 +148,7 @@ export function validateDeck(deck, { rejectBuiltInId = true } = {}) {
   for (const card of deck.cards) {
     if (!isRecord(card) || !Array.isArray(card.pathIds)) continue;
     for (const pathId of card.pathIds) {
-      const path = deck.paths.find((candidate) => candidate?.id === pathId);
+      const path = pathsById.get(pathId);
       if (!path) errors.push(`Card ${card.id ?? "unknown"} references missing path ${pathId}.`);
       else if (!path.cardIds?.includes(card.id)) errors.push(`Card ${card.id} and path ${pathId} are not linked both ways.`);
     }
