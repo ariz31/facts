@@ -1,0 +1,1986 @@
+{
+  "id": "vibe-coding-production",
+  "title": "Vibe Coding 05 — Environments, Delivery & Production",
+  "category": "AI-Assisted Development",
+  "description": "Engineer reproducible environments, safe CI/CD, operational observability, legacy modernization, and defensible production release governance. Part 5 of 5.",
+  "estimatedMinutes": 275,
+  "paths": [
+    {
+      "id": "dev-environments",
+      "title": "Development Environments, Docker & Reproducibility",
+      "description": "Make AI-assisted changes reproducible across machines through explicit environments, containers, configuration, and setup automation.",
+      "cardIds": [
+        "vc-361",
+        "vc-362",
+        "vc-363",
+        "vc-364",
+        "vc-365",
+        "vc-366",
+        "vc-367",
+        "vc-368",
+        "vc-369",
+        "vc-370",
+        "vc-371",
+        "vc-372",
+        "vc-373",
+        "vc-374",
+        "vc-375",
+        "vc-376",
+        "vc-377",
+        "vc-378",
+        "vc-379",
+        "vc-380"
+      ]
+    },
+    {
+      "id": "cicd-deployment",
+      "title": "CI/CD, Deployment & Release Engineering",
+      "description": "Turn fast AI-generated changes into controlled, repeatable releases with gated validation, immutable artifacts, migrations, and rollback.",
+      "cardIds": [
+        "vc-381",
+        "vc-382",
+        "vc-383",
+        "vc-384",
+        "vc-385",
+        "vc-386",
+        "vc-387",
+        "vc-388",
+        "vc-389",
+        "vc-390",
+        "vc-391",
+        "vc-392",
+        "vc-393",
+        "vc-394",
+        "vc-395",
+        "vc-396",
+        "vc-397",
+        "vc-398",
+        "vc-399",
+        "vc-400"
+      ]
+    },
+    {
+      "id": "observability",
+      "title": "Observability, Reliability & Operations",
+      "description": "Design AI-generated services so operators can detect, explain, and recover from failures after deployment.",
+      "cardIds": [
+        "vc-401",
+        "vc-402",
+        "vc-403",
+        "vc-404",
+        "vc-405",
+        "vc-406",
+        "vc-407",
+        "vc-408",
+        "vc-409",
+        "vc-410",
+        "vc-411",
+        "vc-412",
+        "vc-413",
+        "vc-414",
+        "vc-415",
+        "vc-416",
+        "vc-417",
+        "vc-418",
+        "vc-419",
+        "vc-420"
+      ]
+    },
+    {
+      "id": "legacy-refactoring",
+      "title": "Refactoring, Legacy Code & Migrations",
+      "description": "Use AI to improve existing systems without erasing undocumented behavior, breaking compatibility, or mixing cleanup with feature risk.",
+      "cardIds": [
+        "vc-461",
+        "vc-462",
+        "vc-463",
+        "vc-464",
+        "vc-465",
+        "vc-466",
+        "vc-467",
+        "vc-468",
+        "vc-469",
+        "vc-470",
+        "vc-471",
+        "vc-472",
+        "vc-473",
+        "vc-474",
+        "vc-475",
+        "vc-476",
+        "vc-477",
+        "vc-478",
+        "vc-479",
+        "vc-480"
+      ]
+    },
+    {
+      "id": "production-readiness",
+      "title": "Production Readiness, Governance & Team Practice",
+      "description": "Define the final quality gate for AI-assisted software: ownership, security, reliability, documentation, operations, and continuous improvement.",
+      "cardIds": [
+        "vc-481",
+        "vc-482",
+        "vc-483",
+        "vc-484",
+        "vc-485",
+        "vc-486",
+        "vc-487",
+        "vc-488",
+        "vc-489",
+        "vc-490",
+        "vc-491",
+        "vc-492",
+        "vc-493",
+        "vc-494",
+        "vc-495",
+        "vc-496",
+        "vc-497",
+        "vc-498",
+        "vc-499",
+        "vc-500"
+      ]
+    }
+  ],
+  "cards": [
+    {
+      "id": "vc-361",
+      "sequence": 1,
+      "type": "steps",
+      "title": "Make setup deterministic",
+      "prompt": "How should you prepare a reproducible development environment for a new collaborator?",
+      "content": "Agents and humans need the same prerequisites. Document runtime versions, package manager, system dependencies, and startup commands.",
+      "tags": [
+        "vibe-coding-production",
+        "dev-environments",
+        "make-setup-deterministic"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "dev-environments"
+      ],
+      "steps": [
+        "Record supported operating systems, runtime versions, and package manager.",
+        "Supply a lockfile and safe non-secret configuration template.",
+        "Document required services, persistent volumes, and readiness checks.",
+        "Provide bootstrap, seed, test, and reset commands.",
+        "Verify the documented setup from a clean clone rather than a warmed workstation."
+      ]
+    },
+    {
+      "id": "vc-362",
+      "sequence": 2,
+      "type": "fact",
+      "title": "Pin toolchain versions",
+      "prompt": "How can pinned runtime and package versions prevent environment drift?",
+      "content": "Unbounded runtime upgrades can change behavior unexpectedly. Use version files, lockfiles, container tags or digests, and reproducible package installation.",
+      "tags": [
+        "vibe-coding-production",
+        "dev-environments",
+        "pin-toolchain-versions"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "dev-environments"
+      ]
+    },
+    {
+      "id": "vc-363",
+      "sequence": 3,
+      "type": "concept",
+      "title": "Use environment templates",
+      "prompt": "What should a committed example environment file provide without revealing credentials?",
+      "content": "Developers need configuration shape without real secrets. Commit a safe example environment file documenting required variables and defaults.",
+      "tags": [
+        "vibe-coding-production",
+        "dev-environments",
+        "use-environment-templates"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "dev-environments"
+      ]
+    },
+    {
+      "id": "vc-364",
+      "sequence": 4,
+      "type": "question",
+      "title": "Separate secrets from config",
+      "prompt": "A project needs a database password in local development and production. Which configuration approach is appropriate?",
+      "content": "",
+      "tags": [
+        "vibe-coding-production",
+        "dev-environments",
+        "separate-secrets-from-config"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "dev-environments"
+      ],
+      "question": {
+        "options": [
+          "Commit production credentials directly in an example .env file.",
+          "Embed a default production token in the Dockerfile.",
+          "Use a secret manager or injected environment values; commit only non-secret templates.",
+          "Print every secret at startup so an agent can debug quickly."
+        ],
+        "answerIndex": 2,
+        "explanation": "Configuration may be versioned; credentials should not be. Inject secrets through protected environment or secret-management systems. A developer convenience must not create a persistent secret leak."
+      }
+    },
+    {
+      "id": "vc-365",
+      "sequence": 5,
+      "type": "fact",
+      "title": "Use containers when isolation helps",
+      "prompt": "When do containers improve isolation and repeatability for local development?",
+      "content": "Containers can standardize dependencies and services across hosts. Containerize development components where reproducibility outweighs local complexity.",
+      "tags": [
+        "vibe-coding-production",
+        "dev-environments",
+        "use-containers-when-isolation-helps"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "dev-environments"
+      ]
+    },
+    {
+      "id": "vc-366",
+      "sequence": 6,
+      "type": "concept",
+      "title": "Keep images small and deterministic",
+      "prompt": "What makes a multi-stage container image smaller and more deterministic?",
+      "content": "Huge mutable images slow builds and obscure provenance. Use specific bases, multi-stage builds, minimal runtime layers, and clean build contexts.",
+      "tags": [
+        "vibe-coding-production",
+        "dev-environments",
+        "keep-images-small-and-deterministic"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "dev-environments"
+      ]
+    },
+    {
+      "id": "vc-367",
+      "sequence": 7,
+      "type": "concept",
+      "title": "Use Docker Compose for local stacks",
+      "prompt": "Which cooperating services and dependencies belong in a local Compose stack?",
+      "content": "Multi-service development benefits from one declarative topology. Define services, networks, volumes, health checks, and safe development overrides in Compose.",
+      "tags": [
+        "vibe-coding-production",
+        "dev-environments",
+        "use-docker-compose-for-local-stacks"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "dev-environments"
+      ]
+    },
+    {
+      "id": "vc-368",
+      "sequence": 8,
+      "type": "code",
+      "title": "Wait for readiness, not process start",
+      "prompt": "In the Compose excerpt, why does app wait for service_healthy rather than only for the database process to start?",
+      "content": "A running dependency may still be initializing. Use health checks and retry-aware clients instead of fixed sleeps. This is a local illustrative example; use external secret injection outside development.",
+      "tags": [
+        "vibe-coding-production",
+        "dev-environments",
+        "wait-for-readiness-not-process-start"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "dev-environments"
+      ],
+      "code": {
+        "language": "yaml",
+        "snippet": "services:\n  app:\n    build: .\n    depends_on:\n      db:\n        condition: service_healthy\n  db:\n    image: postgres:17\n    environment:\n      POSTGRES_PASSWORD: dev-only-change-me\n    healthcheck:\n      test: [\"CMD-SHELL\", \"pg_isready -U postgres\"]\n      interval: 5s\n      retries: 10"
+      }
+    },
+    {
+      "id": "vc-369",
+      "sequence": 9,
+      "type": "fact",
+      "title": "Persist only intended data",
+      "prompt": "What data should survive container recreation, and what should remain disposable?",
+      "content": "Container filesystems are ephemeral by design. Use named volumes or bind mounts deliberately and know what survives recreation.",
+      "tags": [
+        "vibe-coding-production",
+        "dev-environments",
+        "persist-only-intended-data"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "dev-environments"
+      ]
+    },
+    {
+      "id": "vc-370",
+      "sequence": 10,
+      "type": "concept",
+      "title": "Avoid mounting secrets casually",
+      "prompt": "Which risks follow from mounting host credentials into a development container?",
+      "content": "Host mounts and environment values can broaden exposure. Use supported secret mechanisms and minimize what containers can read.",
+      "tags": [
+        "vibe-coding-production",
+        "dev-environments",
+        "avoid-mounting-secrets-casually"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "dev-environments"
+      ]
+    },
+    {
+      "id": "vc-371",
+      "sequence": 11,
+      "type": "concept",
+      "title": "Use development watch carefully",
+      "prompt": "How should a watch-mode rebuild avoid breaking persistent state or masking errors?",
+      "content": "Live synchronization improves iteration but changes runtime behavior. Define what is synced, ignored, rebuilt, or restarted and keep production images immutable.",
+      "tags": [
+        "vibe-coding-production",
+        "dev-environments",
+        "use-development-watch-carefully"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "dev-environments"
+      ]
+    },
+    {
+      "id": "vc-372",
+      "sequence": 12,
+      "type": "fact",
+      "title": "Match CI and local commands",
+      "prompt": "Why should developers use the same core validation commands as CI?",
+      "content": "Different validation paths create works-on-my-machine failures. Run the same scripts and tool versions locally and in continuous integration.",
+      "tags": [
+        "vibe-coding-production",
+        "dev-environments",
+        "match-ci-and-local-commands"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "dev-environments"
+      ]
+    },
+    {
+      "id": "vc-373",
+      "sequence": 13,
+      "type": "concept",
+      "title": "Provide one-command bootstrap",
+      "prompt": "What should a one-command bootstrap check before declaring the environment ready?",
+      "content": "Setup friction wastes agent and developer cycles. Automate dependency installation, local services, migrations, and seed data safely.",
+      "tags": [
+        "vibe-coding-production",
+        "dev-environments",
+        "provide-one-command-bootstrap"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "dev-environments"
+      ]
+    },
+    {
+      "id": "vc-374",
+      "sequence": 14,
+      "type": "concept",
+      "title": "Make seeds idempotent",
+      "prompt": "How can rerunning database seed scripts avoid duplicate or inconsistent records?",
+      "content": "Repeated setup should not corrupt local state. Design development seed scripts that can rerun or reset predictably.",
+      "tags": [
+        "vibe-coding-production",
+        "dev-environments",
+        "make-seeds-idempotent"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "dev-environments"
+      ]
+    },
+    {
+      "id": "vc-375",
+      "sequence": 15,
+      "type": "concept",
+      "title": "Handle platform differences",
+      "prompt": "What platform differences must a project document for collaborators on different systems?",
+      "content": "Filesystem case, line endings, architecture, and shell behavior can vary. Test or containerize assumptions that matter across macOS, Windows, Linux, and ARM/x86.",
+      "tags": [
+        "vibe-coding-production",
+        "dev-environments",
+        "handle-platform-differences"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "dev-environments"
+      ]
+    },
+    {
+      "id": "vc-376",
+      "sequence": 16,
+      "type": "fact",
+      "title": "Keep dev and production concerns separate",
+      "prompt": "Which local conveniences must not be mistaken for production security practices?",
+      "content": "Development convenience settings can be insecure or slow in production. Use explicit production configuration and do not rely on hot reload, source mounts, or debug flags.",
+      "tags": [
+        "vibe-coding-production",
+        "dev-environments",
+        "keep-dev-and-production-concerns-separate"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "dev-environments"
+      ]
+    },
+    {
+      "id": "vc-377",
+      "sequence": 17,
+      "type": "checklist",
+      "title": "Document reset and recovery",
+      "prompt": "What should be covered by a documented local-environment reset and recovery procedure?",
+      "content": "Local environments inevitably drift. Provide commands to clear caches, recreate containers, reset data, and reinstall dependencies.",
+      "tags": [
+        "vibe-coding-production",
+        "dev-environments",
+        "document-reset-and-recovery"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "dev-environments"
+      ],
+      "items": [
+        "Commands distinguish disposable caches from user or test data.",
+        "Destructive operations warn about volumes and database content.",
+        "Secrets and per-developer configuration survive or are safely recreated.",
+        "Dependencies can be reinstalled from pinned versions.",
+        "A clean build, seed, and focused test verify restored functionality."
+      ]
+    },
+    {
+      "id": "vc-378",
+      "sequence": 18,
+      "type": "concept",
+      "title": "Cache builds safely",
+      "prompt": "How can build caches speed up development without producing stale dependencies?",
+      "content": "Caching accelerates iteration but can hide stale inputs. Key caches to lockfiles and build inputs and provide clean-build paths.",
+      "tags": [
+        "vibe-coding-production",
+        "dev-environments",
+        "cache-builds-safely"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "dev-environments"
+      ]
+    },
+    {
+      "id": "vc-379",
+      "sequence": 19,
+      "type": "concept",
+      "title": "Verify offline or degraded development where relevant",
+      "prompt": "When should a team test degraded or offline development behavior?",
+      "content": "Cloud-only tooling can block work during outages. Identify which dependencies are mandatory online and provide local substitutes where valuable.",
+      "tags": [
+        "vibe-coding-production",
+        "dev-environments",
+        "verify-offline-or-degraded-development-where-relevant"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "dev-environments"
+      ]
+    },
+    {
+      "id": "vc-380",
+      "sequence": 20,
+      "type": "concept",
+      "title": "Treat environment code as product code",
+      "prompt": "Why should environment and infrastructure scripts receive normal code review?",
+      "content": "Container and setup files control execution and security. Review Dockerfiles, Compose, scripts, and devcontainer configuration with normal code-review rigor.",
+      "tags": [
+        "vibe-coding-production",
+        "dev-environments",
+        "treat-environment-code-as-product-code"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "dev-environments"
+      ]
+    },
+    {
+      "id": "vc-381",
+      "sequence": 21,
+      "type": "code",
+      "title": "Run CI on every proposed change",
+      "prompt": "In the pull-request workflow, which repository event runs validation and why must a failing step block merging?",
+      "content": "Automated validation should precede integration. Trigger lint, types, tests, builds, and policy checks for pull requests.",
+      "tags": [
+        "vibe-coding-production",
+        "cicd-deployment",
+        "run-ci-on-every-proposed-change"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "cicd-deployment"
+      ],
+      "code": {
+        "language": "yaml",
+        "snippet": "name: validate\non: [pull_request]\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with:\n          node-version: 22\n      - run: npm ci\n      - run: npm test"
+      }
+    },
+    {
+      "id": "vc-382",
+      "sequence": 22,
+      "type": "fact",
+      "title": "Make required checks authoritative",
+      "prompt": "Why must required validation gates be authoritative rather than optional decoration?",
+      "content": "Optional green badges do not protect the default branch. Configure branch rules so critical checks must pass on the current head.",
+      "tags": [
+        "vibe-coding-production",
+        "cicd-deployment",
+        "make-required-checks-authoritative"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "cicd-deployment"
+      ]
+    },
+    {
+      "id": "vc-383",
+      "sequence": 23,
+      "type": "concept",
+      "title": "Build once and promote",
+      "prompt": "What benefit comes from promoting one immutable artifact across environments?",
+      "content": "Rebuilding per environment can produce different artifacts. Create a versioned immutable artifact in CI and promote the same artifact through environments.",
+      "tags": [
+        "vibe-coding-production",
+        "cicd-deployment",
+        "build-once-and-promote"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "cicd-deployment"
+      ]
+    },
+    {
+      "id": "vc-384",
+      "sequence": 24,
+      "type": "concept",
+      "title": "Use environment-specific configuration",
+      "prompt": "How should deployment-specific configuration be supplied without rebuilding source?",
+      "content": "Artifacts should remain stable while runtime settings change. Inject configuration and secrets per environment rather than rebuilding source.",
+      "tags": [
+        "vibe-coding-production",
+        "cicd-deployment",
+        "use-environment-specific-configuration"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "cicd-deployment"
+      ]
+    },
+    {
+      "id": "vc-385",
+      "sequence": 25,
+      "type": "fact",
+      "title": "Protect deployment credentials",
+      "prompt": "How should production deployment credentials be limited and protected?",
+      "content": "CI tokens often have broad infrastructure access. Use short-lived identity, least privilege, protected environments, and secret masking.",
+      "tags": [
+        "vibe-coding-production",
+        "cicd-deployment",
+        "protect-deployment-credentials"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "cicd-deployment"
+      ]
+    },
+    {
+      "id": "vc-386",
+      "sequence": 26,
+      "type": "concept",
+      "title": "Separate preview, staging, and production",
+      "prompt": "What distinct purposes do preview, staging, and production environments serve?",
+      "content": "Different environments answer different questions. Use previews for change inspection, staging for integration, and production for real traffic.",
+      "tags": [
+        "vibe-coding-production",
+        "cicd-deployment",
+        "separate-preview-staging-and-production"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "cicd-deployment"
+      ]
+    },
+    {
+      "id": "vc-387",
+      "sequence": 27,
+      "type": "concept",
+      "title": "Automate database migration order",
+      "prompt": "Why must application and schema changes follow a compatible deployment order?",
+      "content": "Schema and application versions must overlap safely. Run expand migrations before dependent code and defer destructive contraction until old versions are gone.",
+      "tags": [
+        "vibe-coding-production",
+        "cicd-deployment",
+        "automate-database-migration-order"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "cicd-deployment"
+      ]
+    },
+    {
+      "id": "vc-388",
+      "sequence": 28,
+      "type": "concept",
+      "title": "Use deployment health checks",
+      "prompt": "Which health and readiness signals should a deployment controller inspect?",
+      "content": "A successful upload does not mean the application works. Verify readiness, key endpoints, dependencies, and representative user flows after deployment.",
+      "tags": [
+        "vibe-coding-production",
+        "cicd-deployment",
+        "use-deployment-health-checks"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "cicd-deployment"
+      ]
+    },
+    {
+      "id": "vc-389",
+      "sequence": 29,
+      "type": "steps",
+      "title": "Use progressive rollout for risk",
+      "prompt": "How should a high-risk application release be rolled out progressively?",
+      "content": "Exposing everyone at once increases blast radius. Use canary, percentage, ring, or feature-flag rollout for consequential changes.",
+      "tags": [
+        "vibe-coding-production",
+        "cicd-deployment",
+        "use-progressive-rollout-for-risk"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "cicd-deployment"
+      ],
+      "steps": [
+        "Publish a tested immutable artifact and record its commit digest.",
+        "Check schema compatibility and configure production access controls.",
+        "Deploy to a small controlled cohort with meaningful health metrics.",
+        "Compare error rates, latency, and business invariants with the baseline.",
+        "Pause, roll forward, or roll back using predefined triggers and verified recovery steps."
+      ]
+    },
+    {
+      "id": "vc-390",
+      "sequence": 30,
+      "type": "concept",
+      "title": "Define rollback triggers",
+      "prompt": "What objective signal should trigger pausing or reverting a rollout?",
+      "content": "Operators need objective conditions for stopping a rollout. Tie rollback to error rate, latency, health, or critical business failures.",
+      "tags": [
+        "vibe-coding-production",
+        "cicd-deployment",
+        "define-rollback-triggers"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "cicd-deployment"
+      ]
+    },
+    {
+      "id": "vc-391",
+      "sequence": 31,
+      "type": "question",
+      "title": "Know when rollback is unsafe",
+      "prompt": "A deployment has already migrated user data into a new irreversible format. Which rollback decision is appropriate?",
+      "content": "",
+      "tags": [
+        "vibe-coding-production",
+        "cicd-deployment",
+        "know-when-rollback-is-unsafe"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "cicd-deployment"
+      ],
+      "question": {
+        "options": [
+          "Always redeploy the old binary immediately without inspecting data compatibility.",
+          "Evaluate schema/data compatibility and use a planned forward recovery or compatible rollback.",
+          "Delete the new fields and ignore data created during deployment.",
+          "Treat deployment rollback as equivalent to database restoration."
+        ],
+        "answerIndex": 1,
+        "explanation": "Database and external side effects may not reverse with application code. Design forward fixes or compatible migrations for irreversible changes. A binary rollback can fail or corrupt data after incompatible persisted changes."
+      }
+    },
+    {
+      "id": "vc-392",
+      "sequence": 32,
+      "type": "fact",
+      "title": "Version releases",
+      "prompt": "How can a release identifier connect deployed behavior to a commit and artifact?",
+      "content": "Operational state should map to source and artifacts. Record commit SHA, build identifier, dependency set, and release metadata.",
+      "tags": [
+        "vibe-coding-production",
+        "cicd-deployment",
+        "version-releases"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "cicd-deployment"
+      ]
+    },
+    {
+      "id": "vc-393",
+      "sequence": 33,
+      "type": "concept",
+      "title": "Generate release notes from intent",
+      "prompt": "What belongs in release notes besides a generated list of file changes?",
+      "content": "Commit lists alone may not explain user impact. Summarize features, fixes, migrations, known issues, and operator actions.",
+      "tags": [
+        "vibe-coding-production",
+        "cicd-deployment",
+        "generate-release-notes-from-intent"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "cicd-deployment"
+      ]
+    },
+    {
+      "id": "vc-394",
+      "sequence": 34,
+      "type": "concept",
+      "title": "Protect production environments",
+      "prompt": "Which production gates require explicit approval or controlled identities?",
+      "content": "Deployment should require appropriate authorization. Use environment approvals or protected branches for sensitive releases.",
+      "tags": [
+        "vibe-coding-production",
+        "cicd-deployment",
+        "protect-production-environments"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "cicd-deployment"
+      ]
+    },
+    {
+      "id": "vc-395",
+      "sequence": 35,
+      "type": "concept",
+      "title": "Avoid manual snowflake deploys",
+      "prompt": "Why are undocumented one-off deployment commands a reliability risk?",
+      "content": "Unrecorded dashboard changes create drift. Put deployment steps, infrastructure, and configuration in version-controlled automation where practical.",
+      "tags": [
+        "vibe-coding-production",
+        "cicd-deployment",
+        "avoid-manual-snowflake-deploys"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "cicd-deployment"
+      ]
+    },
+    {
+      "id": "vc-396",
+      "sequence": 36,
+      "type": "fact",
+      "title": "Capture deployment telemetry",
+      "prompt": "What telemetry must be captured during rollout to detect hidden failure?",
+      "content": "Release events should be visible in observability tools. Annotate metrics and logs with version and deploy time to correlate regressions.",
+      "tags": [
+        "vibe-coding-production",
+        "cicd-deployment",
+        "capture-deployment-telemetry"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "cicd-deployment"
+      ]
+    },
+    {
+      "id": "vc-397",
+      "sequence": 37,
+      "type": "concept",
+      "title": "Test rollback procedures",
+      "prompt": "How do rollback rehearsals establish operational confidence?",
+      "content": "A theoretical rollback can fail under pressure. Exercise artifact rollback, configuration restoration, and data recovery in non-production.",
+      "tags": [
+        "vibe-coding-production",
+        "cicd-deployment",
+        "test-rollback-procedures"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "cicd-deployment"
+      ]
+    },
+    {
+      "id": "vc-398",
+      "sequence": 38,
+      "type": "concept",
+      "title": "Clean up preview resources",
+      "prompt": "What cleanup prevents expired previews from wasting resources or leaking data?",
+      "content": "Ephemeral environments can leak cost and data. Expire branches, databases, buckets, and temporary credentials automatically.",
+      "tags": [
+        "vibe-coding-production",
+        "cicd-deployment",
+        "clean-up-preview-resources"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "cicd-deployment"
+      ]
+    },
+    {
+      "id": "vc-399",
+      "sequence": 39,
+      "type": "checklist",
+      "title": "Post-deploy smoke test",
+      "prompt": "Which post-deployment smoke checks demonstrate a release actually works?",
+      "content": "CI cannot detect every environment-specific problem. Run focused production-safe checks after rollout and verify critical flows.",
+      "tags": [
+        "vibe-coding-production",
+        "cicd-deployment",
+        "post-deploy-smoke-test"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "cicd-deployment"
+      ],
+      "items": [
+        "The new artifact/version is confirmed in the target environment.",
+        "A critical authorized user journey succeeds end to end.",
+        "Failure handling and permission boundaries remain intact.",
+        "Database writes, background jobs, and external integrations behave as expected.",
+        "Error logs, alerts, and rollback instructions are accessible."
+      ]
+    },
+    {
+      "id": "vc-400",
+      "sequence": 40,
+      "type": "concept",
+      "title": "Close the release loop",
+      "prompt": "What post-release evidence closes the loop between user outcomes and engineering intent?",
+      "content": "Shipping is complete only when the new version is healthy. Confirm telemetry, migrations, errors, and user-impact metrics before declaring release success.",
+      "tags": [
+        "vibe-coding-production",
+        "cicd-deployment",
+        "close-the-release-loop"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "cicd-deployment"
+      ]
+    },
+    {
+      "id": "vc-401",
+      "sequence": 41,
+      "type": "concept",
+      "title": "Define service objectives",
+      "prompt": "What user-facing reliability target should a service objective describe?",
+      "content": "Reliability should reflect user-visible expectations. Choose indicators and targets for availability, latency, correctness, or freshness.",
+      "tags": [
+        "vibe-coding-production",
+        "observability",
+        "define-service-objectives"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "observability"
+      ]
+    },
+    {
+      "id": "vc-402",
+      "sequence": 42,
+      "type": "code",
+      "title": "Use structured logs",
+      "prompt": "In the structured checkout log, how do requestId, orderId, durationMs and outcome assist an incident investigation?",
+      "content": "Free-form text is difficult to query consistently. Emit machine-readable events with level, operation, correlation, outcome, and safe context.",
+      "tags": [
+        "vibe-coding-production",
+        "observability",
+        "use-structured-logs"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "observability"
+      ],
+      "code": {
+        "language": "javascript",
+        "snippet": "logger.info(\"checkout_completed\", {\n  requestId,\n  orderId,\n  durationMs,\n  outcome: \"success\"\n});"
+      }
+    },
+    {
+      "id": "vc-403",
+      "sequence": 43,
+      "type": "concept",
+      "title": "Preserve correlation IDs",
+      "prompt": "How can a correlation identifier connect frontend and backend activity across requests?",
+      "content": "One user action may cross many services. Propagate request or trace identifiers through logs, queues, and external calls.",
+      "tags": [
+        "vibe-coding-production",
+        "observability",
+        "preserve-correlation-ids"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "observability"
+      ]
+    },
+    {
+      "id": "vc-404",
+      "sequence": 44,
+      "type": "concept",
+      "title": "Measure golden signals",
+      "prompt": "Which latency, traffic, errors, and saturation signals reveal service health?",
+      "content": "Basic service health needs a small set of high-value metrics. Track traffic, errors, latency, and saturation for important services.",
+      "tags": [
+        "vibe-coding-production",
+        "observability",
+        "measure-golden-signals"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "observability"
+      ]
+    },
+    {
+      "id": "vc-405",
+      "sequence": 45,
+      "type": "fact",
+      "title": "Use traces for distributed work",
+      "prompt": "When do distributed traces add information that standalone logs cannot?",
+      "content": "Cross-service latency is hard to reconstruct from isolated logs. Instrument meaningful spans and propagate trace context.",
+      "tags": [
+        "vibe-coding-production",
+        "observability",
+        "use-traces-for-distributed-work"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "observability"
+      ]
+    },
+    {
+      "id": "vc-406",
+      "sequence": 46,
+      "type": "concept",
+      "title": "Log business-critical events",
+      "prompt": "Which business-critical event should be observable without logging private payloads?",
+      "content": "Infrastructure health can be green while product behavior fails. Measure outcomes such as successful checkout, upload, sync, or job completion.",
+      "tags": [
+        "vibe-coding-production",
+        "observability",
+        "log-business-critical-events"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "observability"
+      ]
+    },
+    {
+      "id": "vc-407",
+      "sequence": 47,
+      "type": "concept",
+      "title": "Avoid logging secrets",
+      "prompt": "How can operational logs remain useful while excluding secrets and sensitive data?",
+      "content": "Observability data often has broad access and retention. Redact credentials, tokens, sensitive payloads, and unnecessary personal data.",
+      "tags": [
+        "vibe-coding-production",
+        "observability",
+        "avoid-logging-secrets"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "observability"
+      ]
+    },
+    {
+      "id": "vc-408",
+      "sequence": 48,
+      "type": "question",
+      "title": "Create actionable alerts",
+      "prompt": "An alert fires for every harmless retry and frequently wakes the on-call engineer. What would make the alert actionable?",
+      "content": "",
+      "tags": [
+        "vibe-coding-production",
+        "observability",
+        "create-actionable-alerts"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "observability"
+      ],
+      "question": {
+        "options": [
+          "Increase its frequency so failures cannot be missed.",
+          "Remove all monitoring from the service.",
+          "Alert only on the number of log entries with no service context.",
+          "Tie it to meaningful impact thresholds with owner, runbook, and recovery signal."
+        ],
+        "answerIndex": 3,
+        "explanation": "Alerts should represent conditions that need human or automated action. Tie alerts to service objectives, sustained failures, or resource exhaustion rather than noisy single events. An alert should guide intervention, not merely mirror every technical event."
+      }
+    },
+    {
+      "id": "vc-409",
+      "sequence": 49,
+      "type": "fact",
+      "title": "Include runbook links",
+      "prompt": "Which runbook and ownership details should accompany a critical alert?",
+      "content": "An alert without response guidance wastes incident time. Link likely causes, dashboards, safe diagnostics, mitigation, and escalation.",
+      "tags": [
+        "vibe-coding-production",
+        "observability",
+        "include-runbook-links"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "observability"
+      ]
+    },
+    {
+      "id": "vc-410",
+      "sequence": 50,
+      "type": "concept",
+      "title": "Separate liveness and readiness",
+      "prompt": "Why should readiness and liveness checks answer different operational questions?",
+      "content": "Restart and traffic-routing decisions answer different questions. Use liveness for stuck processes and readiness for whether a process should receive work.",
+      "tags": [
+        "vibe-coding-production",
+        "observability",
+        "separate-liveness-and-readiness"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "observability"
+      ]
+    },
+    {
+      "id": "vc-411",
+      "sequence": 51,
+      "type": "concept",
+      "title": "Use health checks sparingly",
+      "prompt": "When can an expensive health check itself become a reliability hazard?",
+      "content": "Health endpoints can create cascading dependency checks. Check only dependencies needed to safely accept the relevant work.",
+      "tags": [
+        "vibe-coding-production",
+        "observability",
+        "use-health-checks-sparingly"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "observability"
+      ]
+    },
+    {
+      "id": "vc-412",
+      "sequence": 52,
+      "type": "fact",
+      "title": "Track deployment versions",
+      "prompt": "Why should every metric or incident report identify the deployed application version?",
+      "content": "Incidents often correlate with releases. Include version or commit metadata in logs, metrics, and traces.",
+      "tags": [
+        "vibe-coding-production",
+        "observability",
+        "track-deployment-versions"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "observability"
+      ]
+    },
+    {
+      "id": "vc-413",
+      "sequence": 53,
+      "type": "concept",
+      "title": "Monitor queues and background jobs",
+      "prompt": "Which queue-depth, retry, and dead-letter indicators reveal worker problems?",
+      "content": "Async systems can fail silently while APIs remain healthy. Track age, depth, throughput, retries, dead letters, and failure reasons.",
+      "tags": [
+        "vibe-coding-production",
+        "observability",
+        "monitor-queues-and-background-jobs"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "observability"
+      ]
+    },
+    {
+      "id": "vc-414",
+      "sequence": 54,
+      "type": "concept",
+      "title": "Monitor database saturation",
+      "prompt": "How can database pool usage or replication lag warn of saturation?",
+      "content": "Database limits often become system-wide bottlenecks. Watch connections, locks, slow queries, replication, storage, and transaction latency.",
+      "tags": [
+        "vibe-coding-production",
+        "observability",
+        "monitor-database-saturation"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "observability"
+      ]
+    },
+    {
+      "id": "vc-415",
+      "sequence": 55,
+      "type": "steps",
+      "title": "Plan incident roles",
+      "prompt": "How should the team prepare incident responsibilities before a production outage?",
+      "content": "Major failures need coordinated decision making. Define incident lead, communication, operations, and subject-matter roles before an outage.",
+      "tags": [
+        "vibe-coding-production",
+        "observability",
+        "plan-incident-roles"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "observability"
+      ],
+      "steps": [
+        "Define incident severity, communication channels, and escalation routes.",
+        "Assign coordination, technical investigation, and stakeholder communication roles.",
+        "Document safe containment, rollback, and data-recovery authority.",
+        "Link service dashboards, runbooks, and dependency contacts.",
+        "Rehearse handoff and preserve timestamps for later analysis."
+      ]
+    },
+    {
+      "id": "vc-416",
+      "sequence": 56,
+      "type": "fact",
+      "title": "Use blameless postmortems",
+      "prompt": "How should a postmortem identify contributing mechanisms without hiding failure?",
+      "content": "The goal is to improve systems, not hide mistakes. Document timeline, contributing conditions, detection gaps, response, and preventive actions.",
+      "tags": [
+        "vibe-coding-production",
+        "observability",
+        "use-blameless-postmortems"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "observability"
+      ]
+    },
+    {
+      "id": "vc-417",
+      "sequence": 57,
+      "type": "checklist",
+      "title": "Test disaster recovery",
+      "prompt": "How do you verify that disaster-recovery planning is operational rather than theoretical?",
+      "content": "Backups and replicas do not guarantee recoverability. Exercise restore, failover, credentials, DNS, and dependency reconstruction.",
+      "tags": [
+        "vibe-coding-production",
+        "observability",
+        "test-disaster-recovery"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "observability"
+      ],
+      "items": [
+        "Backup frequency and retention meet the service's recovery point objective.",
+        "A restore has succeeded in an isolated environment.",
+        "Recovery time is measured against a defined objective.",
+        "Dependencies, credentials, infrastructure, and DNS recovery are accounted for.",
+        "Lessons from the drill are tracked to resolution."
+      ]
+    },
+    {
+      "id": "vc-418",
+      "sequence": 58,
+      "type": "concept",
+      "title": "Track error budgets",
+      "prompt": "How can an error budget inform delivery versus reliability decisions?",
+      "content": "Reliability targets should influence delivery decisions. Use consumed error budget to decide when to prioritize resilience over feature velocity.",
+      "tags": [
+        "vibe-coding-production",
+        "observability",
+        "track-error-budgets"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "observability"
+      ]
+    },
+    {
+      "id": "vc-419",
+      "sequence": 59,
+      "type": "concept",
+      "title": "Remove noisy telemetry",
+      "prompt": "When should unused, high-cardinality, or noisy telemetry be removed?",
+      "content": "Too much low-value data raises cost and obscures important signals. Regularly review dashboards, logs, and alerts for usefulness.",
+      "tags": [
+        "vibe-coding-production",
+        "observability",
+        "remove-noisy-telemetry"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "observability"
+      ]
+    },
+    {
+      "id": "vc-420",
+      "sequence": 60,
+      "type": "concept",
+      "title": "Operate what you generate",
+      "prompt": "What ongoing operational responsibility follows from deploying AI-produced software?",
+      "content": "AI-assisted development still creates ongoing operational ownership. Ensure the team can diagnose, mitigate, and recover the systems it chooses to deploy.",
+      "tags": [
+        "vibe-coding-production",
+        "observability",
+        "operate-what-you-generate"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "observability"
+      ]
+    },
+    {
+      "id": "vc-461",
+      "sequence": 61,
+      "type": "concept",
+      "title": "Characterize before changing",
+      "prompt": "What existing behavior must be characterized before changing unfamiliar legacy code?",
+      "content": "Legacy behavior may be intentional even when code looks strange. Write characterization tests around current externally visible behavior before refactoring.",
+      "tags": [
+        "vibe-coding-production",
+        "legacy-refactoring",
+        "characterize-before-changing"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "legacy-refactoring"
+      ]
+    },
+    {
+      "id": "vc-462",
+      "sequence": 62,
+      "type": "fact",
+      "title": "Find real callers",
+      "prompt": "How can you identify all real callers before replacing a shared function?",
+      "content": "Dead-looking code may be invoked dynamically or externally. Use repository search, runtime telemetry, routes, reflection patterns, and public contracts before deletion.",
+      "tags": [
+        "vibe-coding-production",
+        "legacy-refactoring",
+        "find-real-callers"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "legacy-refactoring"
+      ]
+    },
+    {
+      "id": "vc-463",
+      "sequence": 63,
+      "type": "question",
+      "title": "Separate refactor from behavior change",
+      "prompt": "A PR claims to be a pure refactor but changes API error codes. What does that mean for review?",
+      "content": "",
+      "tags": [
+        "vibe-coding-production",
+        "legacy-refactoring",
+        "separate-refactor-from-behavior-change"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "legacy-refactoring"
+      ],
+      "question": {
+        "options": [
+          "A behavior change has entered the refactor and needs separate specification and validation.",
+          "All error codes are implementation details and never part of contracts.",
+          "The tests should be deleted to let refactoring proceed.",
+          "It is safe because no new endpoint was created."
+        ],
+        "answerIndex": 0,
+        "explanation": "Combining them makes review and rollback harder. Preserve behavior in one change, then implement new behavior in a later focused change. Refactoring should preserve externally observable behavior unless a separately approved change says otherwise."
+      }
+    },
+    {
+      "id": "vc-464",
+      "sequence": 64,
+      "type": "concept",
+      "title": "Refactor along seams",
+      "prompt": "Where can an abstraction seam let old and new implementations coexist?",
+      "content": "Safe changes start where dependencies can be isolated. Introduce narrow interfaces around external systems or tangled modules before deeper replacement.",
+      "tags": [
+        "vibe-coding-production",
+        "legacy-refactoring",
+        "refactor-along-seams"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "legacy-refactoring"
+      ]
+    },
+    {
+      "id": "vc-465",
+      "sequence": 65,
+      "type": "fact",
+      "title": "Remove duplication carefully",
+      "prompt": "When does deduplication preserve behavior, and when can it collapse important exceptions?",
+      "content": "Similar code may encode subtle different rules. Compare behavior and domain intent before consolidating implementations.",
+      "tags": [
+        "vibe-coding-production",
+        "legacy-refactoring",
+        "remove-duplication-carefully"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "legacy-refactoring"
+      ]
+    },
+    {
+      "id": "vc-466",
+      "sequence": 66,
+      "type": "concept",
+      "title": "Preserve public interfaces",
+      "prompt": "Which public interfaces or serialized formats should remain stable during internal cleanup?",
+      "content": "Internal cleanup should not surprise consumers. Keep API shape, events, URLs, configuration, and data formats compatible unless migration is explicit.",
+      "tags": [
+        "vibe-coding-production",
+        "legacy-refactoring",
+        "preserve-public-interfaces"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "legacy-refactoring"
+      ]
+    },
+    {
+      "id": "vc-467",
+      "sequence": 67,
+      "type": "code",
+      "title": "Use incremental migrations",
+      "prompt": "The staged migration notes mention mirroring outputs and shifting a traffic slice. How do these phases lower cutover risk?",
+      "content": "Big-bang rewrites discard working knowledge and create long integration gaps. Move one capability or route at a time behind stable interfaces.",
+      "tags": [
+        "vibe-coding-production",
+        "legacy-refactoring",
+        "use-incremental-migrations"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "legacy-refactoring"
+      ],
+      "code": {
+        "language": "markdown",
+        "snippet": "Migration:\n1. Add new path behind interface.\n2. Mirror or compare outputs.\n3. Shift a small traffic slice.\n4. Monitor parity.\n5. Remove old path after proof."
+      }
+    },
+    {
+      "id": "vc-468",
+      "sequence": 68,
+      "type": "concept",
+      "title": "Use strangler patterns",
+      "prompt": "When is a strangler-style transition safer than replacing a system in one release?",
+      "content": "New implementation can gradually replace legacy paths. Route selected behavior to the new component while keeping fallback and monitoring.",
+      "tags": [
+        "vibe-coding-production",
+        "legacy-refactoring",
+        "use-strangler-patterns"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "legacy-refactoring"
+      ]
+    },
+    {
+      "id": "vc-469",
+      "sequence": 69,
+      "type": "fact",
+      "title": "Use feature flags for risky transitions",
+      "prompt": "How should a feature flag protect a risky change without becoming permanent complexity?",
+      "content": "Flags separate deployment from exposure. Roll out new behavior gradually and define when the old path can be removed.",
+      "tags": [
+        "vibe-coding-production",
+        "legacy-refactoring",
+        "use-feature-flags-for-risky-transitions"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "legacy-refactoring"
+      ]
+    },
+    {
+      "id": "vc-470",
+      "sequence": 70,
+      "type": "steps",
+      "title": "Migrate data in phases",
+      "prompt": "How should a team migrate persisted data while keeping old clients compatible?",
+      "content": "Schema changes often outlive individual deployments. Expand schema, dual-read or write if necessary, backfill, switch traffic, then contract.",
+      "tags": [
+        "vibe-coding-production",
+        "legacy-refactoring",
+        "migrate-data-in-phases"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "legacy-refactoring"
+      ],
+      "steps": [
+        "Introduce additive schema structures and compatible readers/writers.",
+        "Backfill existing records in bounded resumable batches.",
+        "Compare old and new outputs and monitor anomalies.",
+        "Switch authoritative reads only after data integrity is verified.",
+        "Retire old structures in a separate release when rollback limits are understood."
+      ]
+    },
+    {
+      "id": "vc-471",
+      "sequence": 71,
+      "type": "concept",
+      "title": "Preserve observability during migration",
+      "prompt": "What observability must remain in place while a legacy subsystem is replaced?",
+      "content": "You need evidence that old and new behavior match. Compare error rates, latency, output, and business metrics across implementations.",
+      "tags": [
+        "vibe-coding-production",
+        "legacy-refactoring",
+        "preserve-observability-during-migration"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "legacy-refactoring"
+      ]
+    },
+    {
+      "id": "vc-472",
+      "sequence": 72,
+      "type": "fact",
+      "title": "Control compatibility shims",
+      "prompt": "When should a temporary compatibility shim be removed?",
+      "content": "Temporary adapters can become permanent complexity. Give shims owners, removal conditions, and tests.",
+      "tags": [
+        "vibe-coding-production",
+        "legacy-refactoring",
+        "control-compatibility-shims"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "legacy-refactoring"
+      ]
+    },
+    {
+      "id": "vc-473",
+      "sequence": 73,
+      "type": "concept",
+      "title": "Refactor tests too",
+      "prompt": "How do tests need to evolve when internals change but contracts remain the same?",
+      "content": "Old tests may encode implementation details and block healthy change. Preserve behavioral coverage while reducing brittle coupling to internals.",
+      "tags": [
+        "vibe-coding-production",
+        "legacy-refactoring",
+        "refactor-tests-too"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "legacy-refactoring"
+      ]
+    },
+    {
+      "id": "vc-474",
+      "sequence": 74,
+      "type": "concept",
+      "title": "Use static analysis",
+      "prompt": "What can static analysis reveal about dead code and dependency relationships?",
+      "content": "Legacy code often has hidden dependency and dead-code structure. Use type checking, linting, dependency graphs, and coverage to guide safe cleanup.",
+      "tags": [
+        "vibe-coding-production",
+        "legacy-refactoring",
+        "use-static-analysis"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "legacy-refactoring"
+      ]
+    },
+    {
+      "id": "vc-475",
+      "sequence": 75,
+      "type": "concept",
+      "title": "Avoid cosmetic churn",
+      "prompt": "Why can cosmetic formatting changes make a high-risk functional refactor harder to review?",
+      "content": "Large formatting diffs obscure meaningful refactoring. Keep automated formatting separate or minimize unrelated changes.",
+      "tags": [
+        "vibe-coding-production",
+        "legacy-refactoring",
+        "avoid-cosmetic-churn"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "legacy-refactoring"
+      ]
+    },
+    {
+      "id": "vc-476",
+      "sequence": 76,
+      "type": "fact",
+      "title": "Document discovered invariants",
+      "prompt": "Which discovered invariants should be documented for the next maintainer?",
+      "content": "Legacy investigation reveals knowledge not captured elsewhere. Turn important assumptions into tests, comments, architecture notes, or repository instructions.",
+      "tags": [
+        "vibe-coding-production",
+        "legacy-refactoring",
+        "document-discovered-invariants"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "legacy-refactoring"
+      ]
+    },
+    {
+      "id": "vc-477",
+      "sequence": 77,
+      "type": "concept",
+      "title": "Benchmark before and after",
+      "prompt": "Why should performance be measured both before and after refactoring?",
+      "content": "Refactors can alter performance unexpectedly. Measure critical paths when architecture or query behavior changes.",
+      "tags": [
+        "vibe-coding-production",
+        "legacy-refactoring",
+        "benchmark-before-and-after"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "legacy-refactoring"
+      ]
+    },
+    {
+      "id": "vc-478",
+      "sequence": 78,
+      "type": "concept",
+      "title": "Plan rollback",
+      "prompt": "What recovery plan is required before swapping a high-impact subsystem?",
+      "content": "A migration without a reversal or forward-fix strategy is risky. Keep old behavior available until new behavior has proven stable where feasible.",
+      "tags": [
+        "vibe-coding-production",
+        "legacy-refactoring",
+        "plan-rollback"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "legacy-refactoring"
+      ]
+    },
+    {
+      "id": "vc-479",
+      "sequence": 79,
+      "type": "checklist",
+      "title": "Delete only after proving disuse",
+      "prompt": "Before deleting legacy code, which evidence should establish that it is unused?",
+      "content": "Dead code should be removed, but evidence matters. Confirm no callers, traffic, flags, data dependencies, or operational procedures still require it.",
+      "tags": [
+        "vibe-coding-production",
+        "legacy-refactoring",
+        "delete-only-after-proving-disuse"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "legacy-refactoring"
+      ],
+      "items": [
+        "Static references and dynamic call sites have been inspected.",
+        "Production telemetry shows no remaining traffic to old paths over a relevant interval.",
+        "The replacement satisfies parity tests and compatibility obligations.",
+        "Rollback and configuration references no longer depend on the old code.",
+        "Documentation and operational tooling have been updated."
+      ]
+    },
+    {
+      "id": "vc-480",
+      "sequence": 80,
+      "type": "concept",
+      "title": "Finish migrations",
+      "prompt": "What conditions demonstrate that a migration is fully complete?",
+      "content": "Half-migrated architectures impose permanent dual complexity. Track cleanup tasks and remove old paths, flags, columns, and shims after successful transition.",
+      "tags": [
+        "vibe-coding-production",
+        "legacy-refactoring",
+        "finish-migrations"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "legacy-refactoring"
+      ]
+    },
+    {
+      "id": "vc-481",
+      "sequence": 81,
+      "type": "concept",
+      "title": "Define ownership",
+      "prompt": "Who should own maintenance, security, alerts, and incident response for each production component?",
+      "content": "Every production component needs accountable maintainers. Record who owns code, data, infrastructure, alerts, and incident response.",
+      "tags": [
+        "vibe-coding-production",
+        "production-readiness",
+        "define-ownership"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "production-readiness"
+      ]
+    },
+    {
+      "id": "vc-482",
+      "sequence": 82,
+      "type": "code",
+      "title": "Use a production-readiness review",
+      "prompt": "The readiness list covers owner, threat model, migration, alerts, rollback and runbook. Which critical dimension is missing if one item is unchecked?",
+      "content": "Feature completion is broader than passing unit tests. Review architecture, security, data, performance, reliability, observability, deployment, rollback, and support.",
+      "tags": [
+        "vibe-coding-production",
+        "production-readiness",
+        "use-a-production-readiness-review"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "production-readiness"
+      ],
+      "code": {
+        "language": "markdown",
+        "snippet": "Production readiness:\n- owner identified\n- threat model reviewed\n- migrations safe\n- SLO/alerts defined\n- rollback tested\n- runbook linked\n- costs/limits understood"
+      }
+    },
+    {
+      "id": "vc-483",
+      "sequence": 83,
+      "type": "concept",
+      "title": "Classify data",
+      "prompt": "How should data classification change access, retention, and encryption choices?",
+      "content": "Security controls depend on what the system handles. Label public, internal, confidential, personal, financial, credential, and regulated data as applicable.",
+      "tags": [
+        "vibe-coding-production",
+        "production-readiness",
+        "classify-data"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "production-readiness"
+      ]
+    },
+    {
+      "id": "vc-484",
+      "sequence": 84,
+      "type": "concept",
+      "title": "Classify operational criticality",
+      "prompt": "What downtime and data-loss targets match a service's operational criticality?",
+      "content": "Not every service needs the same redundancy. Define acceptable downtime, data loss, latency, and support response based on business impact.",
+      "tags": [
+        "vibe-coding-production",
+        "production-readiness",
+        "classify-operational-criticality"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "production-readiness"
+      ]
+    },
+    {
+      "id": "vc-485",
+      "sequence": 85,
+      "type": "fact",
+      "title": "Document runbooks",
+      "prompt": "Which steps must an operator runbook explain during a degraded service?",
+      "content": "Operators need safe procedures under pressure. Provide diagnosis, mitigation, rollback, restore, escalation, and dependency guidance.",
+      "tags": [
+        "vibe-coding-production",
+        "production-readiness",
+        "document-runbooks"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "production-readiness"
+      ]
+    },
+    {
+      "id": "vc-486",
+      "sequence": 86,
+      "type": "concept",
+      "title": "Document architecture",
+      "prompt": "What architecture and trust-boundary decisions should survive beyond an AI chat session?",
+      "content": "Teams should not depend on chat history to understand the system. Maintain current diagrams or prose for components, data flow, trust boundaries, and major decisions.",
+      "tags": [
+        "vibe-coding-production",
+        "production-readiness",
+        "document-architecture"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "production-readiness"
+      ]
+    },
+    {
+      "id": "vc-487",
+      "sequence": 87,
+      "type": "concept",
+      "title": "Maintain dependency inventory",
+      "prompt": "Which major third-party services and packages belong in the dependency inventory?",
+      "content": "Production risk includes third-party code and services. Track major packages, external APIs, licenses, credentials, and end-of-life dates.",
+      "tags": [
+        "vibe-coding-production",
+        "production-readiness",
+        "maintain-dependency-inventory"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "production-readiness"
+      ]
+    },
+    {
+      "id": "vc-488",
+      "sequence": 88,
+      "type": "concept",
+      "title": "Maintain an asset and secret inventory",
+      "prompt": "How should an organization inventory and rotate operational identities and secrets?",
+      "content": "Unknown credentials and resources are hard to rotate or secure. Record owners, scopes, environments, and rotation procedures without storing secret values.",
+      "tags": [
+        "vibe-coding-production",
+        "production-readiness",
+        "maintain-an-asset-and-secret-inventory"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "production-readiness"
+      ]
+    },
+    {
+      "id": "vc-489",
+      "sequence": 89,
+      "type": "fact",
+      "title": "Use change management proportional to risk",
+      "prompt": "How can release approval be proportional to blast radius and reversibility?",
+      "content": "Small reversible changes should stay fast; risky changes need stronger controls. Increase review, staging, approvals, and rollout safeguards based on blast radius.",
+      "tags": [
+        "vibe-coding-production",
+        "production-readiness",
+        "use-change-management-proportional-to-risk"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "production-readiness"
+      ]
+    },
+    {
+      "id": "vc-490",
+      "sequence": 90,
+      "type": "concept",
+      "title": "Define support and escalation",
+      "prompt": "What support and escalation arrangements are needed after a feature ships?",
+      "content": "User-impacting incidents need a route to the right people. Document severity, on-call or contact paths, and communication responsibilities.",
+      "tags": [
+        "vibe-coding-production",
+        "production-readiness",
+        "define-support-and-escalation"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "production-readiness"
+      ]
+    },
+    {
+      "id": "vc-491",
+      "sequence": 91,
+      "type": "concept",
+      "title": "Monitor cost",
+      "prompt": "How should real infrastructure and model usage costs be measured?",
+      "content": "AI can generate architectures that work but spend inefficiently. Track compute, storage, bandwidth, third-party API, observability, and model usage costs.",
+      "tags": [
+        "vibe-coding-production",
+        "production-readiness",
+        "monitor-cost"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "production-readiness"
+      ]
+    },
+    {
+      "id": "vc-492",
+      "sequence": 92,
+      "type": "fact",
+      "title": "Set service limits",
+      "prompt": "Which usage, storage, retry, and resource limits keep a service within safe capacity?",
+      "content": "Unlimited usage turns bugs or abuse into outages and bills. Define quotas, rate limits, timeouts, payload sizes, and concurrency limits.",
+      "tags": [
+        "vibe-coding-production",
+        "production-readiness",
+        "set-service-limits"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "production-readiness"
+      ]
+    },
+    {
+      "id": "vc-493",
+      "sequence": 93,
+      "type": "steps",
+      "title": "Practice incident response",
+      "prompt": "How should a team conduct a production incident exercise?",
+      "content": "Plans that are never exercised fail under stress. Run tabletop or technical exercises for likely failure scenarios.",
+      "tags": [
+        "vibe-coding-production",
+        "production-readiness",
+        "practice-incident-response"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "production-readiness"
+      ],
+      "steps": [
+        "Choose a credible failure scenario and severity.",
+        "Assign incident command, technical, and communication roles.",
+        "Use runbooks to detect, contain, diagnose, and recover.",
+        "Measure recovery time and integrity against service objectives.",
+        "Document control gaps and track corrective work."
+      ]
+    },
+    {
+      "id": "vc-494",
+      "sequence": 94,
+      "type": "concept",
+      "title": "Review access regularly",
+      "prompt": "How do you prevent unused access grants from accumulating across people and services?",
+      "content": "Permissions accumulate as teams and systems change. Audit user, service, cloud, database, and CI privileges and remove unnecessary access.",
+      "tags": [
+        "vibe-coding-production",
+        "production-readiness",
+        "review-access-regularly"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "production-readiness"
+      ]
+    },
+    {
+      "id": "vc-495",
+      "sequence": 95,
+      "type": "concept",
+      "title": "Track technical debt explicitly",
+      "prompt": "How should known technical debt be documented without hiding safety-critical work?",
+      "content": "Fast AI-assisted delivery can hide maintenance obligations. Create owned issues for shortcuts, temporary flags, unsupported patterns, and deferred tests.",
+      "tags": [
+        "vibe-coding-production",
+        "production-readiness",
+        "track-technical-debt-explicitly"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "production-readiness"
+      ]
+    },
+    {
+      "id": "vc-496",
+      "sequence": 96,
+      "type": "fact",
+      "title": "Measure quality trends",
+      "prompt": "Which quality trends reveal whether new changes improve or degrade the codebase?",
+      "content": "One green release does not prove a healthy engineering system. Track defects, rollback rate, test health, reliability, security findings, and delivery lead time.",
+      "tags": [
+        "vibe-coding-production",
+        "production-readiness",
+        "measure-quality-trends"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "production-readiness"
+      ]
+    },
+    {
+      "id": "vc-497",
+      "sequence": 97,
+      "type": "concept",
+      "title": "Improve prompts and instructions from incidents",
+      "prompt": "How should production incidents update agent instructions and verification prompts?",
+      "content": "Failures reveal missing context and controls. Update repository instructions, checklists, tests, and automation after recurring AI mistakes.",
+      "tags": [
+        "vibe-coding-production",
+        "production-readiness",
+        "improve-prompts-and-instructions-from-incidents"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "production-readiness"
+      ]
+    },
+    {
+      "id": "vc-498",
+      "sequence": 98,
+      "type": "concept",
+      "title": "Train developers to review AI code",
+      "prompt": "Why must developers be trained to review AI-produced code instead of trusting the generating tool?",
+      "content": "Generation skill without review skill increases risk. Teach debugging, architecture, security, testing, and domain reasoning alongside prompting.",
+      "tags": [
+        "vibe-coding-production",
+        "production-readiness",
+        "train-developers-to-review-ai-code"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "production-readiness"
+      ]
+    },
+    {
+      "id": "vc-499",
+      "sequence": 99,
+      "type": "question",
+      "title": "Retain auditability",
+      "prompt": "An autonomous agent merged a major change but retained no decision, approval, or test record. Which production governance property is missing?",
+      "content": "",
+      "tags": [
+        "vibe-coding-production",
+        "production-readiness",
+        "retain-auditability"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "production-readiness"
+      ],
+      "question": {
+        "options": [
+          "A different font in the runbook.",
+          "A longer generated summary.",
+          "A provenance trail linking requirements, code revision, validation, and authorized approval.",
+          "An automatic rule to erase older incident logs."
+        ],
+        "answerIndex": 2,
+        "explanation": "Organizations may need to explain who changed what and why. Preserve version control, reviews, CI evidence, deployment records, and significant decisions. Auditability means a reviewer can reconstruct who or what changed production, why, with which checks and permissions."
+      }
+    },
+    {
+      "id": "vc-500",
+      "sequence": 100,
+      "type": "checklist",
+      "title": "Define the merge standard",
+      "prompt": "What is the minimum defensible merge standard for AI-authored production changes?",
+      "content": "The endpoint of vibe coding is accountable software engineering. Merge only when requirements are met, evidence is current, risks are understood, and the team can operate the result.",
+      "tags": [
+        "vibe-coding-production",
+        "production-readiness",
+        "define-the-merge-standard"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "production-readiness"
+      ],
+      "items": [
+        "Requirements and scope are traced to the final diff.",
+        "Authorization, data invariants, and relevant threat models were reviewed.",
+        "Mandatory CI and integration checks passed on the exact final head.",
+        "Migrations, monitoring, and rollback constraints are documented.",
+        "Appropriate human approval has been recorded before merging."
+      ]
+    }
+  ]
+}
