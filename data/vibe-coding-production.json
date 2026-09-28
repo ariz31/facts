@@ -373,7 +373,7 @@
       "type": "concept",
       "title": "Provide one-command bootstrap",
       "prompt": "What should a one-command bootstrap check before declaring the environment ready?",
-      "content": "Setup friction wastes agent and developer cycles. Automate dependency installation, local services, migrations, and seed data safely.",
+      "content": "Setup friction wastes agent and developer cycles. Automate dependency installation, local services, migrations, and seed data safely. The bootstrap should confirm required health/readiness endpoints and at least a focused smoke check before claiming setup has completed.",
       "tags": [
         "vibe-coding-production",
         "dev-environments",
@@ -1364,7 +1364,7 @@
       "type": "code",
       "title": "Use incremental migrations",
       "prompt": "The staged migration notes mention mirroring outputs and shifting a traffic slice. How do these phases lower cutover risk?",
-      "content": "Big-bang rewrites discard working knowledge and create long integration gaps. Move one capability or route at a time behind stable interfaces.",
+      "content": "Big-bang rewrites discard working knowledge and create long integration gaps. Move one capability or route at a time behind stable interfaces. Mirroring outputs reveals parity defects before switching ownership; moving a small traffic cohort bounds blast radius and makes a safe revert possible if measured behavior diverges.",
       "tags": [
         "vibe-coding-production",
         "legacy-refactoring",
