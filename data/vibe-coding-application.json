@@ -584,7 +584,7 @@
       "type": "concept",
       "title": "Return meaningful HTTP semantics",
       "prompt": "Which HTTP statuses distinguish malformed, forbidden, missing, and successful requests?",
-      "content": "Clients need predictable status behavior. Use methods and status codes consistently and include machine-readable error structures.",
+      "content": "Clients need predictable status behavior. Use methods and status codes consistently and include machine-readable error structures. For common responses, 400 means a malformed or invalid request, 401 indicates missing or invalid authentication, 403 means the caller is not permitted, 404 indicates a missing or deliberately concealed resource, 200 indicates success, and 201 indicates creation (subject to the endpoint contract).",
       "tags": [
         "vibe-coding-application",
         "backend-api",
@@ -673,7 +673,7 @@
       "type": "fact",
       "title": "Handle partial external failure",
       "prompt": "How should an API recover when its database succeeds but an external service times out?",
-      "content": "Third-party APIs can timeout or return inconsistent errors. Define retry classes, timeouts, circuit behavior, and compensation for side effects.",
+      "content": "Third-party APIs can timeout or return inconsistent errors. Define retry classes, timeouts, circuit behavior, and compensation for side effects. If a database commit must trigger external work, persist a durable outbox event atomically with that commit; use idempotent retries, reconcile uncertain remote outcomes, and compensate for irreversible side effects where necessary.",
       "tags": [
         "vibe-coding-application",
         "backend-api",
@@ -792,7 +792,7 @@
       "type": "fact",
       "title": "Use background jobs safely",
       "prompt": "Which tasks belong in a durable background queue instead of an HTTP request?",
-      "content": "Queues add retry and duplication semantics. Make jobs idempotent, observable, bounded, and dead-lettered when repeated failure requires inspection.",
+      "content": "Queues add retry and duplication semantics. Make jobs idempotent, observable, bounded, and dead-lettered when repeated failure requires inspection. Long-running or retriable work such as bulk imports, media processing, or asynchronous notifications belongs in a durable queue when it cannot reliably finish within the HTTP request budget; a 202 response with a job identifier can expose its status.",
       "tags": [
         "vibe-coding-application",
         "backend-api",
