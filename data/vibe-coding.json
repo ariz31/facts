@@ -283,7 +283,7 @@
       "sequence": 8,
       "type": "concept",
       "title": "Preserve causality",
-      "prompt": "How can you distinguish a root cause from a coincidental symptom during AI-assisted debugging?",
+      "prompt": "How do focused commits and recorded decisions preserve causal understanding during AI-assisted changes?",
       "content": "Understanding what changed and why is essential when AI can generate large diffs quickly. Keep commits focused and record the rationale behind architectural or behavioral decisions.",
       "tags": [
         "vibe-coding",
@@ -690,7 +690,7 @@
       "type": "concept",
       "title": "Design empty states",
       "prompt": "What should an interface communicate when no records or results exist?",
-      "content": "Real products often start with no data. Specify what users see and can do before any content, configuration, or history exists.",
+      "content": "Real products often start with no data. Specify what users see and can do before any content, configuration, or history exists. An empty state should explain why no records appear and offer a useful next action, such as creating or importing a first item, rather than leaving an unexplained blank panel.",
       "tags": [
         "vibe-coding",
         "product-problem-framing",
