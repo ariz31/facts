@@ -211,10 +211,10 @@
       ],
       "question": {
         "options": [
-          "Deploy immediately if the code looks plausible.",
+          "Rely only on a happy-path unit test and deploy to all users.",
           "Require a precise specification, specialist review, and stronger verification.",
-          "Use a longer prompt but skip external review.",
-          "Give the agent unrestricted database write access to save time."
+          "Obtain a second model's approval but skip independent data-recovery planning.",
+          "Apply directly to production behind a UI feature flag without testing persistence."
         ],
         "answerIndex": 1,
         "explanation": "High-risk domains, ambiguous requirements, irreversible data changes, and security-critical paths demand stronger controls. Increase specification, review depth, testing, and specialist involvement as consequence and uncertainty rise. High impact and low reversibility call for stricter controls, not greater agent autonomy."
@@ -1350,9 +1350,9 @@
       "question": {
         "options": [
           "Read the relevant code and tests, reproduce the behavior, and identify the violated invariant.",
-          "Rewrite the module from memory to minimize investigation time.",
-          "Skip tests until after a large cleanup.",
-          "Assume the latest dependency is responsible."
+          "Patch the most recently changed file before reproducing the error.",
+          "Temporarily adjust the failing assertion to get CI green, then investigate.",
+          "Update the suspected dependency before comparing environments."
         ],
         "answerIndex": 0,
         "explanation": "Immediate edits can encode a wrong mental model of the codebase. Require the agent to inspect relevant implementation, tests, and configuration before changing behavior. Investigation reduces the risk of treating a symptom as the cause."
@@ -1864,9 +1864,9 @@
       ],
       "question": {
         "options": [
-          "Continue using the initial snapshot because it was complete.",
-          "Append more unrelated project notes without fetching changes.",
-          "Assume the earlier architecture still applies.",
+          "Continue working from the initial source snapshot until the planned phase ends.",
+          "Add the previous architectural summary to the prompt but do not inspect the new commit.",
+          "Finish the prepared patch and rebase it without rechecking assumptions.",
           "Refresh the current branch and affected files before applying the next patch."
         ],
         "answerIndex": 3,
