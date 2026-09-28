@@ -218,10 +218,10 @@
       ],
       "question": {
         "options": [
-          "The spinner animation is too slow.",
+          "Extend the network timeout to give the save more time.",
           "The failed async path does not perform state cleanup.",
-          "The button color is indistinguishable from the background.",
-          "The screenshot was captured before a successful save."
+          "Debounce clicks to prevent duplicate saves without observing rejection handling.",
+          "Clear loading state after an arbitrary timer independent of operation completion."
         ],
         "answerIndex": 1,
         "explanation": "Visible failures may originate far upstream. Ask what invariant became false first rather than patching the last line that crashed. Fix and test the missing failure-path cleanup rather than masking its visual symptom."
@@ -790,10 +790,10 @@
       ],
       "question": {
         "options": [
-          "Merge because a different model produced an approval.",
-          "Disable authorization until a test can be added.",
+          "Ask another model for a favorable review and treat agreement as validation.",
+          "Merge when CI passes even if no test exercises resource-level permissions.",
           "Treat the approval as a hypothesis and require a concrete authorization check and current-head evidence.",
-          "Assume read-only review tools cannot make factual mistakes."
+          "Defer testing the authorization path until after release and rely on monitoring."
         ],
         "answerIndex": 2,
         "explanation": "Automated review is fallible and context-limited. Validate AI findings and retain human ownership for consequential merges. An attributed reviewer opinion does not replace execution, traceability, or human accountability."
@@ -1061,9 +1061,9 @@
       "question": {
         "options": [
           "Review provenance and script behavior before allowing installation in a privileged environment.",
-          "Accept it automatically because the package is in a public registry.",
-          "Disable lockfiles to avoid version conflicts.",
-          "Grant CI write access to production secrets to simplify setup."
+          "Pin the exact version but otherwise allow its postinstall script to execute unchecked.",
+          "Rely only on a vulnerability scanner to assess the remote command.",
+          "Run installation in production CI because a public registry already accepted the package."
         ],
         "answerIndex": 0,
         "explanation": "Package lifecycle scripts can execute arbitrary code. Understand package trust and consider safer install policies in sensitive environments. Installation hooks execute code and therefore deserve supply-chain review."
@@ -1377,9 +1377,9 @@
       ],
       "question": {
         "options": [
-          "A larger cache.",
-          "More aggressive compression.",
-          "A longer timeout.",
+          "Increase cache lifetime to reduce database load further.",
+          "Monitor cache hit rate without considering permission freshness.",
+          "Attach a client ETag without revisiting the server's authorization-cache lifecycle.",
           "An invalidation or expiry rule that preserves the authorization invariant."
         ],
         "answerIndex": 3,
@@ -1683,10 +1683,10 @@
       ],
       "question": {
         "options": [
-          "The hover transition must run faster.",
+          "Set tabindex=0 on the hover menu without adding keyboard activation.",
           "The entire journey must be operable by keyboard with perceivable focus.",
-          "The menu needs a larger background image.",
-          "The browser should hide the tab key."
+          "Add focus styling but keep activation dependent on pointer hover.",
+          "Support Escape to dismiss the menu without making it keyboard-openable."
         ],
         "answerIndex": 1,
         "explanation": "Every pointer interaction should have a keyboard path. Test tab order, activation, escape, arrow-key patterns, and no keyboard traps. A visually interactive control must still support non-pointer users."
