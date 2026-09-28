@@ -34,6 +34,7 @@ export const DEFAULT_CARD_PRESETS_BY_DECK = Object.freeze({
   cybersecurity: "neon",
   "cloud-devops": "minimal",
   "git-github": "editorial",
+  "ai-software-fundamentals": "notebook",
 });
 
 const ALLOWED_FONTS = new Set(["system", "serif", "mono", "rounded"]);
