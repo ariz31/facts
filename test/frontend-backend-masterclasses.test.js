@@ -32,7 +32,7 @@ const expectedPaths = {
 };
 
 for (const [id, pathIds] of Object.entries(expectedPaths)) {
-  test(`${id} assembles 400 curated cards and reaches the 500-card runtime maximum`, async () => {
+  test(`${id} preserves 400 legacy source cards without repetitive reference padding`, async () => {
     const { manifest, deck } = await loadCuratedDeck(id);
     assert.equal(manifest.lessonStyle, "technical");
     assert.equal(deck.cards.length, 400);
@@ -48,12 +48,11 @@ for (const [id, pathIds] of Object.entries(expectedPaths)) {
     assert.deepEqual(new Set(deck.cards.map((card) => card.type)), new Set(["concept", "fact", "question", "code", "steps", "checklist"]));
     assert.deepEqual(new Set(deck.cards.map((card) => card.difficulty)), new Set(["beginner", "intermediate", "advanced"]));
 
-    assert.equal(getExpansionCount(id), 100);
+    assert.equal(getExpansionCount(id), 0);
     const rendered = expandDeck(deck);
-    assert.equal(rendered.cards.length, 500);
-    assert.equal(rendered.paths.length, 21);
-    assert.equal(rendered.paths.at(-1).id, "reference-library");
-    assert.equal(rendered.paths.at(-1).cardIds.length, 100);
+    assert.equal(rendered, deck);
+    assert.equal(rendered.cards.length, 400);
+    assert.equal(rendered.paths.length, 20);
     assert.deepEqual(validateDeck(rendered, { rejectBuiltInId: false }), []);
   });
 }
@@ -62,5 +61,13 @@ test("compact technical topics expand into paired concept/application lessons", 
   const { deck } = await loadCuratedDeck("frontend-programming");
   assert.equal(deck.cards[0].title, "Client-side trust boundary");
   assert.equal(deck.cards[1].title, "Client-side trust boundary: application");
-  assert.match(deck.cards[1].content, /boundary or failure case/i);
+  assert.equal(deck.cards[0].prompt, "What does Client-side trust boundary mean?");
+  assert.match(deck.cards[0].content, /user-controlled browser/);
+  assert.equal(deck.cards[1].prompt, "How should Client-side trust boundary guide a practical decision?");
+  assert.match(deck.cards[1].content, /trusted servers/);
+  assert.doesNotMatch(deck.cards[1].content, /correct application|boundary or failure case/i);
+  for (const card of deck.cards) {
+    if (card.type !== "question") assert.notEqual(card.prompt, card.content, card.id);
+    if (card.type === "question") assert.equal(new Set(card.question.options).size, card.question.options.length, card.id);
+  }
 });
