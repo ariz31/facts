@@ -1,0 +1,1986 @@
+{
+  "id": "vibe-coding-quality",
+  "title": "Vibe Coding 04 — Debugging, Review & Product Quality",
+  "category": "AI-Assisted Development",
+  "description": "Investigate root causes, independently review generated diffs, evaluate dependencies, measure real-world performance, and build inclusive internationalized interfaces. Part 4 of 5.",
+  "estimatedMinutes": 275,
+  "paths": [
+    {
+      "id": "debugging",
+      "title": "Debugging & Root-Cause Analysis",
+      "description": "Diagnose defects with evidence, reproducibility, and causal reasoning instead of prompting the model to make random patches.",
+      "cardIds": [
+        "vc-241",
+        "vc-242",
+        "vc-243",
+        "vc-244",
+        "vc-245",
+        "vc-246",
+        "vc-247",
+        "vc-248",
+        "vc-249",
+        "vc-250",
+        "vc-251",
+        "vc-252",
+        "vc-253",
+        "vc-254",
+        "vc-255",
+        "vc-256",
+        "vc-257",
+        "vc-258",
+        "vc-259",
+        "vc-260"
+      ]
+    },
+    {
+      "id": "code-review",
+      "title": "Code Review & AI Review",
+      "description": "Review generated changes for behavior, architecture, security, maintainability, and evidence rather than accepting plausible-looking code.",
+      "cardIds": [
+        "vc-281",
+        "vc-282",
+        "vc-283",
+        "vc-284",
+        "vc-285",
+        "vc-286",
+        "vc-287",
+        "vc-288",
+        "vc-289",
+        "vc-290",
+        "vc-291",
+        "vc-292",
+        "vc-293",
+        "vc-294",
+        "vc-295",
+        "vc-296",
+        "vc-297",
+        "vc-298",
+        "vc-299",
+        "vc-300"
+      ]
+    },
+    {
+      "id": "dependencies",
+      "title": "Dependencies & Package Hygiene",
+      "description": "Choose, verify, update, and remove third-party packages safely when coding agents can suggest libraries faster than humans can assess them.",
+      "cardIds": [
+        "vc-301",
+        "vc-302",
+        "vc-303",
+        "vc-304",
+        "vc-305",
+        "vc-306",
+        "vc-307",
+        "vc-308",
+        "vc-309",
+        "vc-310",
+        "vc-311",
+        "vc-312",
+        "vc-313",
+        "vc-314",
+        "vc-315",
+        "vc-316",
+        "vc-317",
+        "vc-318",
+        "vc-319",
+        "vc-320"
+      ]
+    },
+    {
+      "id": "performance",
+      "title": "Performance & Scalability",
+      "description": "Keep AI-generated software responsive and efficient by measuring bottlenecks, setting budgets, and optimizing the right layer.",
+      "cardIds": [
+        "vc-321",
+        "vc-322",
+        "vc-323",
+        "vc-324",
+        "vc-325",
+        "vc-326",
+        "vc-327",
+        "vc-328",
+        "vc-329",
+        "vc-330",
+        "vc-331",
+        "vc-332",
+        "vc-333",
+        "vc-334",
+        "vc-335",
+        "vc-336",
+        "vc-337",
+        "vc-338",
+        "vc-339",
+        "vc-340"
+      ]
+    },
+    {
+      "id": "accessibility-i18n",
+      "title": "Accessibility & Internationalization",
+      "description": "Ensure generated products work for diverse users, input methods, languages, locales, and content lengths.",
+      "cardIds": [
+        "vc-341",
+        "vc-342",
+        "vc-343",
+        "vc-344",
+        "vc-345",
+        "vc-346",
+        "vc-347",
+        "vc-348",
+        "vc-349",
+        "vc-350",
+        "vc-351",
+        "vc-352",
+        "vc-353",
+        "vc-354",
+        "vc-355",
+        "vc-356",
+        "vc-357",
+        "vc-358",
+        "vc-359",
+        "vc-360"
+      ]
+    }
+  ],
+  "cards": [
+    {
+      "id": "vc-241",
+      "sequence": 1,
+      "type": "steps",
+      "title": "Reproduce before fixing",
+      "prompt": "What is an evidence-led sequence for reproducing a reported bug?",
+      "content": "A reliable reproduction defines the actual problem. Capture exact inputs, environment, steps, expected behavior, and observed behavior.",
+      "tags": [
+        "vibe-coding-quality",
+        "debugging",
+        "reproduce-before-fixing"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "debugging"
+      ],
+      "steps": [
+        "Capture the expected and observed behavior with exact environment/version.",
+        "Collect the smallest input and steps that reliably trigger the failure.",
+        "Record logs, stack traces, relevant persistence state, and timing.",
+        "Confirm the failure on the current head before modifying code.",
+        "Turn the reproduction into a focused regression check."
+      ]
+    },
+    {
+      "id": "vc-242",
+      "sequence": 2,
+      "type": "fact",
+      "title": "Reduce the failing case",
+      "prompt": "How can reducing a failing input help isolate the responsible component?",
+      "content": "Smaller reproductions reveal which variables matter. Remove unrelated data, components, or steps while preserving the failure.",
+      "tags": [
+        "vibe-coding-quality",
+        "debugging",
+        "reduce-the-failing-case"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "debugging"
+      ]
+    },
+    {
+      "id": "vc-243",
+      "sequence": 3,
+      "type": "concept",
+      "title": "Read the error literally",
+      "prompt": "Why should the exact first error be inspected rather than guessed around?",
+      "content": "Stack traces and diagnostics often identify the failing boundary. Start from the first relevant error and trace data and control flow around it.",
+      "tags": [
+        "vibe-coding-quality",
+        "debugging",
+        "read-the-error-literally"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "debugging"
+      ]
+    },
+    {
+      "id": "vc-244",
+      "sequence": 4,
+      "type": "question",
+      "title": "Distinguish symptom from cause",
+      "prompt": "A save button shows a spinner forever because a rejected promise never clears loading state. What is the underlying defect?",
+      "content": "",
+      "tags": [
+        "vibe-coding-quality",
+        "debugging",
+        "distinguish-symptom-from-cause"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "debugging"
+      ],
+      "question": {
+        "options": [
+          "The spinner animation is too slow.",
+          "The failed async path does not perform state cleanup.",
+          "The button color is indistinguishable from the background.",
+          "The screenshot was captured before a successful save."
+        ],
+        "answerIndex": 1,
+        "explanation": "Visible failures may originate far upstream. Ask what invariant became false first rather than patching the last line that crashed. Fix and test the missing failure-path cleanup rather than masking its visual symptom."
+      }
+    },
+    {
+      "id": "vc-245",
+      "sequence": 5,
+      "type": "fact",
+      "title": "Compare working and failing states",
+      "prompt": "Which differences between a passing and failing environment offer useful evidence?",
+      "content": "Differences narrow the search space. Compare environment, inputs, versions, flags, permissions, and recent commits.",
+      "tags": [
+        "vibe-coding-quality",
+        "debugging",
+        "compare-working-and-failing-states"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "debugging"
+      ]
+    },
+    {
+      "id": "vc-246",
+      "sequence": 6,
+      "type": "concept",
+      "title": "Use logs with correlation",
+      "prompt": "How can correlated logs reconstruct the sequence leading to a failed request?",
+      "content": "Distributed failures need a thread across components. Preserve request, job, or user-safe correlation identifiers through logs and traces.",
+      "tags": [
+        "vibe-coding-quality",
+        "debugging",
+        "use-logs-with-correlation"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "debugging"
+      ]
+    },
+    {
+      "id": "vc-247",
+      "sequence": 7,
+      "type": "concept",
+      "title": "Inspect actual runtime values",
+      "prompt": "Why is inspecting actual values more reliable than trusting a model's assumed state?",
+      "content": "Model reasoning about hypothetical values is weaker than evidence. Use debugger, structured logs, assertions, or temporary instrumentation to inspect state.",
+      "tags": [
+        "vibe-coding-quality",
+        "debugging",
+        "inspect-actual-runtime-values"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "debugging"
+      ]
+    },
+    {
+      "id": "vc-248",
+      "sequence": 8,
+      "type": "code",
+      "title": "Bisect regressions",
+      "prompt": "The git bisect commands mark one known bad and one known good revision. How does repeated midpoint testing isolate the regression?",
+      "content": "When a bug appeared after a known good version, history is evidence. Use commit bisection or controlled rollback to find the first bad change.",
+      "tags": [
+        "vibe-coding-quality",
+        "debugging",
+        "bisect-regressions"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "debugging"
+      ],
+      "code": {
+        "language": "bash",
+        "snippet": "git bisect start\ngit bisect bad HEAD\ngit bisect good v1.8.0\n# test each midpoint until the first bad commit is isolated"
+      }
+    },
+    {
+      "id": "vc-249",
+      "sequence": 9,
+      "type": "fact",
+      "title": "Check environmental drift",
+      "prompt": "What runtime, configuration, or dependency drift can explain environment-specific failures?",
+      "content": "Builds can fail because runtime and local assumptions differ. Compare environment variables, versions, platform, filesystem, network, and data state.",
+      "tags": [
+        "vibe-coding-quality",
+        "debugging",
+        "check-environmental-drift"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "debugging"
+      ]
+    },
+    {
+      "id": "vc-250",
+      "sequence": 10,
+      "type": "concept",
+      "title": "Check race conditions",
+      "prompt": "Which ordering-dependent bug could disappear during single-request testing?",
+      "content": "Intermittent failures often depend on timing. Look for shared mutable state, missing awaits, duplicate events, stale reads, and unsafe retries.",
+      "tags": [
+        "vibe-coding-quality",
+        "debugging",
+        "check-race-conditions"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "debugging"
+      ]
+    },
+    {
+      "id": "vc-251",
+      "sequence": 11,
+      "type": "concept",
+      "title": "Check caches",
+      "prompt": "How can stale caches conceal an otherwise correct code change?",
+      "content": "Stale state can make new code appear broken. Identify browser, CDN, application, build, database, and service-worker caches in the path.",
+      "tags": [
+        "vibe-coding-quality",
+        "debugging",
+        "check-caches"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "debugging"
+      ]
+    },
+    {
+      "id": "vc-252",
+      "sequence": 12,
+      "type": "fact",
+      "title": "Check serialization boundaries",
+      "prompt": "Where can encoding, JSON parsing, or type conversion corrupt data across an interface?",
+      "content": "Data can change shape across JSON, dates, numbers, and nullable fields. Inspect encoded and decoded representations at each boundary.",
+      "tags": [
+        "vibe-coding-quality",
+        "debugging",
+        "check-serialization-boundaries"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "debugging"
+      ]
+    },
+    {
+      "id": "vc-253",
+      "sequence": 13,
+      "type": "concept",
+      "title": "Check permissions and identity",
+      "prompt": "Which user and tenant identities must be checked when an action unexpectedly fails?",
+      "content": "Many apparent not-found or server errors are authorization problems. Inspect the authenticated identity, scopes, ownership, and policy decisions.",
+      "tags": [
+        "vibe-coding-quality",
+        "debugging",
+        "check-permissions-and-identity"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "debugging"
+      ]
+    },
+    {
+      "id": "vc-254",
+      "sequence": 14,
+      "type": "concept",
+      "title": "Check database state",
+      "prompt": "What database records or transaction state might explain inconsistent application output?",
+      "content": "Schema and data invariants may differ from assumptions. Inspect migrations, constraints, representative rows, locks, and query plans.",
+      "tags": [
+        "vibe-coding-quality",
+        "debugging",
+        "check-database-state"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "debugging"
+      ]
+    },
+    {
+      "id": "vc-255",
+      "sequence": 15,
+      "type": "concept",
+      "title": "Avoid shotgun fixes",
+      "prompt": "Why can changing several likely causes at once make debugging slower?",
+      "content": "Changing many plausible causes at once destroys diagnostic information. Test one hypothesis at a time or isolate changes so cause remains attributable.",
+      "tags": [
+        "vibe-coding-quality",
+        "debugging",
+        "avoid-shotgun-fixes"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "debugging"
+      ]
+    },
+    {
+      "id": "vc-256",
+      "sequence": 16,
+      "type": "fact",
+      "title": "Use temporary assertions",
+      "prompt": "When should temporary assertions be added to expose a violated invariant?",
+      "content": "Assertions can expose the first violated invariant closer to its source. Add targeted checks during investigation and remove or formalize them after the fix.",
+      "tags": [
+        "vibe-coding-quality",
+        "debugging",
+        "use-temporary-assertions"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "debugging"
+      ]
+    },
+    {
+      "id": "vc-257",
+      "sequence": 17,
+      "type": "checklist",
+      "title": "Turn the bug into a test",
+      "prompt": "What must a regression test establish after a defect is fixed?",
+      "content": "A regression test prevents recurrence and proves the fix addresses the observed case. Write the failing test before or alongside the correction when feasible.",
+      "tags": [
+        "vibe-coding-quality",
+        "debugging",
+        "turn-the-bug-into-a-test"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "debugging"
+      ],
+      "items": [
+        "It reproduces the original failure before the repair.",
+        "Its assertion protects user-visible behavior or an authoritative invariant.",
+        "It passes only when the causal defect is corrected, not when checks are weakened.",
+        "At least one adjacent success or failure path remains intact.",
+        "The test runs in the appropriate CI layer."
+      ]
+    },
+    {
+      "id": "vc-258",
+      "sequence": 18,
+      "type": "concept",
+      "title": "Validate adjacent behavior",
+      "prompt": "What nearby user behavior might a narrowly successful fix still break?",
+      "content": "A narrow bug fix can break neighboring cases. Test both the reproduction and nearby valid scenarios.",
+      "tags": [
+        "vibe-coding-quality",
+        "debugging",
+        "validate-adjacent-behavior"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "debugging"
+      ]
+    },
+    {
+      "id": "vc-259",
+      "sequence": 19,
+      "type": "concept",
+      "title": "Remove diagnostic noise",
+      "prompt": "Which debug logs and temporary workarounds should be removed before merging?",
+      "content": "Temporary logs and flags can leak data or clutter production. Clean up investigation artifacts before merge unless they provide durable observability.",
+      "tags": [
+        "vibe-coding-quality",
+        "debugging",
+        "remove-diagnostic-noise"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "debugging"
+      ]
+    },
+    {
+      "id": "vc-260",
+      "sequence": 20,
+      "type": "concept",
+      "title": "Write the root cause",
+      "prompt": "What should a root-cause report distinguish from mere remediation steps?",
+      "content": "A concise causal explanation improves future prevention. Document trigger, violated assumption, why existing checks missed it, fix, and prevention.",
+      "tags": [
+        "vibe-coding-quality",
+        "debugging",
+        "write-the-root-cause"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "debugging"
+      ]
+    },
+    {
+      "id": "vc-281",
+      "sequence": 21,
+      "type": "concept",
+      "title": "Review intent before syntax",
+      "prompt": "Why should a reviewer establish the requested change before reading the diff line by line?",
+      "content": "Correct-looking code can implement the wrong requirement. Start by comparing the diff to the task and acceptance criteria.",
+      "tags": [
+        "vibe-coding-quality",
+        "code-review",
+        "review-intent-before-syntax"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": "vc-282",
+      "sequence": 22,
+      "type": "fact",
+      "title": "Review behavior-changing lines first",
+      "prompt": "Which lines deserve attention first because they change observable behavior or permissions?",
+      "content": "Formatting noise should not consume the same attention as logic. Prioritize control flow, state changes, queries, permissions, network calls, and persistence.",
+      "tags": [
+        "vibe-coding-quality",
+        "code-review",
+        "review-behavior-changing-lines-first"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": "vc-283",
+      "sequence": 23,
+      "type": "steps",
+      "title": "Trace data flow",
+      "prompt": "How do you trace a behavior-changing data flow during a code review?",
+      "content": "Security and correctness issues often cross file boundaries. Follow important inputs from entry through validation, transformation, storage, and output.",
+      "tags": [
+        "vibe-coding-quality",
+        "code-review",
+        "trace-data-flow"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "code-review"
+      ],
+      "steps": [
+        "Identify the entry point and which fields are untrusted.",
+        "Follow parsing and validation into policy or permission checks.",
+        "Trace authoritative writes, transactions, and downstream side effects.",
+        "Inspect error, retry, and serialization paths.",
+        "Compare the observed behavior with acceptance criteria and focused tests."
+      ]
+    },
+    {
+      "id": "vc-284",
+      "sequence": 24,
+      "type": "concept",
+      "title": "Check authorization at the server",
+      "prompt": "Why must a security reviewer check authorization where the server enforces it?",
+      "content": "Client-side hiding is not an access-control mechanism. Verify every sensitive operation enforces permissions in trusted code.",
+      "tags": [
+        "vibe-coding-quality",
+        "code-review",
+        "check-authorization-at-the-server"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": "vc-285",
+      "sequence": 25,
+      "type": "fact",
+      "title": "Check error handling",
+      "prompt": "Which failure and retry paths should a code reviewer trace?",
+      "content": "Generated code often under-specifies failure behavior. Look for swallowed errors, broad catches, fail-open logic, missing rollback, and unusable messages.",
+      "tags": [
+        "vibe-coding-quality",
+        "code-review",
+        "check-error-handling"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": "vc-286",
+      "sequence": 26,
+      "type": "concept",
+      "title": "Check async behavior",
+      "prompt": "What can happen if a handler reports success before an asynchronous write commits?",
+      "content": "Missing awaits and stale closures create subtle defects. Inspect concurrency, cancellation, retries, cleanup, and race-prone state.",
+      "tags": [
+        "vibe-coding-quality",
+        "code-review",
+        "check-async-behavior"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": "vc-287",
+      "sequence": 27,
+      "type": "concept",
+      "title": "Check dependency changes",
+      "prompt": "What should a reviewer investigate when a patch adds or upgrades a dependency?",
+      "content": "A one-line import can pull significant risk. Verify package identity, necessity, version, license, and maintenance.",
+      "tags": [
+        "vibe-coding-quality",
+        "code-review",
+        "check-dependency-changes"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": "vc-288",
+      "sequence": 28,
+      "type": "concept",
+      "title": "Check duplicated logic",
+      "prompt": "How can duplicated business logic create contradictory behavior over time?",
+      "content": "AI may solve locally by copying an existing pattern imperfectly. Search for authoritative existing utilities or services before accepting duplication.",
+      "tags": [
+        "vibe-coding-quality",
+        "code-review",
+        "check-duplicated-logic"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": "vc-289",
+      "sequence": 29,
+      "type": "fact",
+      "title": "Check architectural boundaries",
+      "prompt": "Which proposed changes violate established module ownership or dependency direction?",
+      "content": "A feature can work while making the system harder to evolve. Look for new cross-layer imports, cycles, global state, or database access in inappropriate layers.",
+      "tags": [
+        "vibe-coding-quality",
+        "code-review",
+        "check-architectural-boundaries"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": "vc-290",
+      "sequence": 30,
+      "type": "concept",
+      "title": "Check types and schemas",
+      "prompt": "Why must type assertions and schema changes be checked against actual runtime data?",
+      "content": "Type escape hatches can hide contract errors. Scrutinize casts, any-like types, ignored errors, optionality, and schema mismatches.",
+      "tags": [
+        "vibe-coding-quality",
+        "code-review",
+        "check-types-and-schemas"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": "vc-291",
+      "sequence": 31,
+      "type": "concept",
+      "title": "Check tests for false confidence",
+      "prompt": "How can a passing test suite give false confidence in generated code?",
+      "content": "Tests can mirror the implementation and miss the real contract. Ensure tests cover acceptance, failure, permissions, and realistic integration.",
+      "tags": [
+        "vibe-coding-quality",
+        "code-review",
+        "check-tests-for-false-confidence"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": "vc-292",
+      "sequence": 32,
+      "type": "fact",
+      "title": "Check accessibility",
+      "prompt": "Which keyboard, focus, and accessible-name changes might a visual diff overlook?",
+      "content": "Visual review alone misses interaction defects. Inspect semantics, focus, keyboard behavior, labels, and state announcements.",
+      "tags": [
+        "vibe-coding-quality",
+        "code-review",
+        "check-accessibility"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": "vc-293",
+      "sequence": 33,
+      "type": "concept",
+      "title": "Check performance impact",
+      "prompt": "What workload or query consequences might accompany a seemingly small code change?",
+      "content": "Generated loops and queries can scale badly. Look for repeated work, N+1 requests, unbounded lists, heavy client bundles, and missing caching rationale.",
+      "tags": [
+        "vibe-coding-quality",
+        "code-review",
+        "check-performance-impact"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": "vc-294",
+      "sequence": 34,
+      "type": "concept",
+      "title": "Check observability",
+      "prompt": "Which missing logs or identifiers would make a new production failure hard to diagnose?",
+      "content": "New critical behavior should be diagnosable. Verify safe logs, metrics, traces, or audit events for important operations.",
+      "tags": [
+        "vibe-coding-quality",
+        "code-review",
+        "check-observability"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": "vc-295",
+      "sequence": 35,
+      "type": "concept",
+      "title": "Use AI as a second reviewer",
+      "prompt": "How can a second AI reviewer contribute without replacing independent evidence?",
+      "content": "An independent model can surface issues the authoring model missed. Ask a reviewer agent to inspect the diff adversarially with the spec and repository instructions.",
+      "tags": [
+        "vibe-coding-quality",
+        "code-review",
+        "use-ai-as-a-second-reviewer"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": "vc-296",
+      "sequence": 36,
+      "type": "question",
+      "title": "Do not treat AI review as approval",
+      "prompt": "An independent AI reviewer says a PR is safe, but the authorization path is untested. How should a maintainer respond?",
+      "content": "",
+      "tags": [
+        "vibe-coding-quality",
+        "code-review",
+        "do-not-treat-ai-review-as-approval"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "code-review"
+      ],
+      "question": {
+        "options": [
+          "Merge because a different model produced an approval.",
+          "Disable authorization until a test can be added.",
+          "Treat the approval as a hypothesis and require a concrete authorization check and current-head evidence.",
+          "Assume read-only review tools cannot make factual mistakes."
+        ],
+        "answerIndex": 2,
+        "explanation": "Automated review is fallible and context-limited. Validate AI findings and retain human ownership for consequential merges. An attributed reviewer opinion does not replace execution, traceability, or human accountability."
+      }
+    },
+    {
+      "id": "vc-297",
+      "sequence": 37,
+      "type": "concept",
+      "title": "Review generated configuration carefully",
+      "prompt": "Which generated configuration files require special security and environment scrutiny?",
+      "content": "CI, infrastructure, permissions, and deployment files can create broad effects. Inspect every privilege, secret reference, trigger, environment, and destructive command.",
+      "tags": [
+        "vibe-coding-quality",
+        "code-review",
+        "review-generated-configuration-carefully"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": "vc-298",
+      "sequence": 38,
+      "type": "concept",
+      "title": "Review deletions and renamed behavior",
+      "prompt": "How can deleted code or renamed behavior introduce regression beyond obvious additions?",
+      "content": "AI can remove code it believes is unused. Confirm callers, compatibility, migrations, and feature flags before accepting removal.",
+      "tags": [
+        "vibe-coding-quality",
+        "code-review",
+        "review-deletions-and-renamed-behavior"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "code-review"
+      ]
+    },
+    {
+      "id": "vc-299",
+      "sequence": 39,
+      "type": "code",
+      "title": "Review the final head",
+      "prompt": "This shell sequence inspects diff statistics, relevant files, tests, and type checks. What additional verification is needed when the head changes?",
+      "content": "Earlier review does not cover later fixes. Perform a final diff and check review after all requested changes are applied.",
+      "tags": [
+        "vibe-coding-quality",
+        "code-review",
+        "review-the-final-head"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "code-review"
+      ],
+      "code": {
+        "language": "bash",
+        "snippet": "git diff --stat main...HEAD\ngit diff main...HEAD -- src/ test/\nnpm test\nnpm run typecheck"
+      }
+    },
+    {
+      "id": "vc-300",
+      "sequence": 40,
+      "type": "checklist",
+      "title": "Write review conclusions",
+      "prompt": "What makes a final PR-review conclusion actionable?",
+      "content": "High-value review records why the change is acceptable. Summarize tested behavior, remaining risks, follow-ups, and any consciously accepted tradeoffs.",
+      "tags": [
+        "vibe-coding-quality",
+        "code-review",
+        "write-review-conclusions"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "code-review"
+      ],
+      "items": [
+        "State which requirements were and were not verified.",
+        "Identify the reviewed commit and relevant files or symbols.",
+        "Report concrete test results, not only a mergeable flag.",
+        "Explain unresolved security, persistence, performance, or UX risks.",
+        "Name the exact changes or evidence needed before merge."
+      ]
+    },
+    {
+      "id": "vc-301",
+      "sequence": 41,
+      "type": "concept",
+      "title": "Prefer the standard platform",
+      "prompt": "When does a standard library or platform feature remove the need for an extra package?",
+      "content": "Every dependency adds supply-chain and maintenance cost. Use built-in language or framework capabilities when they solve the requirement cleanly.",
+      "tags": [
+        "vibe-coding-quality",
+        "dependencies",
+        "prefer-the-standard-platform"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "dependencies"
+      ]
+    },
+    {
+      "id": "vc-302",
+      "sequence": 42,
+      "type": "code",
+      "title": "Verify package identity",
+      "prompt": "What can npm view and the lockfile diff establish about an AI-proposed dependency, and what do they NOT prove?",
+      "content": "Models can hallucinate packages or suggest lookalikes. Check the official registry, publisher, repository, documentation, and package name before installing.",
+      "tags": [
+        "vibe-coding-quality",
+        "dependencies",
+        "verify-package-identity"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "dependencies"
+      ],
+      "code": {
+        "language": "bash",
+        "snippet": "npm view zod name version repository license\nnpm audit --omit=dev\ngit diff -- package.json package-lock.json"
+      }
+    },
+    {
+      "id": "vc-303",
+      "sequence": 43,
+      "type": "concept",
+      "title": "Assess maintenance health",
+      "prompt": "What indicators reveal whether a dependency has a credible maintenance history?",
+      "content": "Popularity alone does not guarantee sustainability. Review release recency, issue activity, supported runtimes, maintainers, and deprecation notices.",
+      "tags": [
+        "vibe-coding-quality",
+        "dependencies",
+        "assess-maintenance-health"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "dependencies"
+      ]
+    },
+    {
+      "id": "vc-304",
+      "sequence": 44,
+      "type": "checklist",
+      "title": "Check licensing",
+      "prompt": "Before adopting a third-party dependency, what licensing questions must be checked?",
+      "content": "A technically suitable package may be legally incompatible. Review license terms and organization policy before adoption.",
+      "tags": [
+        "vibe-coding-quality",
+        "dependencies",
+        "check-licensing"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "dependencies"
+      ],
+      "items": [
+        "The package and major transitive licenses are identified.",
+        "Distribution, attribution, modification, and source obligations are understood.",
+        "The intended commercial or open-source use is permitted.",
+        "Vendored binaries or assets have appropriate usage rights.",
+        "A reviewer can trace the decision and current dependency version."
+      ]
+    },
+    {
+      "id": "vc-305",
+      "sequence": 45,
+      "type": "fact",
+      "title": "Pin reproducibly",
+      "prompt": "How do lockfiles and pinned versions support repeatable installs?",
+      "content": "Floating versions make builds change without source changes. Use lockfiles and appropriate version constraints; pin critical build inputs more tightly.",
+      "tags": [
+        "vibe-coding-quality",
+        "dependencies",
+        "pin-reproducibly"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "dependencies"
+      ]
+    },
+    {
+      "id": "vc-306",
+      "sequence": 46,
+      "type": "concept",
+      "title": "Review lockfile diffs",
+      "prompt": "Why should a reviewer inspect lockfile changes rather than only package.json?",
+      "content": "Transitive changes may be larger than the requested package. Inspect added packages, unexpected upgrades, registries, and integrity metadata.",
+      "tags": [
+        "vibe-coding-quality",
+        "dependencies",
+        "review-lockfile-diffs"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "dependencies"
+      ]
+    },
+    {
+      "id": "vc-307",
+      "sequence": 47,
+      "type": "concept",
+      "title": "Minimize dependency surface",
+      "prompt": "How does an unnecessary dependency increase security and support obligations?",
+      "content": "Convenience libraries can introduce large trees for small features. Compare package cost with implementing a small, well-understood utility.",
+      "tags": [
+        "vibe-coding-quality",
+        "dependencies",
+        "minimize-dependency-surface"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "dependencies"
+      ]
+    },
+    {
+      "id": "vc-308",
+      "sequence": 48,
+      "type": "concept",
+      "title": "Separate dev and runtime dependencies",
+      "prompt": "Which packages truly belong in runtime rather than development dependencies?",
+      "content": "Production should not ship tooling it does not need. Classify packages by where they execute and build artifacts accordingly.",
+      "tags": [
+        "vibe-coding-quality",
+        "dependencies",
+        "separate-dev-and-runtime-dependencies"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "dependencies"
+      ]
+    },
+    {
+      "id": "vc-309",
+      "sequence": 49,
+      "type": "fact",
+      "title": "Use trusted registries",
+      "prompt": "Why does the identity of a package registry matter to build trust?",
+      "content": "Registry configuration controls what code can enter builds. Restrict package sources and authenticate private registries securely.",
+      "tags": [
+        "vibe-coding-quality",
+        "dependencies",
+        "use-trusted-registries"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "dependencies"
+      ]
+    },
+    {
+      "id": "vc-310",
+      "sequence": 50,
+      "type": "question",
+      "title": "Protect install scripts",
+      "prompt": "An unknown package requests a postinstall script that downloads and runs a remote binary. What is the appropriate response?",
+      "content": "",
+      "tags": [
+        "vibe-coding-quality",
+        "dependencies",
+        "protect-install-scripts"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "dependencies"
+      ],
+      "question": {
+        "options": [
+          "Review provenance and script behavior before allowing installation in a privileged environment.",
+          "Accept it automatically because the package is in a public registry.",
+          "Disable lockfiles to avoid version conflicts.",
+          "Grant CI write access to production secrets to simplify setup."
+        ],
+        "answerIndex": 0,
+        "explanation": "Package lifecycle scripts can execute arbitrary code. Understand package trust and consider safer install policies in sensitive environments. Installation hooks execute code and therefore deserve supply-chain review."
+      }
+    },
+    {
+      "id": "vc-311",
+      "sequence": 51,
+      "type": "concept",
+      "title": "Scan known vulnerabilities",
+      "prompt": "How should a known vulnerability report be evaluated in application context?",
+      "content": "Dependency risk changes after merge. Use automated advisory or dependency scanning and triage findings by exploitability and exposure.",
+      "tags": [
+        "vibe-coding-quality",
+        "dependencies",
+        "scan-known-vulnerabilities"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "dependencies"
+      ]
+    },
+    {
+      "id": "vc-312",
+      "sequence": 52,
+      "type": "steps",
+      "title": "Update incrementally",
+      "prompt": "What is a safe procedure for updating a significant dependency?",
+      "content": "Large version jumps combine many behavioral changes. Read migration notes and update in manageable steps with tests.",
+      "tags": [
+        "vibe-coding-quality",
+        "dependencies",
+        "update-incrementally"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "dependencies"
+      ],
+      "steps": [
+        "Read changelogs, supported versions, security advisories, and migration notes.",
+        "Upgrade one coherent package group and preserve the lockfile.",
+        "Inspect transitive and install-script changes.",
+        "Run unit, contract, build, and relevant runtime compatibility tests.",
+        "Stage or release with monitoring and a versioned rollback option."
+      ]
+    },
+    {
+      "id": "vc-313",
+      "sequence": 53,
+      "type": "concept",
+      "title": "Avoid abandoned packages",
+      "prompt": "What risks appear when a foundational package is no longer maintained?",
+      "content": "Unmaintained code accumulates compatibility and security risk. Replace critical abandoned dependencies before they become blockers.",
+      "tags": [
+        "vibe-coding-quality",
+        "dependencies",
+        "avoid-abandoned-packages"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "dependencies"
+      ]
+    },
+    {
+      "id": "vc-314",
+      "sequence": 54,
+      "type": "concept",
+      "title": "Remove unused packages",
+      "prompt": "How can unused-package removal reduce attack surface and deployment size?",
+      "content": "Dead dependencies remain supply-chain and build liabilities. Periodically detect and remove packages no longer imported or required.",
+      "tags": [
+        "vibe-coding-quality",
+        "dependencies",
+        "remove-unused-packages"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "dependencies"
+      ]
+    },
+    {
+      "id": "vc-315",
+      "sequence": 55,
+      "type": "concept",
+      "title": "Control transitive overrides carefully",
+      "prompt": "When might a transitive version override fix one issue but break another package?",
+      "content": "Forced resolutions can create unsupported combinations. Document why overrides exist and remove them when upstream fixes arrive.",
+      "tags": [
+        "vibe-coding-quality",
+        "dependencies",
+        "control-transitive-overrides-carefully"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "dependencies"
+      ]
+    },
+    {
+      "id": "vc-316",
+      "sequence": 56,
+      "type": "fact",
+      "title": "Verify binary and native packages",
+      "prompt": "What platform and build implications accompany native or binary packages?",
+      "content": "Prebuilt artifacts increase platform and provenance considerations. Check supported architectures, signatures or provenance, and fallback build requirements.",
+      "tags": [
+        "vibe-coding-quality",
+        "dependencies",
+        "verify-binary-and-native-packages"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "dependencies"
+      ]
+    },
+    {
+      "id": "vc-317",
+      "sequence": 57,
+      "type": "concept",
+      "title": "Review SDK permissions",
+      "prompt": "Which user or cloud permissions should be examined before adding an SDK?",
+      "content": "Cloud and third-party SDKs can expose powerful APIs. Use least-privilege credentials and configure only required capabilities.",
+      "tags": [
+        "vibe-coding-quality",
+        "dependencies",
+        "review-sdk-permissions"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "dependencies"
+      ]
+    },
+    {
+      "id": "vc-318",
+      "sequence": 58,
+      "type": "concept",
+      "title": "Track breaking changes",
+      "prompt": "How should breaking release notes influence an upgrade plan?",
+      "content": "Agent-generated upgrades may compile while subtly changing semantics. Read changelogs for auth, defaults, serialization, caching, and error behavior.",
+      "tags": [
+        "vibe-coding-quality",
+        "dependencies",
+        "track-breaking-changes"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "dependencies"
+      ]
+    },
+    {
+      "id": "vc-319",
+      "sequence": 59,
+      "type": "concept",
+      "title": "Automate dependency policy",
+      "prompt": "Which repository checks can consistently enforce acceptable dependency choices?",
+      "content": "Manual review alone does not scale. Use bots, scanners, allowlists, and required checks appropriate to repository risk.",
+      "tags": [
+        "vibe-coding-quality",
+        "dependencies",
+        "automate-dependency-policy"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "dependencies"
+      ]
+    },
+    {
+      "id": "vc-320",
+      "sequence": 60,
+      "type": "concept",
+      "title": "Document major dependency choices",
+      "prompt": "What reasons for adopting a major dependency should be written down?",
+      "content": "Frameworks and core libraries shape architecture for years. Record why major packages were selected, alternatives considered, and exit considerations.",
+      "tags": [
+        "vibe-coding-quality",
+        "dependencies",
+        "document-major-dependency-choices"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "dependencies"
+      ]
+    },
+    {
+      "id": "vc-321",
+      "sequence": 61,
+      "type": "steps",
+      "title": "Measure before optimizing",
+      "prompt": "How should a team investigate and improve a performance complaint?",
+      "content": "Intuition is unreliable about real bottlenecks. Profile latency, CPU, memory, network, queries, and rendering before changing architecture.",
+      "tags": [
+        "vibe-coding-quality",
+        "performance",
+        "measure-before-optimizing"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "performance"
+      ],
+      "steps": [
+        "Define an affected user journey and measurable baseline.",
+        "Capture traces or profiles under representative input and load.",
+        "Find the dominant latency, CPU, memory, network, or query contributor.",
+        "Make one bounded optimization with explicit trade-offs.",
+        "Repeat the measurement and compare relevant tail latencies and regressions."
+      ]
+    },
+    {
+      "id": "vc-322",
+      "sequence": 62,
+      "type": "fact",
+      "title": "Set performance budgets",
+      "prompt": "How can explicit latency and bundle-size budgets make performance testable?",
+      "content": "Without thresholds, regressions accumulate gradually. Define budgets for key user and server metrics and enforce them where practical.",
+      "tags": [
+        "vibe-coding-quality",
+        "performance",
+        "set-performance-budgets"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "performance"
+      ]
+    },
+    {
+      "id": "vc-323",
+      "sequence": 63,
+      "type": "concept",
+      "title": "Optimize user-perceived latency",
+      "prompt": "What is the difference between server throughput and perceived user responsiveness?",
+      "content": "Backend speed alone does not determine experience. Measure time to useful content, interaction responsiveness, and completion of important actions.",
+      "tags": [
+        "vibe-coding-quality",
+        "performance",
+        "optimize-user-perceived-latency"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "performance"
+      ]
+    },
+    {
+      "id": "vc-324",
+      "sequence": 64,
+      "type": "concept",
+      "title": "Avoid unbounded work",
+      "prompt": "What should bound the size and duration of a data-processing operation?",
+      "content": "Lists, loops, searches, and uploads can grow beyond expected sizes. Paginate, cap, stream, or batch work based on realistic limits.",
+      "tags": [
+        "vibe-coding-quality",
+        "performance",
+        "avoid-unbounded-work"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "performance"
+      ]
+    },
+    {
+      "id": "vc-325",
+      "sequence": 65,
+      "type": "fact",
+      "title": "Prevent N+1 queries",
+      "prompt": "How can per-item database fetching cause N+1 query amplification?",
+      "content": "Repeated data access is a common generated-code scaling defect. Inspect query count per request and batch related data.",
+      "tags": [
+        "vibe-coding-quality",
+        "performance",
+        "prevent-n-1-queries"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "performance"
+      ]
+    },
+    {
+      "id": "vc-326",
+      "sequence": 66,
+      "type": "code",
+      "title": "Use indexes from workload evidence",
+      "prompt": "In EXPLAIN ANALYZE for this limited, ordered query, which plan details reveal whether an index matches the workload?",
+      "content": "Indexes speed reads but cost writes and storage. Create indexes around real filter, join, and ordering patterns and verify query plans.",
+      "tags": [
+        "vibe-coding-quality",
+        "performance",
+        "use-indexes-from-workload-evidence"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "performance"
+      ],
+      "code": {
+        "language": "sql",
+        "snippet": "EXPLAIN ANALYZE\nSELECT p.id, p.title\nFROM project p\nWHERE p.workspace_id = $1\nORDER BY p.updated_at DESC\nLIMIT 50;"
+      }
+    },
+    {
+      "id": "vc-327",
+      "sequence": 67,
+      "type": "question",
+      "title": "Cache with an invalidation model",
+      "prompt": "A cache makes project reads fast but users now receive obsolete permissions. What design element is missing?",
+      "content": "",
+      "tags": [
+        "vibe-coding-quality",
+        "performance",
+        "cache-with-an-invalidation-model"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "performance"
+      ],
+      "question": {
+        "options": [
+          "A larger cache.",
+          "More aggressive compression.",
+          "A longer timeout.",
+          "An invalidation or expiry rule that preserves the authorization invariant."
+        ],
+        "answerIndex": 3,
+        "explanation": "Caching without freshness rules creates correctness bugs. Define cache key, owner, lifetime, invalidation, and fallback before adding a cache. Caching correctness includes when stale data must stop being served, especially for permissions."
+      }
+    },
+    {
+      "id": "vc-328",
+      "sequence": 68,
+      "type": "concept",
+      "title": "Compress and minimize payloads",
+      "prompt": "When are compression and smaller response payloads worth prioritizing?",
+      "content": "Sending unnecessary data wastes bandwidth and parsing time. Select needed fields, paginate results, compress responses, and avoid oversized JSON.",
+      "tags": [
+        "vibe-coding-quality",
+        "performance",
+        "compress-and-minimize-payloads"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "performance"
+      ]
+    },
+    {
+      "id": "vc-329",
+      "sequence": 69,
+      "type": "fact",
+      "title": "Control client bundle growth",
+      "prompt": "How can dependency or component growth increase initial JavaScript costs?",
+      "content": "AI can import large libraries for small UI needs. Track bundles and prefer selective imports, code splitting, and platform features.",
+      "tags": [
+        "vibe-coding-quality",
+        "performance",
+        "control-client-bundle-growth"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "performance"
+      ]
+    },
+    {
+      "id": "vc-330",
+      "sequence": 70,
+      "type": "concept",
+      "title": "Optimize images and media",
+      "prompt": "What media delivery choices reduce unnecessary network and rendering work?",
+      "content": "Large media often dominates page weight. Serve appropriately sized formats, responsive sources, lazy load noncritical content, and reserve dimensions.",
+      "tags": [
+        "vibe-coding-quality",
+        "performance",
+        "optimize-images-and-media"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "performance"
+      ]
+    },
+    {
+      "id": "vc-331",
+      "sequence": 71,
+      "type": "concept",
+      "title": "Avoid blocking the main thread",
+      "prompt": "Why can synchronous browser work make an otherwise fast endpoint feel slow?",
+      "content": "Long JavaScript tasks make interfaces feel frozen. Split heavy work, use workers when justified, and minimize synchronous computation during interaction.",
+      "tags": [
+        "vibe-coding-quality",
+        "performance",
+        "avoid-blocking-the-main-thread"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "performance"
+      ]
+    },
+    {
+      "id": "vc-332",
+      "sequence": 72,
+      "type": "fact",
+      "title": "Use concurrency deliberately",
+      "prompt": "When does extra concurrency improve throughput, and when does it overload dependencies?",
+      "content": "Parallel work helps only when dependencies and limits permit it. Bound concurrency to protect databases, APIs, memory, and rate limits.",
+      "tags": [
+        "vibe-coding-quality",
+        "performance",
+        "use-concurrency-deliberately"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "performance"
+      ]
+    },
+    {
+      "id": "vc-333",
+      "sequence": 73,
+      "type": "concept",
+      "title": "Use backpressure",
+      "prompt": "How does backpressure protect a slow downstream consumer?",
+      "content": "Producers can overwhelm slower consumers. Apply queue limits, streaming flow control, or admission limits under load.",
+      "tags": [
+        "vibe-coding-quality",
+        "performance",
+        "use-backpressure"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "performance"
+      ]
+    },
+    {
+      "id": "vc-334",
+      "sequence": 74,
+      "type": "concept",
+      "title": "Load test critical paths",
+      "prompt": "What workload distribution should a meaningful load test represent?",
+      "content": "Unit performance does not predict whole-system contention. Test representative traffic, concurrency, data size, and failure conditions.",
+      "tags": [
+        "vibe-coding-quality",
+        "performance",
+        "load-test-critical-paths"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "performance"
+      ]
+    },
+    {
+      "id": "vc-335",
+      "sequence": 75,
+      "type": "concept",
+      "title": "Profile memory",
+      "prompt": "How can retaining objects accidentally grow a long-running process's memory?",
+      "content": "Leaks and retained data can crash long-running processes. Inspect heap growth, caches, subscriptions, listeners, and unbounded collections.",
+      "tags": [
+        "vibe-coding-quality",
+        "performance",
+        "profile-memory"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "performance"
+      ]
+    },
+    {
+      "id": "vc-336",
+      "sequence": 76,
+      "type": "fact",
+      "title": "Design autoscaling signals",
+      "prompt": "Which measured signal should trigger autoscaling instead of guesswork?",
+      "content": "CPU alone may not reflect workload pressure. Scale on metrics related to queue depth, concurrency, latency, or resource saturation.",
+      "tags": [
+        "vibe-coding-quality",
+        "performance",
+        "design-autoscaling-signals"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "performance"
+      ]
+    },
+    {
+      "id": "vc-337",
+      "sequence": 77,
+      "type": "concept",
+      "title": "Protect dependencies under load",
+      "prompt": "What limits prevent upstream spikes from exhausting shared dependencies?",
+      "content": "Scaling the frontend tier can overload databases or third parties. Use connection limits, rate controls, caching, queues, and circuit behavior.",
+      "tags": [
+        "vibe-coding-quality",
+        "performance",
+        "protect-dependencies-under-load"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "performance"
+      ]
+    },
+    {
+      "id": "vc-338",
+      "sequence": 78,
+      "type": "concept",
+      "title": "Test cold starts and warmup",
+      "prompt": "Why should deployment validation include cold-start or warmup behavior when relevant?",
+      "content": "Serverless and container workloads can behave differently after idle periods. Measure initialization and reduce heavy startup or provide capacity where latency matters.",
+      "tags": [
+        "vibe-coding-quality",
+        "performance",
+        "test-cold-starts-and-warmup"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "performance"
+      ]
+    },
+    {
+      "id": "vc-339",
+      "sequence": 79,
+      "type": "checklist",
+      "title": "Observe tail latency",
+      "prompt": "What should a latency report include beyond the average?",
+      "content": "Averages can hide severe slow experiences. Track percentiles such as p95 or p99 for important operations.",
+      "tags": [
+        "vibe-coding-quality",
+        "performance",
+        "observe-tail-latency"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "performance"
+      ],
+      "items": [
+        "p95/p99 response or interaction latency is tracked for critical routes.",
+        "Sample volume and load characteristics are stated.",
+        "Cold-start and dependency-failure periods are not silently excluded.",
+        "Changes are compared to an equivalent baseline and budget.",
+        "User-relevant effects accompany server-level measurements."
+      ]
+    },
+    {
+      "id": "vc-340",
+      "sequence": 80,
+      "type": "concept",
+      "title": "Re-measure after optimization",
+      "prompt": "How should engineers verify that an optimization improves the original bottleneck?",
+      "content": "An optimization is only successful if evidence improves without unacceptable tradeoffs. Compare before and after metrics and watch for correctness, cost, or complexity regressions.",
+      "tags": [
+        "vibe-coding-quality",
+        "performance",
+        "re-measure-after-optimization"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "performance"
+      ]
+    },
+    {
+      "id": "vc-341",
+      "sequence": 81,
+      "type": "concept",
+      "title": "Use semantic structure",
+      "prompt": "Why should generated interfaces start with meaningful HTML structure?",
+      "content": "Assistive technology depends on meaningful markup. Use headings, landmarks, lists, tables, labels, and native controls according to purpose.",
+      "tags": [
+        "vibe-coding-quality",
+        "accessibility-i18n",
+        "use-semantic-structure"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "accessibility-i18n"
+      ]
+    },
+    {
+      "id": "vc-342",
+      "sequence": 82,
+      "type": "fact",
+      "title": "Provide accessible names",
+      "prompt": "What makes a visible icon control discoverable to a screen reader?",
+      "content": "Icon-only controls are ambiguous without text alternatives. Ensure interactive elements have meaningful visible labels or accessible names.",
+      "tags": [
+        "vibe-coding-quality",
+        "accessibility-i18n",
+        "provide-accessible-names"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "accessibility-i18n"
+      ]
+    },
+    {
+      "id": "vc-343",
+      "sequence": 83,
+      "type": "concept",
+      "title": "Maintain visible focus",
+      "prompt": "How should visible focus help keyboard users locate their next action?",
+      "content": "Keyboard users need to know where interaction is occurring. Use clear focus indicators with adequate contrast and never remove focus without replacement.",
+      "tags": [
+        "vibe-coding-quality",
+        "accessibility-i18n",
+        "maintain-visible-focus"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "accessibility-i18n"
+      ]
+    },
+    {
+      "id": "vc-344",
+      "sequence": 84,
+      "type": "question",
+      "title": "Support complete keyboard operation",
+      "prompt": "A menu opens on hover but has no keyboard trigger or visible focus. Which requirement remains unmet?",
+      "content": "",
+      "tags": [
+        "vibe-coding-quality",
+        "accessibility-i18n",
+        "support-complete-keyboard-operation"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "accessibility-i18n"
+      ],
+      "question": {
+        "options": [
+          "The hover transition must run faster.",
+          "The entire journey must be operable by keyboard with perceivable focus.",
+          "The menu needs a larger background image.",
+          "The browser should hide the tab key."
+        ],
+        "answerIndex": 1,
+        "explanation": "Every pointer interaction should have a keyboard path. Test tab order, activation, escape, arrow-key patterns, and no keyboard traps. A visually interactive control must still support non-pointer users."
+      }
+    },
+    {
+      "id": "vc-345",
+      "sequence": 85,
+      "type": "steps",
+      "title": "Manage dialog focus",
+      "prompt": "What is correct focus management for a modal dialog?",
+      "content": "Modal interfaces require predictable focus containment and restoration. Move focus into dialogs, trap appropriately, and restore to the invoking control on close.",
+      "tags": [
+        "vibe-coding-quality",
+        "accessibility-i18n",
+        "manage-dialog-focus"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "accessibility-i18n"
+      ],
+      "steps": [
+        "Trigger the dialog from a labeled, keyboard-operable control.",
+        "On open, move focus to a sensible element within the dialog.",
+        "Keep keyboard focus within the modal while it is active.",
+        "Support Escape and a visible close action where appropriate.",
+        "On close, return focus to the invoking control or a logical fallback."
+      ]
+    },
+    {
+      "id": "vc-346",
+      "sequence": 86,
+      "type": "concept",
+      "title": "Announce dynamic updates",
+      "prompt": "How should a live-region update announce status without becoming noisy?",
+      "content": "Screen-reader users may not notice visual state changes. Use appropriate live regions or status semantics for important asynchronous feedback.",
+      "tags": [
+        "vibe-coding-quality",
+        "accessibility-i18n",
+        "announce-dynamic-updates"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "accessibility-i18n"
+      ]
+    },
+    {
+      "id": "vc-347",
+      "sequence": 87,
+      "type": "concept",
+      "title": "Meet contrast requirements",
+      "prompt": "Why must text, controls, and focus indicators retain sufficient contrast?",
+      "content": "Muted AI-generated palettes can become unreadable. Measure text, icon, control, and focus contrast instead of judging by appearance.",
+      "tags": [
+        "vibe-coding-quality",
+        "accessibility-i18n",
+        "meet-contrast-requirements"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "accessibility-i18n"
+      ]
+    },
+    {
+      "id": "vc-348",
+      "sequence": 88,
+      "type": "concept",
+      "title": "Support zoom and text resizing",
+      "prompt": "What layouts fail when users zoom or increase the default text size?",
+      "content": "Fixed layouts can break when users enlarge content. Allow reflow and avoid clipping at high zoom or larger text settings.",
+      "tags": [
+        "vibe-coding-quality",
+        "accessibility-i18n",
+        "support-zoom-and-text-resizing"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "accessibility-i18n"
+      ]
+    },
+    {
+      "id": "vc-349",
+      "sequence": 89,
+      "type": "fact",
+      "title": "Respect motion preferences",
+      "prompt": "How should animation and scrolling respond to reduced-motion preferences?",
+      "content": "Animation can cause discomfort or distract from tasks. Reduce or remove nonessential motion when the user requests reduced motion.",
+      "tags": [
+        "vibe-coding-quality",
+        "accessibility-i18n",
+        "respect-motion-preferences"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "accessibility-i18n"
+      ]
+    },
+    {
+      "id": "vc-350",
+      "sequence": 90,
+      "type": "concept",
+      "title": "Provide text alternatives",
+      "prompt": "What information must an image's alternative text communicate in context?",
+      "content": "Images and charts need equivalent meaning. Write concise alt text or nearby descriptions based on the image's purpose.",
+      "tags": [
+        "vibe-coding-quality",
+        "accessibility-i18n",
+        "provide-text-alternatives"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "accessibility-i18n"
+      ]
+    },
+    {
+      "id": "vc-351",
+      "sequence": 91,
+      "type": "code",
+      "title": "Use accessible form errors",
+      "prompt": "In the labeled email field, how do for/id and aria-describedby connect the control to its name and an error message?",
+      "content": "Color alone is not a sufficient error signal. Associate clear error text with the relevant field and focus or summarize errors appropriately.",
+      "tags": [
+        "vibe-coding-quality",
+        "accessibility-i18n",
+        "use-accessible-form-errors"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "accessibility-i18n"
+      ],
+      "code": {
+        "language": "html",
+        "snippet": "<label for=\"email\">Email address</label>\n<input id=\"email\" name=\"email\" aria-describedby=\"email-error\">\n<p id=\"email-error\" role=\"alert\"></p>"
+      }
+    },
+    {
+      "id": "vc-352",
+      "sequence": 92,
+      "type": "fact",
+      "title": "Test with assistive technology",
+      "prompt": "What manual assistive-technology checks complement automated accessibility scanners?",
+      "content": "Automated scanners do not cover all usability. Perform keyboard and representative screen-reader testing on critical flows.",
+      "tags": [
+        "vibe-coding-quality",
+        "accessibility-i18n",
+        "test-with-assistive-technology"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "accessibility-i18n"
+      ]
+    },
+    {
+      "id": "vc-353",
+      "sequence": 93,
+      "type": "concept",
+      "title": "Externalize user-facing strings",
+      "prompt": "Why should user-visible copy be externalized rather than scattered through components?",
+      "content": "Hard-coded strings block translation workflows. Keep translatable content separate from code and avoid string concatenation that assumes word order.",
+      "tags": [
+        "vibe-coding-quality",
+        "accessibility-i18n",
+        "externalize-user-facing-strings"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "accessibility-i18n"
+      ]
+    },
+    {
+      "id": "vc-354",
+      "sequence": 94,
+      "type": "concept",
+      "title": "Design for text expansion",
+      "prompt": "How can translated labels change button widths and navigation layouts?",
+      "content": "Translations can be substantially longer than source text. Use flexible layouts and test long labels, buttons, and navigation.",
+      "tags": [
+        "vibe-coding-quality",
+        "accessibility-i18n",
+        "design-for-text-expansion"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "accessibility-i18n"
+      ]
+    },
+    {
+      "id": "vc-355",
+      "sequence": 95,
+      "type": "concept",
+      "title": "Use locale-aware formatting",
+      "prompt": "Why should dates, numbers, currencies, and times follow user locale and timezone?",
+      "content": "Dates, numbers, currencies, and plural rules differ by locale. Use internationalization APIs and explicit locale or time-zone handling.",
+      "tags": [
+        "vibe-coding-quality",
+        "accessibility-i18n",
+        "use-locale-aware-formatting"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "accessibility-i18n"
+      ]
+    },
+    {
+      "id": "vc-356",
+      "sequence": 96,
+      "type": "fact",
+      "title": "Avoid encoding meaning in color only",
+      "prompt": "How can an interface convey status without depending solely on red versus green?",
+      "content": "Color perception varies and assistive technology may not convey color. Combine color with text, icons, patterns, or position.",
+      "tags": [
+        "vibe-coding-quality",
+        "accessibility-i18n",
+        "avoid-encoding-meaning-in-color-only"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "accessibility-i18n"
+      ]
+    },
+    {
+      "id": "vc-357",
+      "sequence": 97,
+      "type": "concept",
+      "title": "Support right-to-left layout when required",
+      "prompt": "When might a right-to-left language require changes to visual order and icons?",
+      "content": "RTL languages affect alignment, order, and directional icons. Use logical CSS properties and test mirrored layouts.",
+      "tags": [
+        "vibe-coding-quality",
+        "accessibility-i18n",
+        "support-right-to-left-layout-when-required"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "accessibility-i18n"
+      ]
+    },
+    {
+      "id": "vc-358",
+      "sequence": 98,
+      "type": "concept",
+      "title": "Localize validation thoughtfully",
+      "prompt": "What contextual information must localized validation messages preserve?",
+      "content": "Input formats and names vary across cultures. Avoid assumptions about postal codes, names, phone numbers, and date entry beyond business requirements.",
+      "tags": [
+        "vibe-coding-quality",
+        "accessibility-i18n",
+        "localize-validation-thoughtfully"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "accessibility-i18n"
+      ]
+    },
+    {
+      "id": "vc-359",
+      "sequence": 99,
+      "type": "checklist",
+      "title": "Include accessibility in acceptance criteria",
+      "prompt": "Which accessibility requirements should be included in a feature's acceptance criteria?",
+      "content": "Accessibility work is missed when treated as optional polish. Specify keyboard, focus, semantics, contrast, and announcements in the feature definition.",
+      "tags": [
+        "vibe-coding-quality",
+        "accessibility-i18n",
+        "include-accessibility-in-acceptance-criteria"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "accessibility-i18n"
+      ],
+      "items": [
+        "Semantic controls have discernible names, roles, and states.",
+        "The primary journey is keyboard-operable with visible focus.",
+        "Forms expose labels, validation errors, and status announcements.",
+        "Text zoom, contrast, motion preference, and mobile reflow are supported.",
+        "Automated checks and relevant manual assistive-technology flows are recorded."
+      ]
+    },
+    {
+      "id": "vc-360",
+      "sequence": 100,
+      "type": "concept",
+      "title": "Prevent regression with automation",
+      "prompt": "How can accessibility tests prevent later AI-generated changes from undoing good behavior?",
+      "content": "Accessibility needs continuous protection. Add linting and automated checks while retaining manual verification for critical interactions.",
+      "tags": [
+        "vibe-coding-quality",
+        "accessibility-i18n",
+        "prevent-regression-with-automation"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "accessibility-i18n"
+      ]
+    }
+  ]
+}
