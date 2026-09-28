@@ -58,4 +58,4 @@ This is preferable to repeating “the sampling distribution describes sampling 
 
 ## 6. Non-destructive migration note
 
-Frontend (400), Backend (400), Docker (116) and Vibe Coding (500) predate the new limit. Their original authored sources remain accessible under an explicit legacy validation ceiling. Do not claim the entire historical catalog is already at or below 100 cards per deck. Split these curricula into carefully ordered smaller topic entries (and update catalog, registry, offline precache, progress identifiers and tests) in a dedicated migration.
+Frontend (400), Backend (400), and Docker (116) remain pre-existing oversized curricula under a separate legacy validation ceiling. Vibe Coding was migrated into five curated, individually valid 100-card topics with stable historical card IDs and a one-time progress migration. The three remaining legacy courses need their own non-destructive split into smaller topic entries before the entire built-in catalog meets the new maximum.
