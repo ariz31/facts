@@ -4,7 +4,7 @@ These are normative requirements for **every newly AI-generated/imported Facts t
 
 ## 1. Size and topic boundaries
 
-- A topic/deck has **1–100 cards, never 101+**. The import interface provides 25, 50, 75 and 100 as ready-made generation targets.
+- A topic/deck has **1–100 cards, never 101+**. The import interface provides 25, 50, 75 and 100 as selectable maxima, not mandatory quotas.
 - Produce only as many cards as the requested scope can support without duplication. If the subject requires more than 100 genuinely distinct cards, divide it into coherent independently named topics rather than silently clipping at 100 or padding a deck with filler.
 - Existing authored curricula over this limit are temporarily legacy content; do not truncate them on read. Split and curate them non-destructively in a separate content migration.
 
