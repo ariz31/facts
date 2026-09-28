@@ -1,0 +1,117 @@
+{
+  "id": "backend-and-data",
+  "title": "Backend, APIs & Database Foundations",
+  "description": "Learn client-server contracts, HTTP operations, server validation, identity and permissions, persistence, transactions, and failure handling.",
+  "lessons": [
+    {
+      "title": "Client-server architecture",
+      "principle": "Clients request actions or data; servers enforce trusted rules and coordinate data or external systems.",
+      "practice": "Draw the flow from task form to API to database and back."
+    },
+    {
+      "title": "Place responsibilities deliberately",
+      "principle": "Frontend validation improves usability, but it does not prevent forged network requests.",
+      "practice": "Repeat mandatory authorization and input validation on the server."
+    },
+    {
+      "title": "HTTP requests and responses",
+      "principle": "An HTTP exchange has a method, URL, headers, optional body, status, and response representation.",
+      "practice": "Identify GET, POST, PATCH, DELETE, and commonly used 2xx/4xx/5xx categories."
+    },
+    {
+      "title": "Use meaningful statuses",
+      "principle": "A missing task and a broken database are not equivalent failures.",
+      "practice": "Return a suitable not-found response for unknown IDs and a server error for an unexpected outage."
+    },
+    {
+      "title": "API contracts",
+      "principle": "API endpoints should define resource names, request schema, response schema, and error behavior.",
+      "practice": "Write a create-task contract before asking AI to implement it."
+    },
+    {
+      "title": "Avoid accidental breaking changes",
+      "principle": "Clients may rely on existing field names, types, and nullability.",
+      "practice": "Add fields compatibly where possible and document any intentionally breaking version transition."
+    },
+    {
+      "title": "Server-side validation",
+      "principle": "Every externally supplied value can be absent, malformed, duplicated, oversized, or malicious.",
+      "practice": "Validate type, length, ownership, and allowed values before business logic executes."
+    },
+    {
+      "title": "Make validation errors actionable",
+      "principle": "Silent coercion can corrupt data and leave users uncertain about the fix.",
+      "practice": "Return structured field errors without exposing stack traces or sensitive internal details."
+    },
+    {
+      "title": "Authentication and authorization",
+      "principle": "Authentication establishes an identity; authorization decides what that identity may do.",
+      "practice": "Explain why knowing a task ID is not permission to edit that task."
+    },
+    {
+      "title": "Prevent cross-user access",
+      "principle": "Checking ownership only in the frontend cannot stop direct API calls.",
+      "practice": "Filter or check each read and mutation by authenticated user or tenant on the trusted backend."
+    },
+    {
+      "title": "Database records and queries",
+      "principle": "A database persists entities with types, keys, and queryable relationships.",
+      "practice": "Model users and tasks with a stable task ID and user ownership."
+    },
+    {
+      "title": "Keep database constraints as safeguards",
+      "principle": "Application checks alone cannot reliably prevent duplicates or invalid references during concurrency.",
+      "practice": "Add NOT NULL, unique, and foreign-key constraints that enforce true domain invariants."
+    },
+    {
+      "title": "CRUD and persistence",
+      "principle": "Create, read, update, and delete operations should have explicit success and failure semantics.",
+      "practice": "Implement task creation and retrieval before expanding to more mutations."
+    },
+    {
+      "title": "Avoid silent data loss",
+      "principle": "Replacing an entire list from stale client state can overwrite a concurrent user's change.",
+      "practice": "Use scoped record updates with appropriate concurrency protection rather than blind full-table replacement."
+    },
+    {
+      "title": "Transactions and consistency",
+      "principle": "A transaction groups related database changes so they succeed or fail together where supported.",
+      "practice": "Identify invariants needing atomic changes, such as a transfer between two balances."
+    },
+    {
+      "title": "Handle retries safely",
+      "principle": "An operation retried after a timeout may already have committed.",
+      "practice": "Use stable operation IDs or idempotency mechanisms for non-repeatable side effects."
+    },
+    {
+      "title": "Concurrency and asynchronous jobs",
+      "principle": "Multiple requests may overlap; long-running work may require queues, timeouts, and durable tracking.",
+      "practice": "Do not keep a request open merely to wait for a lengthy report generation when a job model fits."
+    },
+    {
+      "title": "Define job status and ownership",
+      "principle": "Background work needs explicit progress, retry, failure, and access rules.",
+      "practice": "Store job IDs, enforce requester authorization, and avoid retrying non-idempotent actions blindly."
+    },
+    {
+      "title": "Resilience and observability",
+      "principle": "Servers need informative logs, health checks, capacity limits, backups, and recoverable errors.",
+      "practice": "Log a request identifier without logging passwords, tokens, or private payloads."
+    },
+    {
+      "title": "Test dependency failures",
+      "principle": "A service must behave deliberately when its database or external API is unavailable.",
+      "practice": "Simulate a database outage and verify response status, safe message, retry policy, and recovery."
+    }
+  ],
+  "codeExamples": [
+    {
+      "language": "http",
+      "snippet": "POST /api/tasks HTTP/1.1\nContent-Type: application/json\nAuthorization: Bearer <redacted>\n\n{\"title\":\"Read requirements\"}\n\nHTTP/1.1 201 Created\nContent-Type: application/json\n\n{\"id\":\"task-123\",\"title\":\"Read requirements\",\"done\":false}"
+    },
+    {
+      "language": "sql",
+      "snippet": "CREATE TABLE tasks (\n  id TEXT PRIMARY KEY,\n  owner_id TEXT NOT NULL,\n  title TEXT NOT NULL CHECK (length(trim(title)) > 0),\n  done BOOLEAN NOT NULL DEFAULT FALSE\n);\n-- Server queries must also restrict owner_id."
+    }
+  ]
+}
