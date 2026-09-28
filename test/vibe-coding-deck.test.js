@@ -19,6 +19,14 @@ const expectedPaths = [
   ["dev-environments", "cicd-deployment", "observability", "legacy-refactoring", "production-readiness"],
 ];
 
+const originalCardRangeStarts = [
+  [1, 21, 41, 61, 81],
+  [101, 121, 261, 421, 441],
+  [141, 161, 181, 201, 221],
+  [241, 281, 301, 321, 341],
+  [361, 381, 401, 461, 481],
+];
+
 const expectedCodeLessons = new Map([
   ["mindset-foundations", "Automate objective checks"],
   ["product-problem-framing", "Start from the user problem"],
@@ -55,6 +63,18 @@ test("Vibe Coding has five schema-valid 100-card topics in prerequisite order", 
     assert.deepEqual(deck.paths.map((path) => path.id), expectedPaths[index]);
     assert.deepEqual(deck.cards.map((card) => card.sequence), Array.from({ length: 100 }, (_, i) => i + 1));
     assert.ok(deck.paths.every((path) => path.cardIds.length === 20), deck.id);
+    // Preserve the original vc-001..vc-500 learning-objective/path ownership
+    // even when a path is moved to a different top-level course.
+    deck.paths.forEach((path, pathIndex) => {
+      const rangeStart = originalCardRangeStarts[index][pathIndex];
+      const expectedIds = Array.from({ length: 20 }, (_, offset) =>
+        `vc-${String(rangeStart + offset).padStart(3, "0")}`);
+      assert.deepEqual(path.cardIds, expectedIds, `${deck.id}: miscategorized cards in ${path.id}`);
+      for (const cardId of expectedIds) {
+        const card = deck.cards.find((candidate) => candidate.id === cardId);
+        assert.deepEqual(card?.pathIds, [path.id], `${cardId}: wrong teaching topic`);
+      }
+    });
     assert.deepEqual(validateDeck(deck, { rejectBuiltInId: false }), [], deck.id);
     assert.deepEqual(validateGeneratedDeckQuality(deck), [], deck.id);
     assert.equal(deck.format, undefined, "Vibe Coding is explicitly authored and no longer assembled from generic templates.");
@@ -128,4 +148,37 @@ test("question answer positions are not fixed and topical AI safety coverage is 
   for (const phrase of ["prompt-injection", "mcp", "subagents", "sandbox", "data", "cost", "evaluation"]) {
     assert.ok(agentic.includes(phrase), `Missing AI engineering coverage: ${phrase}`);
   }
+});
+
+test("expanded agent-safety lessons retain their original mastery objectives", () => {
+  const agentic = new Map(decks[1].cards.map((card) => [card.id, card]));
+  const originalObjectives = [
+    ["vc-425", "Use MCP with trust boundaries", "External tool servers can expose data or perform actions."],
+    ["vc-427", "Use subagents for independent analysis", "Parallel perspectives help when tasks do not modify overlapping state."],
+    ["vc-433", "Use timeouts and bounded operations", "Agents can launch commands that hang or consume excessive resources."],
+    ["vc-434", "Do not paste secrets into prompts", "Prompt context may be retained or exposed beyond intended boundaries."],
+    ["vc-437", "Use dry runs where available", "Previewing mutation reduces surprises."],
+    ["vc-457", "Security blind spots", "Models may optimize functionality while overlooking abuse paths."],
+    ["vc-459", "False completion claims", "Agents can state checks passed without actually running them."],
+  ];
+  for (const [id, originalTitle, originalPrinciple] of originalObjectives) {
+    const card = agentic.get(id);
+    assert.equal(card?.title, originalTitle, `${id}: do not silently transfer mastery to a new objective`);
+    assert.ok(card.content.includes(originalPrinciple), `${id}: original teaching objective was lost`);
+  }
+});
+
+test("direct answers address the audit's formerly under-explained scenarios", () => {
+  const cards = new Map(decks.flatMap((deck) => deck.cards.map((card) => [card.id, card])));
+  assert.match(cards.get("vc-008").prompt, /focused commits and recorded decisions/);
+  for (const code of ["400", "401", "403", "404", "200", "201"]) {
+    assert.ok(cards.get("vc-164").content.includes(code), `HTTP ${code} meaning must be taught`);
+  }
+  assert.match(cards.get("vc-169").content, /outbox event atomically/);
+  assert.match(cards.get("vc-176").content, /bulk imports/);
+  assert.match(cards.get("vc-430").content, /connection host, project\/database identifier/);
+  assert.match(cards.get("vc-458").content, /screenshot captures only one static visual state/);
+  assert.match(cards.get("vc-460").content, /falsifiable hypothesis/);
+  assert.match(cards.get("vc-302").content, /Neither proves the package is benign/);
+  assert.match(cards.get("vc-358").content, /localized validation message should retain the field name/);
 });
