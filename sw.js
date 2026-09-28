@@ -13,6 +13,7 @@ const CORE_ASSETS = [
   "./src/lesson-deck-runtime.js",
   "./src/runtime-data.js",
   "./src/card-generation-rules.js",
+  "./src/vibe-progress.js",
   "./src/ui-enhancements.js",
   "./src/card-render-state.js",
   "./src/topic-expansion.js",
