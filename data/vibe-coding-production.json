@@ -218,10 +218,10 @@
       ],
       "question": {
         "options": [
-          "Commit production credentials directly in an example .env file.",
-          "Embed a default production token in the Dockerfile.",
+          "Check sample production credentials into an ignored local file and reuse them in CI.",
+          "Bake the production password into an image build ARG to simplify deployment.",
           "Use a secret manager or injected environment values; commit only non-secret templates.",
-          "Print every secret at startup so an agent can debug quickly."
+          "Store the password in public client configuration behind an environment check."
         ],
         "answerIndex": 2,
         "explanation": "Configuration may be versioned; credentials should not be. Inject secrets through protected environment or secret-management systems. A developer convenience must not create a persistent secret leak."
@@ -1019,9 +1019,9 @@
       ],
       "question": {
         "options": [
-          "Increase its frequency so failures cannot be missed.",
-          "Remove all monitoring from the service.",
-          "Alert only on the number of log entries with no service context.",
+          "Alert whenever a single retry appears regardless of its user impact.",
+          "Increase the alert threshold without defining ownership or a recovery procedure.",
+          "Trigger alarms on all log volume rather than user-facing failure rate.",
           "Tie it to meaningful impact thresholds with owner, runbook, and recovery signal."
         ],
         "answerIndex": 3,
