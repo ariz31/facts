@@ -566,10 +566,10 @@
       ],
       "question": {
         "options": [
-          "Its color was included in the first prompt.",
-          "The model generated it without errors.",
+          "The request appears in a stakeholder's initial roadmap.",
+          "A designer selected it in an early prototype.",
           "It is linked to an evidenced user need and an observable outcome.",
-          "Another dashboard uses a similar visual style."
+          "Comparable products use a similar status palette."
         ],
         "answerIndex": 2,
         "explanation": "Stakeholder suggestions often mix goals with premature implementation choices. Separate mandatory outcomes and constraints from negotiable design ideas. A requested implementation detail is not itself evidence of the underlying user need."
@@ -968,9 +968,9 @@
       ],
       "question": {
         "options": [
-          "Publishing should feel simple.",
-          "The publish button should be blue.",
-          "The application should be production-ready.",
+          "Publishing returns a success status after an authorized request.",
+          "Publishing completes within the stated latency budget.",
+          "An owner receives confirmation after successful publication.",
           "An unauthenticated request must not publish a project or create a publish event."
         ],
         "answerIndex": 3,
