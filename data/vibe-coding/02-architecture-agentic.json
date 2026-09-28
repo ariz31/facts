@@ -1,0 +1,1986 @@
+{
+  "id": "vibe-coding-agentic",
+  "title": "Vibe Coding 02 — Architecture, Git & Agentic Workflows",
+  "category": "AI-Assisted Development",
+  "description": "Plan changes by dependency, design maintainable boundaries, use Git and current-head review, coordinate bounded agents and MCP tools, and recover from characteristic model failures. Part 2 of 5.",
+  "estimatedMinutes": 270,
+  "paths": [
+    {
+      "id": "planning-decomposition",
+      "title": "Planning & Task Decomposition",
+      "description": "Break ambitious requests into ordered, independently verifiable slices that reduce agent drift and integration risk.",
+      "cardIds": [
+        "vc-101",
+        "vc-102",
+        "vc-103",
+        "vc-104",
+        "vc-105",
+        "vc-106",
+        "vc-107",
+        "vc-108",
+        "vc-109",
+        "vc-110",
+        "vc-111",
+        "vc-112",
+        "vc-113",
+        "vc-114",
+        "vc-115",
+        "vc-116",
+        "vc-117",
+        "vc-118",
+        "vc-119",
+        "vc-120"
+      ]
+    },
+    {
+      "id": "architecture",
+      "title": "Architecture & System Design",
+      "description": "Use AI without surrendering architectural coherence, boundaries, data ownership, and long-term changeability.",
+      "cardIds": [
+        "vc-121",
+        "vc-122",
+        "vc-123",
+        "vc-124",
+        "vc-125",
+        "vc-126",
+        "vc-127",
+        "vc-128",
+        "vc-129",
+        "vc-130",
+        "vc-131",
+        "vc-132",
+        "vc-133",
+        "vc-134",
+        "vc-135",
+        "vc-136",
+        "vc-137",
+        "vc-138",
+        "vc-139",
+        "vc-140"
+      ]
+    },
+    {
+      "id": "git-pr",
+      "title": "Git, Commits & Pull Requests",
+      "description": "Keep AI-assisted work reviewable, attributable, reversible, and safely integrated through disciplined version-control practices.",
+      "cardIds": [
+        "vc-261",
+        "vc-262",
+        "vc-263",
+        "vc-264",
+        "vc-265",
+        "vc-266",
+        "vc-267",
+        "vc-268",
+        "vc-269",
+        "vc-270",
+        "vc-271",
+        "vc-272",
+        "vc-273",
+        "vc-274",
+        "vc-275",
+        "vc-276",
+        "vc-277",
+        "vc-278",
+        "vc-279",
+        "vc-280"
+      ]
+    },
+    {
+      "id": "agents-tools-mcp",
+      "title": "Agentic Workflows, Tools & MCP",
+      "description": "Coordinate coding agents, shell tools, browsers, repositories, databases, and external integrations without losing scope, trust, or evidence.",
+      "cardIds": [
+        "vc-421",
+        "vc-422",
+        "vc-423",
+        "vc-424",
+        "vc-425",
+        "vc-426",
+        "vc-427",
+        "vc-428",
+        "vc-429",
+        "vc-430",
+        "vc-431",
+        "vc-432",
+        "vc-433",
+        "vc-434",
+        "vc-435",
+        "vc-436",
+        "vc-437",
+        "vc-438",
+        "vc-439",
+        "vc-440"
+      ]
+    },
+    {
+      "id": "failure-modes",
+      "title": "AI Failure Modes, Hallucinations & Recovery",
+      "description": "Recognize characteristic coding-agent errors early and use workflows that recover without compounding bad assumptions.",
+      "cardIds": [
+        "vc-441",
+        "vc-442",
+        "vc-443",
+        "vc-444",
+        "vc-445",
+        "vc-446",
+        "vc-447",
+        "vc-448",
+        "vc-449",
+        "vc-450",
+        "vc-451",
+        "vc-452",
+        "vc-453",
+        "vc-454",
+        "vc-455",
+        "vc-456",
+        "vc-457",
+        "vc-458",
+        "vc-459",
+        "vc-460"
+      ]
+    }
+  ],
+  "cards": [
+    {
+      "id": "vc-101",
+      "sequence": 1,
+      "type": "concept",
+      "title": "Plan around outcomes",
+      "prompt": "What measurable outcome should a development plan optimize rather than simply listing files to edit?",
+      "content": "A plan should describe completed behavior, not only file edits. Name the user or system capability delivered by each step.",
+      "tags": [
+        "vibe-coding-agentic",
+        "planning-decomposition",
+        "plan-around-outcomes"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "planning-decomposition"
+      ]
+    },
+    {
+      "id": "vc-102",
+      "sequence": 2,
+      "type": "fact",
+      "title": "Find dependencies first",
+      "prompt": "Why must prerequisite tasks be discovered before assigning parallel implementation work?",
+      "content": "Some changes must precede others because interfaces, schemas, or infrastructure depend on them. Order work by dependency and avoid parallel changes that rely on unstable contracts.",
+      "tags": [
+        "vibe-coding-agentic",
+        "planning-decomposition",
+        "find-dependencies-first"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "planning-decomposition"
+      ]
+    },
+    {
+      "id": "vc-103",
+      "sequence": 3,
+      "type": "steps",
+      "title": "Create vertical slices",
+      "prompt": "How do you decompose a feature into independently verifiable vertical slices?",
+      "content": "End-to-end slices reveal integration problems earlier than layer-by-layer bulk work. Implement a narrow path through UI, API, and data when feasible before expanding coverage.",
+      "tags": [
+        "vibe-coding-agentic",
+        "planning-decomposition",
+        "create-vertical-slices"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "planning-decomposition"
+      ],
+      "steps": [
+        "Identify the smallest end-user action that produces a meaningful result.",
+        "Trace its UI, API, domain, and persistence dependencies.",
+        "Choose one slice with a clear acceptance scenario and minimal surface area.",
+        "Implement and validate that slice through all affected layers.",
+        "Repeat with the next behavior while keeping each slice reviewable and reversible."
+      ]
+    },
+    {
+      "id": "vc-104",
+      "sequence": 4,
+      "type": "concept",
+      "title": "Separate discovery from execution",
+      "prompt": "Which unknowns should be investigated before implementation begins?",
+      "content": "Unknown architecture or reproduction steps make plans speculative. Perform targeted investigation before committing to implementation steps.",
+      "tags": [
+        "vibe-coding-agentic",
+        "planning-decomposition",
+        "separate-discovery-from-execution"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "planning-decomposition"
+      ]
+    },
+    {
+      "id": "vc-105",
+      "sequence": 5,
+      "type": "fact",
+      "title": "Identify risky steps",
+      "prompt": "What makes a particular step risky enough to require special safeguards?",
+      "content": "Migrations, auth, billing, permissions, and destructive operations deserve dedicated attention. Mark high-risk steps and attach stronger validation or rollback requirements.",
+      "tags": [
+        "vibe-coding-agentic",
+        "planning-decomposition",
+        "identify-risky-steps"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "planning-decomposition"
+      ]
+    },
+    {
+      "id": "vc-106",
+      "sequence": 6,
+      "type": "checklist",
+      "title": "Define checkpoints",
+      "prompt": "At a high-risk implementation checkpoint, which evidence is required to advance?",
+      "content": "Long agent runs need points where assumptions can be revalidated. Pause after schema, architecture, or behavioral milestones to inspect the state.",
+      "tags": [
+        "vibe-coding-agentic",
+        "planning-decomposition",
+        "define-checkpoints"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "planning-decomposition"
+      ],
+      "items": [
+        "The current branch and changed files are known.",
+        "The intended behavior and rollback route are recorded.",
+        "Focused tests of the completed slice actually ran.",
+        "New assumptions and scope changes have been resolved.",
+        "A reviewer can inspect the concrete diff and evidence."
+      ]
+    },
+    {
+      "id": "vc-107",
+      "sequence": 7,
+      "type": "concept",
+      "title": "Keep steps independently testable",
+      "prompt": "Why should each implementation step produce independently testable evidence?",
+      "content": "A step that cannot be validated creates hidden debt for later stages. Associate each plan item with a concrete check or observable result.",
+      "tags": [
+        "vibe-coding-agentic",
+        "planning-decomposition",
+        "keep-steps-independently-testable"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "planning-decomposition"
+      ]
+    },
+    {
+      "id": "vc-108",
+      "sequence": 8,
+      "type": "concept",
+      "title": "Limit simultaneous change dimensions",
+      "prompt": "What goes wrong when business logic, data schema, and UI are changed simultaneously?",
+      "content": "Changing architecture, behavior, dependencies, and styling at once complicates diagnosis. Hold unrelated dimensions stable while implementing the primary change.",
+      "tags": [
+        "vibe-coding-agentic",
+        "planning-decomposition",
+        "limit-simultaneous-change-dimensions"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "planning-decomposition"
+      ]
+    },
+    {
+      "id": "vc-109",
+      "sequence": 9,
+      "type": "code",
+      "title": "Plan data migrations separately",
+      "prompt": "The migration plan has five phases. Why must additive schema and compatible application code precede switching reads and deleting the old field?",
+      "content": "Persistent data evolves on a different risk profile than application code. Design expand-migrate-contract phases for zero-downtime or reversible rollout where needed.",
+      "tags": [
+        "vibe-coding-agentic",
+        "planning-decomposition",
+        "plan-data-migrations-separately"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "planning-decomposition"
+      ],
+      "code": {
+        "language": "markdown",
+        "snippet": "Phase 1: additive schema\nPhase 2: dual-compatible app\nPhase 3: backfill\nPhase 4: switch reads\nPhase 5: remove legacy column"
+      }
+    },
+    {
+      "id": "vc-110",
+      "sequence": 10,
+      "type": "concept",
+      "title": "Plan compatibility transitions",
+      "prompt": "How can a plan support both old and new clients during a compatibility transition?",
+      "content": "Consumers may not upgrade simultaneously. Use additive interfaces and staged removal rather than breaking all callers in one step.",
+      "tags": [
+        "vibe-coding-agentic",
+        "planning-decomposition",
+        "plan-compatibility-transitions"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "planning-decomposition"
+      ]
+    },
+    {
+      "id": "vc-111",
+      "sequence": 11,
+      "type": "concept",
+      "title": "Plan fallback behavior",
+      "prompt": "What should users experience if a newly introduced dependency or feature fails?",
+      "content": "External services and optional capabilities fail. Specify degraded modes, retries, feature disabling, and user messaging.",
+      "tags": [
+        "vibe-coding-agentic",
+        "planning-decomposition",
+        "plan-fallback-behavior"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "planning-decomposition"
+      ]
+    },
+    {
+      "id": "vc-112",
+      "sequence": 12,
+      "type": "fact",
+      "title": "Plan testing layers",
+      "prompt": "How do unit, integration, and end-to-end tests serve different milestones?",
+      "content": "Different defects need different test scopes. Assign pure logic to unit tests, boundaries to integration tests, and user journeys to end-to-end tests.",
+      "tags": [
+        "vibe-coding-agentic",
+        "planning-decomposition",
+        "plan-testing-layers"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "planning-decomposition"
+      ]
+    },
+    {
+      "id": "vc-113",
+      "sequence": 13,
+      "type": "concept",
+      "title": "Plan observability before launch",
+      "prompt": "What telemetry must be planned before releasing a new critical workflow?",
+      "content": "Instrumentation added after an incident is too late. Include metrics, logs, traces, and alert thresholds in the implementation plan.",
+      "tags": [
+        "vibe-coding-agentic",
+        "planning-decomposition",
+        "plan-observability-before-launch"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "planning-decomposition"
+      ]
+    },
+    {
+      "id": "vc-114",
+      "sequence": 14,
+      "type": "concept",
+      "title": "Plan documentation updates",
+      "prompt": "Which documentation must change along with implementation and deployment behavior?",
+      "content": "Behavior changes that are undocumented create support and maintenance costs. Identify README, API, runbook, architecture, or user documentation that must change.",
+      "tags": [
+        "vibe-coding-agentic",
+        "planning-decomposition",
+        "plan-documentation-updates"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "planning-decomposition"
+      ]
+    },
+    {
+      "id": "vc-115",
+      "sequence": 15,
+      "type": "concept",
+      "title": "Plan cleanup explicitly",
+      "prompt": "Why should temporary compatibility code have an explicit cleanup milestone?",
+      "content": "Temporary flags and compatibility branches often become permanent. Create removal conditions and follow-up items for transitional code.",
+      "tags": [
+        "vibe-coding-agentic",
+        "planning-decomposition",
+        "plan-cleanup-explicitly"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "planning-decomposition"
+      ]
+    },
+    {
+      "id": "vc-116",
+      "sequence": 16,
+      "type": "fact",
+      "title": "Use issue-sized work units",
+      "prompt": "How should a complex task be divided into reviewable issue-sized work units?",
+      "content": "Huge tasks are hard for both agents and reviewers to reason about. Split work so each PR has one coherent purpose and manageable diff.",
+      "tags": [
+        "vibe-coding-agentic",
+        "planning-decomposition",
+        "use-issue-sized-work-units"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "planning-decomposition"
+      ]
+    },
+    {
+      "id": "vc-117",
+      "sequence": 17,
+      "type": "question",
+      "title": "Parallelize only independent tasks",
+      "prompt": "Two agents want to edit the same central state reducer while a third can write isolated tests. Which delegation avoids an integration conflict?",
+      "content": "",
+      "tags": [
+        "vibe-coding-agentic",
+        "planning-decomposition",
+        "parallelize-only-independent-tasks"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "planning-decomposition"
+      ],
+      "question": {
+        "options": [
+          "Give each agent a separate branch for the same reducer and merge results automatically by timestamp.",
+          "Share a working tree as long as each agent runs its own focused tests.",
+          "Assign disjoint work or parallel read-only review, and integrate shared writes centrally.",
+          "Allow concurrent edits to shared state if both workers report clean diffs."
+        ],
+        "answerIndex": 2,
+        "explanation": "Concurrent agents can overwrite assumptions or modify overlapping code. Assign separate file or subsystem ownership and define integration contracts first. Parallelism saves time only when work products can be reconciled without competing writes."
+      }
+    },
+    {
+      "id": "vc-118",
+      "sequence": 18,
+      "type": "concept",
+      "title": "Track decisions and changes",
+      "prompt": "How should an implementation record decisions that depart from its original plan?",
+      "content": "Plans evolve as evidence emerges. Update the plan when a discovered constraint changes sequence, scope, or design.",
+      "tags": [
+        "vibe-coding-agentic",
+        "planning-decomposition",
+        "track-decisions-and-changes"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "planning-decomposition"
+      ]
+    },
+    {
+      "id": "vc-119",
+      "sequence": 19,
+      "type": "concept",
+      "title": "Re-plan after failures",
+      "prompt": "What new evidence should trigger re-planning instead of another speculative patch?",
+      "content": "Repeated patching around a failed approach wastes context and creates complexity. Return to the model of the problem when evidence contradicts the original plan.",
+      "tags": [
+        "vibe-coding-agentic",
+        "planning-decomposition",
+        "re-plan-after-failures"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "planning-decomposition"
+      ]
+    },
+    {
+      "id": "vc-120",
+      "sequence": 20,
+      "type": "concept",
+      "title": "End with a verification phase",
+      "prompt": "What constitutes a final verification phase after all implementation work is done?",
+      "content": "Implementation is not the final plan item. Reserve a final step for full validation, diff review, documentation, and residual-risk assessment.",
+      "tags": [
+        "vibe-coding-agentic",
+        "planning-decomposition",
+        "end-with-a-verification-phase"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "planning-decomposition"
+      ]
+    },
+    {
+      "id": "vc-121",
+      "sequence": 21,
+      "type": "steps",
+      "title": "Start with system boundaries",
+      "prompt": "How should you establish an application's system boundaries before generating modules?",
+      "content": "Architecture begins by deciding what belongs together and what should remain separate. Identify users, external systems, trust boundaries, data stores, and major components.",
+      "tags": [
+        "vibe-coding-agentic",
+        "architecture",
+        "start-with-system-boundaries"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "architecture"
+      ],
+      "steps": [
+        "List internal users, external systems, and sensitive data assets.",
+        "Draw trust, responsibility, and network boundaries.",
+        "Assign authoritative ownership for state and business invariants.",
+        "Define the public interfaces and failure modes across each boundary.",
+        "Check the design against the simplest implementation that meets current requirements."
+      ]
+    },
+    {
+      "id": "vc-122",
+      "sequence": 22,
+      "type": "fact",
+      "title": "Prefer simple architecture",
+      "prompt": "When is a modular monolith a more appropriate starting point than distributed services?",
+      "content": "Complexity has ongoing cognitive and operational cost. Use the least complex design that satisfies current requirements and credible near-term needs.",
+      "tags": [
+        "vibe-coding-agentic",
+        "architecture",
+        "prefer-simple-architecture"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "architecture"
+      ]
+    },
+    {
+      "id": "vc-123",
+      "sequence": 23,
+      "type": "concept",
+      "title": "Define module responsibilities",
+      "prompt": "What makes a module responsibility focused enough for both humans and coding agents?",
+      "content": "Overlapping ownership produces coupling and duplicated rules. Give each module one clear responsibility and explicit public interfaces.",
+      "tags": [
+        "vibe-coding-agentic",
+        "architecture",
+        "define-module-responsibilities"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "architecture"
+      ]
+    },
+    {
+      "id": "vc-124",
+      "sequence": 24,
+      "type": "concept",
+      "title": "Keep domain rules centralized",
+      "prompt": "Why should an invariant have one authoritative implementation rather than many UI copies?",
+      "content": "Duplicated business logic diverges over time. Place authoritative rules in a domain or service layer reusable by all entry points.",
+      "tags": [
+        "vibe-coding-agentic",
+        "architecture",
+        "keep-domain-rules-centralized"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "architecture"
+      ]
+    },
+    {
+      "id": "vc-125",
+      "sequence": 25,
+      "type": "fact",
+      "title": "Separate policy from mechanism",
+      "prompt": "How can you separate a business permission rule from its storage or transport mechanism?",
+      "content": "Policy changes more often than low-level mechanisms. Keep authorization, retry, routing, and business decisions configurable or isolated from implementation plumbing.",
+      "tags": [
+        "vibe-coding-agentic",
+        "architecture",
+        "separate-policy-from-mechanism"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "architecture"
+      ]
+    },
+    {
+      "id": "vc-126",
+      "sequence": 26,
+      "type": "code",
+      "title": "Design explicit interfaces",
+      "prompt": "In the ProjectRepository interface, what dependency is hidden from callers, and which contract can remain stable if storage changes?",
+      "content": "Hidden coupling makes AI-generated changes unpredictable. Use typed contracts, schemas, and narrow APIs between components.",
+      "tags": [
+        "vibe-coding-agentic",
+        "architecture",
+        "design-explicit-interfaces"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "architecture"
+      ],
+      "code": {
+        "language": "typescript",
+        "snippet": "export interface ProjectRepository {\n  getById(id: string): Promise<Project | null>;\n  save(project: Project): Promise<void>;\n}"
+      }
+    },
+    {
+      "id": "vc-127",
+      "sequence": 27,
+      "type": "concept",
+      "title": "Control dependency direction",
+      "prompt": "Why does dependency direction matter when changing code with agents?",
+      "content": "Cycles make systems difficult to test and replace. Make lower-level modules independent of higher-level orchestration and UI concerns.",
+      "tags": [
+        "vibe-coding-agentic",
+        "architecture",
+        "control-dependency-direction"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "architecture"
+      ]
+    },
+    {
+      "id": "vc-128",
+      "sequence": 28,
+      "type": "concept",
+      "title": "Choose state ownership deliberately",
+      "prompt": "Who should own mutable state shared between frontend components or backend services?",
+      "content": "Duplicated or ambiguous state causes synchronization bugs. Define one authoritative owner for each piece of mutable state.",
+      "tags": [
+        "vibe-coding-agentic",
+        "architecture",
+        "choose-state-ownership-deliberately"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "architecture"
+      ]
+    },
+    {
+      "id": "vc-129",
+      "sequence": 29,
+      "type": "fact",
+      "title": "Distinguish synchronous and asynchronous work",
+      "prompt": "When should slow work move from a synchronous request to an asynchronous job?",
+      "content": "Not every operation belongs in a request-response path. Move long, retryable, or fan-out work to durable asynchronous processing where appropriate.",
+      "tags": [
+        "vibe-coding-agentic",
+        "architecture",
+        "distinguish-synchronous-and-asynchronous-work"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "architecture"
+      ]
+    },
+    {
+      "id": "vc-130",
+      "sequence": 30,
+      "type": "question",
+      "title": "Design idempotent operations",
+      "prompt": "A payment client retries after a timeout, but the first request may already have succeeded. Which backend contract prevents a second charge?",
+      "content": "",
+      "tags": [
+        "vibe-coding-agentic",
+        "architecture",
+        "design-idempotent-operations"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "architecture"
+      ],
+      "question": {
+        "options": [
+          "Record an idempotency key and return the same committed outcome for the same operation.",
+          "Retry with exponential backoff but no server-side deduplication.",
+          "Disable double-clicking in the browser and assume no network retry occurs.",
+          "Reject payments submitted within a short time window, regardless of operation identity."
+        ],
+        "answerIndex": 0,
+        "explanation": "Retries are normal in distributed systems. Use stable identifiers and idempotency keys for side-effecting operations that may be repeated. A retry-safe design must enforce uniqueness at the authoritative server boundary."
+      }
+    },
+    {
+      "id": "vc-131",
+      "sequence": 31,
+      "type": "concept",
+      "title": "Design failure boundaries",
+      "prompt": "Where should failures be caught, translated, and prevented from corrupting other modules?",
+      "content": "One failing dependency should not always collapse the entire system. Use timeouts, circuit breaking, queues, isolation, or graceful degradation based on impact.",
+      "tags": [
+        "vibe-coding-agentic",
+        "architecture",
+        "design-failure-boundaries"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "architecture"
+      ]
+    },
+    {
+      "id": "vc-132",
+      "sequence": 32,
+      "type": "fact",
+      "title": "Model consistency requirements",
+      "prompt": "What consistency guarantee is needed for a multi-step state change?",
+      "content": "Strong consistency is costly and not always necessary. State which invariants require transactions and where eventual consistency is acceptable.",
+      "tags": [
+        "vibe-coding-agentic",
+        "architecture",
+        "model-consistency-requirements"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "architecture"
+      ]
+    },
+    {
+      "id": "vc-133",
+      "sequence": 33,
+      "type": "concept",
+      "title": "Design for observability",
+      "prompt": "Which logs, metrics, or trace identifiers belong in architectural design?",
+      "content": "Opaque architecture is hard to operate. Preserve request or job correlation across component boundaries and emit meaningful telemetry.",
+      "tags": [
+        "vibe-coding-agentic",
+        "architecture",
+        "design-for-observability"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "architecture"
+      ]
+    },
+    {
+      "id": "vc-134",
+      "sequence": 34,
+      "type": "concept",
+      "title": "Avoid premature microservices",
+      "prompt": "What conditions justify a new service boundary rather than another module?",
+      "content": "Network boundaries add deployment, consistency, latency, and ownership complexity. Split services only when organizational or scaling boundaries justify the operational cost.",
+      "tags": [
+        "vibe-coding-agentic",
+        "architecture",
+        "avoid-premature-microservices"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "architecture"
+      ]
+    },
+    {
+      "id": "vc-135",
+      "sequence": 35,
+      "type": "concept",
+      "title": "Use architecture decision records",
+      "prompt": "What information should an architecture decision record retain for future engineers?",
+      "content": "Consequential choices need durable rationale. Record context, decision, alternatives, consequences, and reversal conditions for major architecture decisions.",
+      "tags": [
+        "vibe-coding-agentic",
+        "architecture",
+        "use-architecture-decision-records"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "architecture"
+      ]
+    },
+    {
+      "id": "vc-136",
+      "sequence": 36,
+      "type": "checklist",
+      "title": "Protect public contracts",
+      "prompt": "Before changing an internal module, which public-contract guarantees should you inspect?",
+      "content": "Internal refactors should not accidentally break consumers. Version or evolve external APIs and events compatibly.",
+      "tags": [
+        "vibe-coding-agentic",
+        "architecture",
+        "protect-public-contracts"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "architecture"
+      ],
+      "items": [
+        "Endpoint shapes, error semantics, and persisted formats remain compatible or versioned.",
+        "Authorization behavior and ownership checks remain enforced.",
+        "Dependent clients and consumers are enumerated.",
+        "Migration and deprecation sequencing is documented.",
+        "Contract tests exercise old and new supported behavior."
+      ]
+    },
+    {
+      "id": "vc-137",
+      "sequence": 37,
+      "type": "concept",
+      "title": "Plan capacity assumptions",
+      "prompt": "How should realistic workload assumptions affect system sizing?",
+      "content": "Architecture should match expected load and growth. Estimate traffic, storage, concurrency, and hot-path behavior before introducing scaling mechanisms.",
+      "tags": [
+        "vibe-coding-agentic",
+        "architecture",
+        "plan-capacity-assumptions"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "architecture"
+      ]
+    },
+    {
+      "id": "vc-138",
+      "sequence": 38,
+      "type": "concept",
+      "title": "Minimize shared mutable infrastructure",
+      "prompt": "What failures can result from sharing mutable infrastructure between unrelated functions?",
+      "content": "Shared tables, caches, or globals create invisible coupling. Use clear ownership and access patterns for shared resources.",
+      "tags": [
+        "vibe-coding-agentic",
+        "architecture",
+        "minimize-shared-mutable-infrastructure"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "architecture"
+      ]
+    },
+    {
+      "id": "vc-139",
+      "sequence": 39,
+      "type": "concept",
+      "title": "Review architecture after implementation",
+      "prompt": "Why should the built system be checked against the original architecture diagram?",
+      "content": "Generated code can drift from an approved design. Inspect dependencies, boundaries, and data flow after the agent finishes, not just the feature output.",
+      "tags": [
+        "vibe-coding-agentic",
+        "architecture",
+        "review-architecture-after-implementation"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "architecture"
+      ]
+    },
+    {
+      "id": "vc-140",
+      "sequence": 40,
+      "type": "concept",
+      "title": "Optimize for change",
+      "prompt": "Which design choices make later changes local rather than system-wide?",
+      "content": "Good architecture makes likely future changes local and understandable. Choose boundaries around stable domain concepts rather than around accidental current file structure.",
+      "tags": [
+        "vibe-coding-agentic",
+        "architecture",
+        "optimize-for-change"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "architecture"
+      ]
+    },
+    {
+      "id": "vc-261",
+      "sequence": 41,
+      "type": "concept",
+      "title": "Start from a current base",
+      "prompt": "Why should a proposed change start from an up-to-date default branch?",
+      "content": "Old branches accumulate avoidable conflicts and stale assumptions. Fetch or sync before beginning consequential work.",
+      "tags": [
+        "vibe-coding-agentic",
+        "git-pr",
+        "start-from-a-current-base"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "git-pr"
+      ]
+    },
+    {
+      "id": "vc-262",
+      "sequence": 42,
+      "type": "fact",
+      "title": "Use a focused branch",
+      "prompt": "How does a focused feature branch isolate work and make review manageable?",
+      "content": "A branch should represent one coherent change. Keep unrelated features, fixes, generated assets, and experiments separate.",
+      "tags": [
+        "vibe-coding-agentic",
+        "git-pr",
+        "use-a-focused-branch"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "git-pr"
+      ]
+    },
+    {
+      "id": "vc-263",
+      "sequence": 43,
+      "type": "concept",
+      "title": "Inspect the working tree first",
+      "prompt": "What should git status reveal before you let an agent edit or stage files?",
+      "content": "Pre-existing local changes can be overwritten or accidentally committed. Check status and diff before an agent begins modifying files.",
+      "tags": [
+        "vibe-coding-agentic",
+        "git-pr",
+        "inspect-the-working-tree-first"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "git-pr"
+      ]
+    },
+    {
+      "id": "vc-264",
+      "sequence": 44,
+      "type": "code",
+      "title": "Stage intentionally",
+      "prompt": "Read the staging sequence. Which command verifies that only the intended source and test changes will enter the next commit?",
+      "content": "AI tools may touch more files than expected. Review changed files and hunks before staging rather than blindly adding everything.",
+      "tags": [
+        "vibe-coding-agentic",
+        "git-pr",
+        "stage-intentionally"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "git-pr"
+      ],
+      "code": {
+        "language": "bash",
+        "snippet": "git status -sb\ngit diff\ngit add src/service.ts test/service.test.ts\ngit diff --staged\ngit commit -m \"Fix duplicate project creation\""
+      }
+    },
+    {
+      "id": "vc-265",
+      "sequence": 45,
+      "type": "fact",
+      "title": "Write meaningful commits",
+      "prompt": "What information makes a commit message useful when debugging project history?",
+      "content": "Commit history is an engineering communication channel. Use concise messages that describe intent and keep each commit understandable.",
+      "tags": [
+        "vibe-coding-agentic",
+        "git-pr",
+        "write-meaningful-commits"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "git-pr"
+      ]
+    },
+    {
+      "id": "vc-266",
+      "sequence": 46,
+      "type": "concept",
+      "title": "Keep commits buildable where practical",
+      "prompt": "Why should individual commits remain buildable and conceptually cohesive when practical?",
+      "content": "Broken intermediate history complicates bisecting and review. Group changes so important commits preserve a coherent state.",
+      "tags": [
+        "vibe-coding-agentic",
+        "git-pr",
+        "keep-commits-buildable-where-practical"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "git-pr"
+      ]
+    },
+    {
+      "id": "vc-267",
+      "sequence": 47,
+      "type": "concept",
+      "title": "Review the diff before commit",
+      "prompt": "What must be inspected in the unstaged and staged diff before committing?",
+      "content": "Generated output can include accidental deletions or formatting churn. Inspect behavior-changing lines, dependency changes, migrations, and generated files.",
+      "tags": [
+        "vibe-coding-agentic",
+        "git-pr",
+        "review-the-diff-before-commit"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "git-pr"
+      ]
+    },
+    {
+      "id": "vc-268",
+      "sequence": 48,
+      "type": "concept",
+      "title": "Avoid unnecessary force pushes",
+      "prompt": "When can rewriting a shared branch's history damage collaborators' work?",
+      "content": "Rewritten shared history creates coordination risk. Use force-with-lease only when branch history intentionally needs rewriting.",
+      "tags": [
+        "vibe-coding-agentic",
+        "git-pr",
+        "avoid-unnecessary-force-pushes"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "git-pr"
+      ]
+    },
+    {
+      "id": "vc-269",
+      "sequence": 49,
+      "type": "fact",
+      "title": "Keep PRs small",
+      "prompt": "How does smaller PR scope improve code review and regression isolation?",
+      "content": "Review quality declines as diff size grows. Split large initiatives into independently valuable, mergeable slices.",
+      "tags": [
+        "vibe-coding-agentic",
+        "git-pr",
+        "keep-prs-small"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "git-pr"
+      ]
+    },
+    {
+      "id": "vc-270",
+      "sequence": 50,
+      "type": "concept",
+      "title": "Write a useful PR description",
+      "prompt": "What should a reviewer learn from the summary and risk section of a pull request?",
+      "content": "Reviewers need intent and verification context. Describe problem, solution, notable decisions, risks, migration impact, and tests.",
+      "tags": [
+        "vibe-coding-agentic",
+        "git-pr",
+        "write-a-useful-pr-description"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "git-pr"
+      ]
+    },
+    {
+      "id": "vc-271",
+      "sequence": 51,
+      "type": "concept",
+      "title": "Link requirements to changes",
+      "prompt": "How do you link requirements or issue acceptance criteria to changed files?",
+      "content": "A PR should make it easy to verify whether scope is satisfied. Reference issue or acceptance criteria and explain any deviations.",
+      "tags": [
+        "vibe-coding-agentic",
+        "git-pr",
+        "link-requirements-to-changes"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "git-pr"
+      ]
+    },
+    {
+      "id": "vc-272",
+      "sequence": 52,
+      "type": "checklist",
+      "title": "Expose generated changes clearly",
+      "prompt": "What must a pull request disclose when significant code was produced by an agent?",
+      "content": "Reviewers need to know which files are generated versus authored. Document generation commands and avoid hand-editing outputs.",
+      "tags": [
+        "vibe-coding-agentic",
+        "git-pr",
+        "expose-generated-changes-clearly"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "git-pr"
+      ],
+      "items": [
+        "The generated or heavily revised areas are identified.",
+        "A human has read the affected contracts, permissions, and data flow.",
+        "Executed test commands and their actual outcomes are reported.",
+        "Known limitations, assumptions, and high-risk changes are visible.",
+        "No review is replaced merely by a model's confidence statement."
+      ]
+    },
+    {
+      "id": "vc-273",
+      "sequence": 53,
+      "type": "concept",
+      "title": "Call out migrations and dependencies",
+      "prompt": "Which schema migrations and dependent changes must a PR call out?",
+      "content": "These changes carry outsized operational risk. List new packages, lockfile changes, schema migrations, and rollout requirements prominently.",
+      "tags": [
+        "vibe-coding-agentic",
+        "git-pr",
+        "call-out-migrations-and-dependencies"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "git-pr"
+      ]
+    },
+    {
+      "id": "vc-274",
+      "sequence": 54,
+      "type": "concept",
+      "title": "Use draft PRs early",
+      "prompt": "What is the practical purpose of opening a draft PR before the implementation is complete?",
+      "content": "Early PRs provide CI and collaboration without claiming completion. Open drafts for large changes and transition to ready only after validation.",
+      "tags": [
+        "vibe-coding-agentic",
+        "git-pr",
+        "use-draft-prs-early"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "git-pr"
+      ]
+    },
+    {
+      "id": "vc-275",
+      "sequence": 55,
+      "type": "question",
+      "title": "Require current-head validation",
+      "prompt": "A PR passed CI, then received a new commit that changed runtime behavior. When is it merge-ready?",
+      "content": "",
+      "tags": [
+        "vibe-coding-agentic",
+        "git-pr",
+        "require-current-head-validation"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "git-pr"
+      ],
+      "question": {
+        "options": [
+          "Immediately, because its earlier CI run passed.",
+          "After the author confirms the change looks small.",
+          "Once its mergeable flag turns green, even if checks are stale.",
+          "After required validation executes successfully against the actual final head."
+        ],
+        "answerIndex": 3,
+        "explanation": "A green check on an older commit is not evidence for the latest code. Merge only when required checks apply to the exact head being reviewed. Previous green checks do not validate a different commit."
+      }
+    },
+    {
+      "id": "vc-276",
+      "sequence": 56,
+      "type": "fact",
+      "title": "Resolve review threads deliberately",
+      "prompt": "How should a developer respond to an unresolved review thread?",
+      "content": "Comments represent unresolved reasoning, not boxes to click. Address, explain, or explicitly reject feedback before resolving threads.",
+      "tags": [
+        "vibe-coding-agentic",
+        "git-pr",
+        "resolve-review-threads-deliberately"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "git-pr"
+      ]
+    },
+    {
+      "id": "vc-277",
+      "sequence": 57,
+      "type": "concept",
+      "title": "Re-review after material changes",
+      "prompt": "Why is another review pass required after material changes to a previously approved PR?",
+      "content": "A PR can become substantially different after fixes. Request or perform another review when architecture, security, or behavior changes significantly.",
+      "tags": [
+        "vibe-coding-agentic",
+        "git-pr",
+        "re-review-after-material-changes"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "git-pr"
+      ]
+    },
+    {
+      "id": "vc-278",
+      "sequence": 58,
+      "type": "concept",
+      "title": "Protect the default branch",
+      "prompt": "Which branch protections make unsafe direct changes less likely?",
+      "content": "Direct unreviewed changes undermine delivery controls. Use branch rules, required checks, and appropriate approvals for production repositories.",
+      "tags": [
+        "vibe-coding-agentic",
+        "git-pr",
+        "protect-the-default-branch"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "git-pr"
+      ]
+    },
+    {
+      "id": "vc-279",
+      "sequence": 59,
+      "type": "steps",
+      "title": "Use safe merge strategy",
+      "prompt": "What is a safe sequence for merging an AI-assisted pull request?",
+      "content": "Merge, squash, and rebase have different history consequences. Choose the repository's intended strategy and preserve important authorship or context.",
+      "tags": [
+        "vibe-coding-agentic",
+        "git-pr",
+        "use-safe-merge-strategy"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "git-pr"
+      ],
+      "steps": [
+        "Confirm scope, intended base branch, and unresolved review threads.",
+        "Fetch or read the latest head SHA and compare it with the reviewed diff.",
+        "Verify all mandatory checks on that same commit and address conflicts.",
+        "Use the repository's accepted merge method without force rewriting shared history.",
+        "Check the resulting default branch and deployment or smoke-test evidence."
+      ]
+    },
+    {
+      "id": "vc-280",
+      "sequence": 60,
+      "type": "concept",
+      "title": "Verify after merge",
+      "prompt": "What must be confirmed after merging rather than assuming the deployment is healthy?",
+      "content": "Integration can trigger deployment or environment-specific failures. Confirm default-branch CI, deployment, migrations, and smoke checks after merge.",
+      "tags": [
+        "vibe-coding-agentic",
+        "git-pr",
+        "verify-after-merge"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "git-pr"
+      ]
+    },
+    {
+      "id": "vc-421",
+      "sequence": 61,
+      "type": "concept",
+      "title": "Choose autonomy by risk",
+      "prompt": "How should task consequence determine the autonomy granted to a coding agent?",
+      "content": "Not every task should run with the same permissions. Grant agents only the tools and write access needed for the current task.",
+      "tags": [
+        "vibe-coding-agentic",
+        "agents-tools-mcp",
+        "choose-autonomy-by-risk"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "agents-tools-mcp"
+      ]
+    },
+    {
+      "id": "vc-422",
+      "sequence": 62,
+      "type": "fact",
+      "title": "Use tools for evidence",
+      "prompt": "Why should an agent inspect tools and actual system state rather than guess?",
+      "content": "Agents reason better when they can inspect real state. Prefer repository search, tests, logs, database queries, and browser checks over guessing.",
+      "tags": [
+        "vibe-coding-agentic",
+        "agents-tools-mcp",
+        "use-tools-for-evidence"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "agents-tools-mcp"
+      ]
+    },
+    {
+      "id": "vc-423",
+      "sequence": 63,
+      "type": "concept",
+      "title": "Constrain destructive tools",
+      "prompt": "Which constraints belong around an agent with shell, database, or cloud write access?",
+      "content": "Shell, database, cloud, and GitHub writes can have irreversible effects. Require explicit targets, safe defaults, previews, or approvals for destructive actions.",
+      "tags": [
+        "vibe-coding-agentic",
+        "agents-tools-mcp",
+        "constrain-destructive-tools"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "agents-tools-mcp"
+      ]
+    },
+    {
+      "id": "vc-424",
+      "sequence": 64,
+      "type": "concept",
+      "title": "Separate read and write phases",
+      "prompt": "Why should repository investigation use wider visibility than the subsequent mutation phase?",
+      "content": "Investigation benefits from broad visibility; mutation requires tighter control. Inspect first, then narrow writes to the intended files or resources.",
+      "tags": [
+        "vibe-coding-agentic",
+        "agents-tools-mcp",
+        "separate-read-and-write-phases"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "agents-tools-mcp"
+      ]
+    },
+    {
+      "id": "vc-425",
+      "sequence": 65,
+      "type": "fact",
+      "title": "Use MCP with trust boundaries",
+      "prompt": "What trust checks matter when connecting an MCP tool server and interpreting its responses?",
+      "content": "External tool servers can expose data or perform actions. Review server identity, permissions, data access, and tool descriptions before connecting. Treat retrieved pages, MCP output and tool metadata as untrusted task data, not executable instructions: they may contain prompt-injection or tool-poisoning attempts. Restrict write privileges and require approval for consequential actions.",
+      "tags": [
+        "vibe-coding-agentic",
+        "agents-tools-mcp",
+        "use-mcp-with-trust-boundaries"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "agents-tools-mcp"
+      ]
+    },
+    {
+      "id": "vc-426",
+      "sequence": 66,
+      "type": "code",
+      "title": "Give agents scoped credentials",
+      "prompt": "In the illustrative tool policy, which system has read-only access, which repository is writable, and why should these scopes differ?",
+      "content": "Broad permanent tokens magnify prompt or tool mistakes. Use short-lived, least-privilege credentials and isolated environments.",
+      "tags": [
+        "vibe-coding-agentic",
+        "agents-tools-mcp",
+        "give-agents-scoped-credentials"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "agents-tools-mcp"
+      ],
+      "code": {
+        "language": "json",
+        "snippet": "{\n  \"tools\": {\n    \"github\": { \"mode\": \"read-write\", \"repos\": [\"org/app\"] },\n    \"database\": { \"mode\": \"read-only\", \"environment\": \"staging\" }\n  }\n}"
+      }
+    },
+    {
+      "id": "vc-427",
+      "sequence": 67,
+      "type": "steps",
+      "title": "Use subagents for independent analysis",
+      "prompt": "Which subagent tasks can run in parallel without conflicting, and how should their findings be integrated?",
+      "content": "Parallel perspectives help when tasks do not modify overlapping state. Assign research, review, or isolated modules independently and integrate centrally. Give each worker bounded deliverables, explicit sources, write scope, and evidence requirements; reconcile any shared-file changes through one integration owner and validate the combined result.",
+      "tags": [
+        "vibe-coding-agentic",
+        "agents-tools-mcp",
+        "use-subagents-for-independent-analysis"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "agents-tools-mcp"
+      ],
+      "steps": [
+        "Split the request into bounded tasks with explicit deliverables and source constraints.",
+        "Identify shared files and forbid competing writes to the same state.",
+        "Give read-only specialists independent investigations when useful.",
+        "Require each worker to return evidence, validation, and unresolved risks.",
+        "Integrate findings centrally and revalidate the combined result."
+      ]
+    },
+    {
+      "id": "vc-428",
+      "sequence": 68,
+      "type": "question",
+      "title": "Avoid parallel conflicting writes",
+      "prompt": "Two agents independently modify the same configuration file and both claim success. What prevents lost updates?",
+      "content": "",
+      "tags": [
+        "vibe-coding-agentic",
+        "agents-tools-mcp",
+        "avoid-parallel-conflicting-writes"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "agents-tools-mcp"
+      ],
+      "question": {
+        "options": [
+          "Trust separate agents' local tests on a shared working tree.",
+          "Assign an owner for the shared file or isolate branches and reconcile changes against the latest state.",
+          "Merge the final contents of both branches based only on line overlap.",
+          "Choose the most recent file version without checking whether it preserves both intentions."
+        ],
+        "answerIndex": 1,
+        "explanation": "Multiple agents editing the same state can overwrite each other. Partition file ownership, branches, or resources before parallel execution. Use isolated work and one integration authority for overlapping mutable state."
+      }
+    },
+    {
+      "id": "vc-429",
+      "sequence": 69,
+      "type": "fact",
+      "title": "Use browser verification",
+      "prompt": "How can real browser interaction expose problems that static source review misses?",
+      "content": "Frontend code should be tested in the actual rendered environment. Check loading, interactions, responsive layout, console errors, and key user flows.",
+      "tags": [
+        "vibe-coding-agentic",
+        "agents-tools-mcp",
+        "use-browser-verification"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "agents-tools-mcp"
+      ]
+    },
+    {
+      "id": "vc-430",
+      "sequence": 70,
+      "type": "concept",
+      "title": "Use database tools safely",
+      "prompt": "How should an agent verify the environment and target before running a database tool?",
+      "content": "Direct queries can reveal sensitive data or mutate production. Prefer read-only or staging access and use transactions or backups for risky changes. Before any query, confirm the exact connection host, project/database identifier, active role, and intended environment; do not infer the target from an agent's memory.",
+      "tags": [
+        "vibe-coding-agentic",
+        "agents-tools-mcp",
+        "use-database-tools-safely"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "agents-tools-mcp"
+      ]
+    },
+    {
+      "id": "vc-431",
+      "sequence": 71,
+      "type": "concept",
+      "title": "Record tool outcomes",
+      "prompt": "Which details of a tool call must be retained to support a reliable implementation claim?",
+      "content": "Later reasoning should rely on what actually happened. Capture command results, test summaries, relevant logs, and changed resources.",
+      "tags": [
+        "vibe-coding-agentic",
+        "agents-tools-mcp",
+        "record-tool-outcomes"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "agents-tools-mcp"
+      ]
+    },
+    {
+      "id": "vc-432",
+      "sequence": 72,
+      "type": "fact",
+      "title": "Handle tool failure explicitly",
+      "prompt": "What should an orchestrator do when a tool call times out or returns partial results?",
+      "content": "An unavailable command is not evidence that the code is correct. Report missing validation and seek an equivalent check rather than silently skipping it.",
+      "tags": [
+        "vibe-coding-agentic",
+        "agents-tools-mcp",
+        "handle-tool-failure-explicitly"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "agents-tools-mcp"
+      ]
+    },
+    {
+      "id": "vc-433",
+      "sequence": 73,
+      "type": "concept",
+      "title": "Use timeouts and bounded operations",
+      "prompt": "Which execution, context and cost limits keep an autonomous agent from running an unbounded task?",
+      "content": "Agents can launch commands that hang or consume excessive resources. Set reasonable timeouts and avoid unbounded searches or workloads. Also cap retries, input/output tokens, stale context growth and API spending; checkpoint confirmed findings and escalate when a budget expires rather than repeating speculative calls.",
+      "tags": [
+        "vibe-coding-agentic",
+        "agents-tools-mcp",
+        "use-timeouts-and-bounded-operations"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "agents-tools-mcp"
+      ]
+    },
+    {
+      "id": "vc-434",
+      "sequence": 74,
+      "type": "concept",
+      "title": "Do not paste secrets into prompts",
+      "prompt": "Where can agent prompt context leak credentials or personal data, and how should that risk be controlled?",
+      "content": "Prompt context may be retained or exposed beyond intended boundaries. Use tool-side secret injection or environment references when supported. Production credentials and unnecessary personal data can also escape via logs, tool responses or connected servers: minimize and redact context, scope tool-server permissions, and inspect outbound data paths.",
+      "tags": [
+        "vibe-coding-agentic",
+        "agents-tools-mcp",
+        "do-not-paste-secrets-into-prompts"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "agents-tools-mcp"
+      ]
+    },
+    {
+      "id": "vc-435",
+      "sequence": 75,
+      "type": "concept",
+      "title": "Review commands before execution",
+      "prompt": "What risks should be checked before allowing an agent to run an unfamiliar command?",
+      "content": "Generated shell commands can contain destructive flags or unsafe interpolation. Inspect paths, environment, quoting, recursion, and privilege escalation.",
+      "tags": [
+        "vibe-coding-agentic",
+        "agents-tools-mcp",
+        "review-commands-before-execution"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "agents-tools-mcp"
+      ]
+    },
+    {
+      "id": "vc-436",
+      "sequence": 76,
+      "type": "fact",
+      "title": "Prefer idempotent automations",
+      "prompt": "How do idempotent operations make agent retries safer after uncertain failures?",
+      "content": "Repeated agent runs should not duplicate or corrupt resources. Design create-or-update and check-before-change patterns for external actions.",
+      "tags": [
+        "vibe-coding-agentic",
+        "agents-tools-mcp",
+        "prefer-idempotent-automations"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "agents-tools-mcp"
+      ]
+    },
+    {
+      "id": "vc-437",
+      "sequence": 77,
+      "type": "concept",
+      "title": "Use dry runs where available",
+      "prompt": "How can sandboxed dry-run previews reduce the risk of destructive agent actions?",
+      "content": "Previewing mutation reduces surprises. Run plans, diffs, migration previews, or deployment previews before applying consequential changes. Use a constrained sandbox and least-privilege credentials with an explicit target, review the predicted effects, obtain necessary approvals, and verify persisted state after the actual write; a dry run is not proof of success.",
+      "tags": [
+        "vibe-coding-agentic",
+        "agents-tools-mcp",
+        "use-dry-runs-where-available"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "agents-tools-mcp"
+      ]
+    },
+    {
+      "id": "vc-438",
+      "sequence": 78,
+      "type": "checklist",
+      "title": "Keep human-visible checkpoints",
+      "prompt": "Before an agent performs a risky write, what should be available for human review?",
+      "content": "Long autonomous runs can drift far from intent. Require summaries at architecture, migration, and pre-merge milestones.",
+      "tags": [
+        "vibe-coding-agentic",
+        "agents-tools-mcp",
+        "keep-human-visible-checkpoints"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "agents-tools-mcp"
+      ],
+      "items": [
+        "The exact repository, environment, branch, and resource identifiers are visible.",
+        "The proposed change and affected data are summarized.",
+        "Permission scope, reversibility, and recovery method are known.",
+        "Required approvals are obtained before irreversible action.",
+        "The post-action verification and audit record are defined."
+      ]
+    },
+    {
+      "id": "vc-439",
+      "sequence": 79,
+      "type": "concept",
+      "title": "Use independent review agents",
+      "prompt": "How can a separate reviewer detect errors missed by the implementation agent?",
+      "content": "The authoring agent shares its own assumptions. Give a fresh agent the spec and final diff for adversarial verification.",
+      "tags": [
+        "vibe-coding-agentic",
+        "agents-tools-mcp",
+        "use-independent-review-agents"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "agents-tools-mcp"
+      ]
+    },
+    {
+      "id": "vc-440",
+      "sequence": 80,
+      "type": "concept",
+      "title": "Treat tool configuration as security policy",
+      "prompt": "Why is tool configuration itself part of an application's security posture?",
+      "content": "Connected tools determine what an agent can read and change. Version, review, and minimize agent permissions, MCP configuration, and automation credentials.",
+      "tags": [
+        "vibe-coding-agentic",
+        "agents-tools-mcp",
+        "treat-tool-configuration-as-security-policy"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "agents-tools-mcp"
+      ]
+    },
+    {
+      "id": "vc-441",
+      "sequence": 81,
+      "type": "concept",
+      "title": "Hallucinated APIs",
+      "prompt": "What evidence disproves an apparently plausible but nonexistent library API?",
+      "content": "Models may invent functions, flags, packages, or service capabilities that sound plausible. Verify unfamiliar APIs against installed code or authoritative documentation before relying on them.",
+      "tags": [
+        "vibe-coding-agentic",
+        "failure-modes",
+        "hallucinated-apis"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "failure-modes"
+      ]
+    },
+    {
+      "id": "vc-442",
+      "sequence": 82,
+      "type": "fact",
+      "title": "Outdated knowledge",
+      "prompt": "How can a model's outdated knowledge create version-specific integration bugs?",
+      "content": "Model training or cached context may not match current library behavior. Inspect installed versions and current primary documentation for version-sensitive decisions.",
+      "tags": [
+        "vibe-coding-agentic",
+        "failure-modes",
+        "outdated-knowledge"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "failure-modes"
+      ]
+    },
+    {
+      "id": "vc-443",
+      "sequence": 83,
+      "type": "concept",
+      "title": "Confident wrong explanations",
+      "prompt": "Why should a confident causal explanation be tested against actual runtime behavior?",
+      "content": "Fluent prose can hide an incorrect causal model. Demand evidence from code, tests, logs, or reproductions instead of accepting confidence.",
+      "tags": [
+        "vibe-coding-agentic",
+        "failure-modes",
+        "confident-wrong-explanations"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "failure-modes"
+      ]
+    },
+    {
+      "id": "vc-444",
+      "sequence": 84,
+      "type": "concept",
+      "title": "Scope creep",
+      "prompt": "What signs indicate that an agent has begun making changes outside the requested scope?",
+      "content": "Agents may fix adjacent issues or refactor unrelated code. Reassert scope, inspect the diff, and revert unrelated changes.",
+      "tags": [
+        "vibe-coding-agentic",
+        "failure-modes",
+        "scope-creep"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "failure-modes"
+      ]
+    },
+    {
+      "id": "vc-445",
+      "sequence": 85,
+      "type": "fact",
+      "title": "Overengineering",
+      "prompt": "When does a new abstraction increase complexity without solving a demonstrated problem?",
+      "content": "Models can introduce abstractions, frameworks, or patterns beyond the problem. Prefer the simplest existing pattern and require justification for new architectural machinery.",
+      "tags": [
+        "vibe-coding-agentic",
+        "failure-modes",
+        "overengineering"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "failure-modes"
+      ]
+    },
+    {
+      "id": "vc-446",
+      "sequence": 86,
+      "type": "concept",
+      "title": "Underengineering",
+      "prompt": "What essential validation or error-handling work can an under-engineered patch omit?",
+      "content": "Fast generated code may omit validation, errors, observability, or tests. Use production-readiness checklists and acceptance criteria beyond happy-path behavior.",
+      "tags": [
+        "vibe-coding-agentic",
+        "failure-modes",
+        "underengineering"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "failure-modes"
+      ]
+    },
+    {
+      "id": "vc-447",
+      "sequence": 87,
+      "type": "concept",
+      "title": "Copy-paste duplication",
+      "prompt": "How can AI-generated duplication diverge from an existing authoritative utility?",
+      "content": "Agents can replicate similar logic rather than discover the authoritative implementation. Search the repository for existing utilities, services, and patterns before adding another copy.",
+      "tags": [
+        "vibe-coding-agentic",
+        "failure-modes",
+        "copy-paste-duplication"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "failure-modes"
+      ]
+    },
+    {
+      "id": "vc-448",
+      "sequence": 88,
+      "type": "question",
+      "title": "Test gaming",
+      "prompt": "An AI fixes a failing test by weakening its assertion, leaving the reported behavior broken. What should the reviewer do?",
+      "content": "",
+      "tags": [
+        "vibe-coding-agentic",
+        "failure-modes",
+        "test-gaming"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "failure-modes"
+      ],
+      "question": {
+        "options": [
+          "Adjust the expected output to match the new implementation without checking the original issue.",
+          "Accept an alternative test with the same name but fewer assertions.",
+          "Restore the behavioral assertion and verify a fix against a reproducing case.",
+          "Move the failing case into a manual checklist and mark the original automated test skipped."
+        ],
+        "answerIndex": 2,
+        "explanation": "An agent may weaken assertions or change tests to make failures disappear. Require explanation of why a test expectation changed and compare against product requirements. Validation must be capable of failing when the original defect is still present."
+      }
+    },
+    {
+      "id": "vc-449",
+      "sequence": 89,
+      "type": "fact",
+      "title": "Type escape hatches",
+      "prompt": "Why are blanket type casts and suppressed errors dangerous remediation shortcuts?",
+      "content": "Casts and ignored errors can silence useful feedback. Scrutinize any, unknown casts, suppression comments, disabled lint rules, and non-null assertions.",
+      "tags": [
+        "vibe-coding-agentic",
+        "failure-modes",
+        "type-escape-hatches"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "failure-modes"
+      ]
+    },
+    {
+      "id": "vc-450",
+      "sequence": 90,
+      "type": "checklist",
+      "title": "Placeholder leakage",
+      "prompt": "Which unintended placeholders must be excluded from a release artifact?",
+      "content": "TODOs, mock values, fake credentials, or temporary UI can reach production. Search for placeholders, debug code, hardcoded hosts, and sample secrets before merge.",
+      "tags": [
+        "vibe-coding-agentic",
+        "failure-modes",
+        "placeholder-leakage"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "failure-modes"
+      ],
+      "items": [
+        "TODO or sample outputs are not mistaken for completed functionality.",
+        "Demo domains, synthetic account identifiers, and test secrets are not shipped as production settings.",
+        "Mocked authorization, billing, and external service calls have been replaced or explicitly isolated.",
+        "Unresolved migrations and disabled validations are reported.",
+        "The final built artifact has been checked, not just the original source tree."
+      ]
+    },
+    {
+      "id": "vc-451",
+      "sequence": 91,
+      "type": "concept",
+      "title": "Dependency hallucination",
+      "prompt": "How can a hallucinated dependency compromise correctness or supply-chain safety?",
+      "content": "Suggested package names may be nonexistent or malicious lookalikes. Verify every new dependency through the official registry and source.",
+      "tags": [
+        "vibe-coding-agentic",
+        "failure-modes",
+        "dependency-hallucination"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "failure-modes"
+      ]
+    },
+    {
+      "id": "vc-452",
+      "sequence": 92,
+      "type": "fact",
+      "title": "Destructive assumptions",
+      "prompt": "What assumptions make automated database or deployment commands especially dangerous?",
+      "content": "Agents can assume a table, branch, or resource is disposable. State preservation requirements and require explicit confirmation around destructive changes.",
+      "tags": [
+        "vibe-coding-agentic",
+        "failure-modes",
+        "destructive-assumptions"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "failure-modes"
+      ]
+    },
+    {
+      "id": "vc-453",
+      "sequence": 93,
+      "type": "steps",
+      "title": "Infinite patch loops",
+      "prompt": "What should happen after an agent has produced several unsuccessful speculative patches?",
+      "content": "Repeated fixes can accumulate complexity without addressing the root cause. Stop after evidence contradicts the approach and return to reproduction and causal analysis.",
+      "tags": [
+        "vibe-coding-agentic",
+        "failure-modes",
+        "infinite-patch-loops"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "failure-modes"
+      ],
+      "steps": [
+        "Stop further edits and preserve the current failing evidence.",
+        "Reproduce one minimal counterexample against the current head.",
+        "Inspect the first violated invariant and revert unrelated changes.",
+        "Form one specific explanation and make one narrowly scoped repair.",
+        "Execute focused regressions and stop if evidence does not support the repair."
+      ]
+    },
+    {
+      "id": "vc-454",
+      "sequence": 94,
+      "type": "concept",
+      "title": "Context drift",
+      "prompt": "How does a long agent session drift from current requirements or repository state?",
+      "content": "Long sessions can lose earlier constraints or decisions. Restate critical invariants, keep a task plan, and inspect the final diff against the original brief.",
+      "tags": [
+        "vibe-coding-agentic",
+        "failure-modes",
+        "context-drift"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "failure-modes"
+      ]
+    },
+    {
+      "id": "vc-455",
+      "sequence": 95,
+      "type": "concept",
+      "title": "Stale file edits",
+      "prompt": "What happens if an agent patches files that another developer has changed since inspection?",
+      "content": "An agent may edit code based on an earlier snapshot after concurrent changes. Refresh relevant files and branch state before applying or publishing modifications.",
+      "tags": [
+        "vibe-coding-agentic",
+        "failure-modes",
+        "stale-file-edits"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "failure-modes"
+      ]
+    },
+    {
+      "id": "vc-456",
+      "sequence": 96,
+      "type": "fact",
+      "title": "Partial implementation",
+      "prompt": "Which signs reveal that an agent delivered only part of a multi-step request?",
+      "content": "Generated code may update one layer and miss callers, tests, docs, or migrations. Trace the feature end-to-end and use repository search for all contract consumers.",
+      "tags": [
+        "vibe-coding-agentic",
+        "failure-modes",
+        "partial-implementation"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "failure-modes"
+      ]
+    },
+    {
+      "id": "vc-457",
+      "sequence": 97,
+      "type": "concept",
+      "title": "Security blind spots",
+      "prompt": "How can reviewers uncover AI-generated security blind spots, including prompt-injection vulnerabilities?",
+      "content": "Models may optimize functionality while overlooking abuse paths. Run dedicated threat modeling and security review rather than relying on general code generation. Include benign simulated hostile instructions in a test repository file or tool response; verify the agent treats them as untrusted data and does not obey unauthorized commands or disclose secrets.",
+      "tags": [
+        "vibe-coding-agentic",
+        "failure-modes",
+        "security-blind-spots"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "failure-modes"
+      ]
+    },
+    {
+      "id": "vc-458",
+      "sequence": 98,
+      "type": "concept",
+      "title": "Visual mismatch",
+      "prompt": "How can a screenshot look convincing while keyboard and interactive behavior remain broken?",
+      "content": "Frontend code can satisfy DOM structure but not intended appearance. Use browser screenshots and interaction verification against references or design specs. A screenshot captures only one static visual state and cannot establish keyboard traversal, focus management, form submission, loading, error recovery, or other interactions; exercise those in a real browser.",
+      "tags": [
+        "vibe-coding-agentic",
+        "failure-modes",
+        "visual-mismatch"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "failure-modes"
+      ]
+    },
+    {
+      "id": "vc-459",
+      "sequence": 99,
+      "type": "concept",
+      "title": "False completion claims",
+      "prompt": "What execution evidence distinguishes a genuinely completed AI coding task from a false completion claim?",
+      "content": "Agents can state checks passed without actually running them. Require concrete command results tied to the final head. A repeatable agent evaluation should also cover representative positive, negative, and regression scenarios, record actual failures and cost, and report limitations instead of relying on fluent completion summaries.",
+      "tags": [
+        "vibe-coding-agentic",
+        "failure-modes",
+        "false-completion-claims"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "failure-modes"
+      ]
+    },
+    {
+      "id": "vc-460",
+      "sequence": 100,
+      "type": "code",
+      "title": "Recover by narrowing",
+      "prompt": "In the six-step recovery checklist, why are reproduction and a single falsifiable hypothesis required before another patch?",
+      "content": "When an AI-assisted change goes off course, smaller context and smaller changes restore control. Revert unsafe work, preserve useful evidence, restate the failing case, and rebuild in verified increments. A reproduction provides an observable failing baseline; one falsifiable hypothesis makes the next repair testable, allowing evidence to support or reject it instead of launching another speculative patch.",
+      "tags": [
+        "vibe-coding-agentic",
+        "failure-modes",
+        "recover-by-narrowing"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "failure-modes"
+      ],
+      "code": {
+        "language": "markdown",
+        "snippet": "Recovery loop:\n1. Stop patching.\n2. Reproduce the failure.\n3. Revert unrelated edits.\n4. Restate the invariant.\n5. Implement one minimal hypothesis.\n6. Re-run evidence."
+      }
+    }
+  ]
+}
