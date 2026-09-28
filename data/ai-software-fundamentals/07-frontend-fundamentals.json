@@ -1,0 +1,117 @@
+{
+  "id": "frontend-fundamentals",
+  "title": "Frontend & User Interface Foundations",
+  "description": "Understand how browser applications work and build accessible interactions with HTML, CSS, JavaScript, state, and API requests.",
+  "lessons": [
+    {
+      "title": "Browser and web basics",
+      "principle": "A browser requests resources over HTTP(S), parses HTML, styles with CSS, and executes JavaScript within security boundaries.",
+      "practice": "Sketch what happens when a user navigates to an application URL."
+    },
+    {
+      "title": "Identify the runtime boundary",
+      "principle": "The browser is user-controlled and cannot securely enforce secrets or final permission checks.",
+      "practice": "Move authoritative validation and protected operations to an appropriate trusted backend."
+    },
+    {
+      "title": "Semantic HTML",
+      "principle": "Semantic elements give documents and controls meaning beyond their visual appearance.",
+      "practice": "Build a page using main, headings, labels, buttons, and lists for their intended purposes."
+    },
+    {
+      "title": "Choose proper interactive elements",
+      "principle": "Buttons perform actions, anchors navigate, and labels name inputs.",
+      "practice": "Avoid click handlers on arbitrary div elements when a native button can do the job."
+    },
+    {
+      "title": "CSS foundations",
+      "principle": "Selectors, cascade, box model, and layout rules determine presentation without changing document semantics.",
+      "practice": "Style a simple card with predictable class selectors and responsive widths."
+    },
+    {
+      "title": "Inspect layout issues systematically",
+      "principle": "Padding, border, margin, overflow, and positioning often explain apparent alignment defects.",
+      "practice": "Use browser computed styles and box-model tools instead of random CSS overrides."
+    },
+    {
+      "title": "JavaScript in the browser",
+      "principle": "JavaScript reads and updates document state through DOM APIs and event listeners.",
+      "practice": "Attach a click listener that safely changes visible task text."
+    },
+    {
+      "title": "Prefer safe DOM updates",
+      "principle": "Injecting untrusted strings into HTML can enable script injection.",
+      "practice": "Set textContent for plain text and sanitize trusted rich-content workflows when HTML is unavoidable."
+    },
+    {
+      "title": "Forms and validation",
+      "principle": "Form controls gather values, require labels, and need visible feedback for invalid submission.",
+      "practice": "Make an add-task form that trims text and blocks empty submissions."
+    },
+    {
+      "title": "Preserve submission semantics",
+      "principle": "Enter key, submit event, pending state, and error feedback are part of a usable form.",
+      "practice": "Handle submit rather than only button click; keep entered data when validation or save fails."
+    },
+    {
+      "title": "UI state and rendering",
+      "principle": "UI state determines what a user sees; rendering should reflect the latest authoritative data.",
+      "practice": "Model a loading, empty, ready, saving, and error state."
+    },
+    {
+      "title": "Avoid race-condition displays",
+      "principle": "A slower previous request can overwrite the result of a newer request.",
+      "practice": "Track request identity or cancel obsolete requests before updating visible results."
+    },
+    {
+      "title": "Asynchronous network requests",
+      "principle": "fetch returns a promise and responses may fail at transport, protocol, or application layers.",
+      "practice": "Check response.ok, parse the expected body, and handle timeout or cancellation as applicable."
+    },
+    {
+      "title": "Differentiate error states",
+      "principle": "HTTP 404, network disconnection, invalid JSON, and business-validation errors require different responses.",
+      "practice": "Provide user-actionable messages without implying that every non-2xx response is a disconnected network."
+    },
+    {
+      "title": "Accessibility fundamentals",
+      "principle": "People must be able to perceive, understand, navigate, and operate the interface with varied abilities and devices.",
+      "practice": "Test keyboard focus, heading order, labels, status messages, and color contrast."
+    },
+    {
+      "title": "Avoid keyboard traps",
+      "principle": "A modal or custom widget must preserve usable focus order and Escape behavior when appropriate.",
+      "practice": "Prefer native dialog and controls where possible and manually test with keyboard-only navigation."
+    },
+    {
+      "title": "Responsive and mobile UX",
+      "principle": "Responsive design adapts layout to viewport and input method, not just device labels.",
+      "practice": "Start with a narrow layout and expand only when content needs more space."
+    },
+    {
+      "title": "Support touch and text scaling",
+      "principle": "Tiny targets and fixed-height containers can fail on phones and with larger text settings.",
+      "practice": "Test long labels, zoom, orientation, tap-target spacing, and reduced motion as relevant."
+    },
+    {
+      "title": "Frontend verification",
+      "principle": "Visible polish is not proof of correct data flow, accessibility, or failure handling.",
+      "practice": "Test create-task, empty form, reload, slow network, and keyboard behavior."
+    },
+    {
+      "title": "Use AI to generate test ideas",
+      "principle": "AI can propose scenarios but cannot replace observing the application in a real browser.",
+      "practice": "Record screenshots or reproduction steps only as supporting evidence alongside functional checks."
+    }
+  ],
+  "codeExamples": [
+    {
+      "language": "html",
+      "snippet": "<form id=\"task-form\">\n  <label for=\"task-title\">Task title</label>\n  <input id=\"task-title\" name=\"title\" required>\n  <button type=\"submit\">Add task</button>\n  <p id=\"feedback\" role=\"status\"></p>\n</form>"
+    },
+    {
+      "language": "javascript",
+      "snippet": "async function loadTasks() {\n  const response = await fetch('/api/tasks');\n  if (!response.ok) throw new Error(`Tasks request failed: ${response.status}`);\n  return response.json();\n}"
+    }
+  ]
+}
