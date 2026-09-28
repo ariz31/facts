@@ -11,10 +11,6 @@
     "cloud-devops",
     "git-github",
     "docker",
-    "vibe-coding",
-    "vibe-coding-agentic",
-    "vibe-coding-application",
-    "vibe-coding-quality",
-    "vibe-coding-production"
+    "vibe-coding"
   ]
 }
