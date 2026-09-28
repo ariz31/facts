@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "facts-pwa-";
-const CACHE_NAME = `${CACHE_PREFIX}v12`;
+const CACHE_NAME = `${CACHE_PREFIX}v13`;
 const CORE_ASSETS = [
   "./",
   "./index.html",
@@ -11,6 +11,7 @@ const CORE_ASSETS = [
   "./src/app.js",
   "./src/lesson-deck.js",
   "./src/lesson-deck-runtime.js",
+  "./src/subtopic-deck.js",
   "./src/runtime-data.js",
   "./src/card-generation-rules.js",
   "./src/vibe-progress.js",
@@ -79,7 +80,7 @@ async function cacheDeckSource(cache, deckName) {
   if (!response.ok) throw new Error(`${url} returned ${response.status}.`);
   await cache.put(url, response.clone());
   const source = await response.json();
-  if (source?.format !== "lesson-fragments-v1" || !Array.isArray(source.fragments)) return;
+  if (!["lesson-fragments-v1", "subtopic-fragments-v1"].includes(source?.format) || !Array.isArray(source.fragments)) return;
   await Promise.all(source.fragments.map((fragment) => {
     if (typeof fragment !== "string" || !fragment || fragment.includes("..")) {
       throw new Error(`Invalid lesson fragment path in ${deckName}.`);

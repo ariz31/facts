@@ -1,4 +1,5 @@
 import { assembleLessonDeck, isLessonFragmentManifest } from "./lesson-deck.js";
+import { assembleSubtopicDeck, isSubtopicFragmentManifest } from "./subtopic-deck.js";
 
 if (typeof window !== "undefined" && typeof window.fetch === "function") installLessonDeckFetchAdapter();
 
@@ -24,7 +25,9 @@ function installLessonDeckFetchAdapter() {
     const response = await nativeFetch(input, init);
     if (!response.ok) return response;
     const manifest = await response.clone().json();
-    if (!isLessonFragmentManifest(manifest)) return response;
+    const lessonFormat = isLessonFragmentManifest(manifest);
+    const subtopicFormat = isSubtopicFragmentManifest(manifest);
+    if (!lessonFormat && !subtopicFormat) return response;
 
     const dataBase = new URL("./", url);
     const fragments = await Promise.all(manifest.fragments.map(async (fragmentPath) => {
@@ -33,7 +36,9 @@ function installLessonDeckFetchAdapter() {
       return fragmentResponse.json();
     }));
 
-    const deck = assembleLessonDeck(manifest, fragments);
+    const deck = subtopicFormat
+      ? assembleSubtopicDeck(manifest, fragments)
+      : assembleLessonDeck(manifest, fragments);
     const headers = new Headers(response.headers);
     headers.set("Content-Type", "application/json; charset=utf-8");
     for (const name of ["Content-Length", "Content-Encoding", "ETag", "Last-Modified"]) headers.delete(name);

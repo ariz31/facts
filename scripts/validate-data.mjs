@@ -2,9 +2,10 @@ import { access, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { BUILT_IN_DECK_IDS, validateDeck } from "../src/deck-schema.js";
 import { assembleLessonDeck, isLessonFragmentManifest } from "../src/lesson-deck.js";
+import { assembleSubtopicDeck, isSubtopicFragmentManifest } from "../src/subtopic-deck.js";
 import { expandDeck, getExpansionCount } from "../src/topic-expansion.js";
 import { validateGeneratedDeckQuality } from "../src/card-generation-rules.js";
-import { VIBE_CURRICULUM_IDS } from "../src/vibe-progress.js";
+
 
 const dataDirectory = new URL("../data/", import.meta.url);
 const catalog = JSON.parse(await readFile(join(dataDirectory.pathname, "decks.json"), "utf8"));
@@ -41,9 +42,11 @@ for (const deckName of deckNames) {
   globalDeckIds.add(deck.id);
 
   errors.push(...validateDeck(deck, { rejectBuiltInId: false }));
-  if (VIBE_CURRICULUM_IDS.includes(deck.id)) {
-    if (source.format || source.fragments) errors.push("Vibe Coding v2 must use explicit authored cards rather than generated lesson templates.");
-    if (deck.cards.length > 100) errors.push("Vibe Coding must contain at most 100 cards per topic.");
+  if (deck.id === "vibe-coding") {
+    if (!isSubtopicFragmentManifest(source)) errors.push("Vibe Coding must be one main topic with internal subtopic shards.");
+    if (deck.paths.length !== 25 || deck.cards.length !== 500) {
+      errors.push("The existing Vibe Coding curriculum must preserve its 25 audited subtopics and all 500 stable cards.");
+    }
     errors.push(...validateGeneratedDeckQuality(deck).map((error) => `Vibe Coding content: ${error}`));
   }
   for (const card of deck.cards ?? []) {
@@ -79,7 +82,9 @@ if (!process.exitCode) {
 }
 
 async function assembleSourceDeck(source) {
-  if (!isLessonFragmentManifest(source)) return source;
+  const lessonFormat = isLessonFragmentManifest(source);
+  const subtopicFormat = isSubtopicFragmentManifest(source);
+  if (!lessonFormat && !subtopicFormat) return source;
   const fragments = [];
   const seen = new Set();
   for (const fragmentName of source.fragments) {
@@ -92,5 +97,5 @@ async function assembleSourceDeck(source) {
     await access(fragmentPath);
     fragments.push(JSON.parse(await readFile(fragmentPath, "utf8")));
   }
-  return assembleLessonDeck(source, fragments);
+  return subtopicFormat ? assembleSubtopicDeck(source, fragments) : assembleLessonDeck(source, fragments);
 }

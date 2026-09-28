@@ -73,18 +73,10 @@ test("validation rejects unsupported difficulty and non-consecutive sequences", 
   assert.ok(errors.some((error) => error.includes("consecutive")));
 });
 
-test("validation rejects a built-in id and excessive card count", () => {
+test("validation rejects replacing a built-in topic", () => {
   const deck = validDeck();
-  deck.id = "docker";
-  deck.cards = Array.from({ length: IMPORT_LIMITS.maximumCards + 1 }, (_, index) => ({
-    ...validDeck().cards[0],
-    id: `card-${index + 1}`,
-    sequence: index + 1,
-  }));
-
-  const errors = validateDeck(deck);
-  assert.ok(errors.some((error) => error.includes("cannot replace a built-in")));
-  assert.ok(errors.some((error) => error.includes("at most")));
+  deck.id = "vibe-coding";
+  assert.match(validateDeck(deck).join(" "), /cannot replace a built-in/);
 });
 
 test("parseDeckResult accepts a fenced deck wrapper", () => {
@@ -110,24 +102,39 @@ test("collectValidImportedDecks excludes corrupt entries without discarding vali
   assert.equal(result.rejected.length, 1);
 });
 
-test("AI-imported topics accept 100 cards but reject 101; historical authored data has a separate ceiling", () => {
-  const template = validDeck().cards[0];
+function generatedTopic(subtopicSizes) {
   const deck = validDeck();
-  deck.cards = Array.from({ length: 100 }, (_, index) => ({
-    ...template,
-    id: `card-${String(index + 1).padStart(3, "0")}`,
-    sequence: index + 1,
-    title: `Concept ${index + 1}`,
-    prompt: `What is unique about concept ${index + 1}?`,
-    content: `Concept ${index + 1} describes a distinct technical learning objective.`,
-  }));
-  deck.paths[0].cardIds = deck.cards.map((card) => card.id);
-  assert.deepEqual(validateDeck(deck), []);
-  deck.cards.push({ ...deck.cards[99], id: "card-101", sequence: 101, title: "Concept 101", prompt: "What is concept 101?", content: "An additional distinct idea." });
-  deck.paths[0].cardIds.push("card-101");
-  assert.match(validateDeck(deck).join(" "), /at most 100 cards/);
-  deck.id = "frontend-programming";
-  assert.deepEqual(validateDeck(deck, { rejectBuiltInId: false }), []);
+  deck.paths = [];
+  deck.cards = [];
+  for (let group = 0; group < subtopicSizes.length; group += 1) {
+    const pathId = `subtopic-${group + 1}`;
+    const cardIds = [];
+    for (let i = 0; i < subtopicSizes[group]; i += 1) {
+      const n = deck.cards.length + 1;
+      const id = `custom-${String(n).padStart(4, "0")}`;
+      cardIds.push(id);
+      deck.cards.push({
+        id, sequence: n, type: "concept", title: `Topic ${group + 1}: concept ${i + 1}`,
+        prompt: `How does subtopic ${group + 1}, concept ${i + 1} support the learning objective?`,
+        content: `The distinct learning objective ${n} develops the requested subject with its own technical explanation.`,
+        tags: [pathId], difficulty: "beginner", pathIds: [pathId],
+      });
+    }
+    deck.paths.push({ id: pathId, title: `Subtopic ${group + 1}`,
+      description: `Progressive part ${group + 1} of a single parent topic.`, cardIds });
+  }
+  return deck;
+}
+
+test("the main topic has no aggregate card cap; every subtopic is capped independently at 100", () => {
+  assert.equal(IMPORT_LIMITS.maximumCardsPerSubtopic, 100);
+  assert.deepEqual(validateDeck(generatedTopic([100, 100, 100, 100, 100])), []);
+  assert.deepEqual(validateDeck(generatedTopic([100, 1])), []);
+  const tooManyInOnePath = generatedTopic([101, 100]);
+  assert.match(validateDeck(tooManyInOnePath).join(" "), /Subtopic subtopic-1 can contain at most 100 cards/);
+  assert.deepEqual(validateDeck(generatedTopic([101, 100]), { rejectBuiltInId: false })
+    .some((error) => error.includes("at most 100 cards")), true,
+  "Built-in topics must not bypass the per-subtopic rule.");
 });
 
 test("AI-imported topics reject echoing answers and an out-of-order learning path", () => {

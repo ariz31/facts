@@ -1,0 +1,1986 @@
+{
+  "id": "vibe-coding",
+  "title": "Vibe Coding 01 — Foundations, Product & Context",
+  "category": "AI-Assisted Development",
+  "description": "A sequenced foundation for AI-assisted software engineering: engineering responsibility, product framing, testable specifications, effective coding prompts, and reliable repository context. Part 1 of 5.",
+  "estimatedMinutes": 260,
+  "paths": [
+    {
+      "id": "mindset-foundations",
+      "title": "Vibe Coding Foundations",
+      "description": "Understand what vibe coding is, where it helps, where it fails, and the engineering mindset that keeps speed from becoming fragility.",
+      "cardIds": [
+        "vc-001",
+        "vc-002",
+        "vc-003",
+        "vc-004",
+        "vc-005",
+        "vc-006",
+        "vc-007",
+        "vc-008",
+        "vc-009",
+        "vc-010",
+        "vc-011",
+        "vc-012",
+        "vc-013",
+        "vc-014",
+        "vc-015",
+        "vc-016",
+        "vc-017",
+        "vc-018",
+        "vc-019",
+        "vc-020"
+      ]
+    },
+    {
+      "id": "product-problem-framing",
+      "title": "Product Thinking & Problem Framing",
+      "description": "Turn vague ideas into user-centered problems, outcomes, constraints, and scope before asking an agent to build.",
+      "cardIds": [
+        "vc-021",
+        "vc-022",
+        "vc-023",
+        "vc-024",
+        "vc-025",
+        "vc-026",
+        "vc-027",
+        "vc-028",
+        "vc-029",
+        "vc-030",
+        "vc-031",
+        "vc-032",
+        "vc-033",
+        "vc-034",
+        "vc-035",
+        "vc-036",
+        "vc-037",
+        "vc-038",
+        "vc-039",
+        "vc-040"
+      ]
+    },
+    {
+      "id": "specs-acceptance",
+      "title": "Specifications & Acceptance Criteria",
+      "description": "Convert intent into precise, testable requirements that guide both AI implementation and human review.",
+      "cardIds": [
+        "vc-041",
+        "vc-042",
+        "vc-043",
+        "vc-044",
+        "vc-045",
+        "vc-046",
+        "vc-047",
+        "vc-048",
+        "vc-049",
+        "vc-050",
+        "vc-051",
+        "vc-052",
+        "vc-053",
+        "vc-054",
+        "vc-055",
+        "vc-056",
+        "vc-057",
+        "vc-058",
+        "vc-059",
+        "vc-060"
+      ]
+    },
+    {
+      "id": "prompting",
+      "title": "Prompting for Coding Agents",
+      "description": "Write prompts that provide intent, scope, context, constraints, evidence, and verification without micromanaging every token.",
+      "cardIds": [
+        "vc-061",
+        "vc-062",
+        "vc-063",
+        "vc-064",
+        "vc-065",
+        "vc-066",
+        "vc-067",
+        "vc-068",
+        "vc-069",
+        "vc-070",
+        "vc-071",
+        "vc-072",
+        "vc-073",
+        "vc-074",
+        "vc-075",
+        "vc-076",
+        "vc-077",
+        "vc-078",
+        "vc-079",
+        "vc-080"
+      ]
+    },
+    {
+      "id": "context-engineering",
+      "title": "Context Engineering & Repository Instructions",
+      "description": "Give agents the right persistent and task-specific context while avoiding noisy, stale, or unsafe instructions.",
+      "cardIds": [
+        "vc-081",
+        "vc-082",
+        "vc-083",
+        "vc-084",
+        "vc-085",
+        "vc-086",
+        "vc-087",
+        "vc-088",
+        "vc-089",
+        "vc-090",
+        "vc-091",
+        "vc-092",
+        "vc-093",
+        "vc-094",
+        "vc-095",
+        "vc-096",
+        "vc-097",
+        "vc-098",
+        "vc-099",
+        "vc-100"
+      ]
+    }
+  ],
+  "cards": [
+    {
+      "id": "vc-001",
+      "sequence": 1,
+      "type": "concept",
+      "title": "Vibe coding is an interaction style",
+      "prompt": "What does conversational AI-assisted coding change, and what work must remain explicitly engineered?",
+      "content": "AI-assisted development uses conversational intent, examples, and feedback loops to produce and revise software. Use natural-language direction for speed, but keep explicit requirements, review, and verification around the generated code.",
+      "tags": [
+        "vibe-coding",
+        "mindset-foundations",
+        "vibe-coding-is-an-interaction-style"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "mindset-foundations"
+      ]
+    },
+    {
+      "id": "vc-002",
+      "sequence": 2,
+      "type": "fact",
+      "title": "Speed is not the same as correctness",
+      "prompt": "Why does a fast initial implementation provide little evidence of software correctness?",
+      "content": "Fast generation reduces typing time, not the need to establish whether behavior is correct. Measure success by verified outcomes, maintainability, and user impact rather than by how quickly code appears.",
+      "tags": [
+        "vibe-coding",
+        "mindset-foundations",
+        "speed-is-not-the-same-as-correctness"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "mindset-foundations"
+      ]
+    },
+    {
+      "id": "vc-003",
+      "sequence": 3,
+      "type": "concept",
+      "title": "The model is a collaborator, not an authority",
+      "prompt": "How should you respond when a coding model sounds certain about unfamiliar code?",
+      "content": "Coding models can synthesize useful implementations while still misunderstanding requirements or inventing details. Treat every generated change as a proposal that must survive inspection, tests, and domain checks.",
+      "tags": [
+        "vibe-coding",
+        "mindset-foundations",
+        "the-model-is-a-collaborator-not-an-authority"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "mindset-foundations"
+      ]
+    },
+    {
+      "id": "vc-004",
+      "sequence": 4,
+      "type": "question",
+      "title": "Know when not to vibe code",
+      "prompt": "An agent suggests an unreviewed change to a financial record that is difficult to undo. What workflow is appropriate?",
+      "content": "",
+      "tags": [
+        "vibe-coding",
+        "mindset-foundations",
+        "know-when-not-to-vibe-code"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "mindset-foundations"
+      ],
+      "question": {
+        "options": [
+          "Rely only on a happy-path unit test and deploy to all users.",
+          "Require a precise specification, specialist review, and stronger verification.",
+          "Obtain a second model's approval but skip independent data-recovery planning.",
+          "Apply directly to production behind a UI feature flag without testing persistence."
+        ],
+        "answerIndex": 1,
+        "explanation": "High-risk domains, ambiguous requirements, irreversible data changes, and security-critical paths demand stronger controls. Increase specification, review depth, testing, and specialist involvement as consequence and uncertainty rise. High impact and low reversibility call for stricter controls, not greater agent autonomy."
+      }
+    },
+    {
+      "id": "vc-005",
+      "sequence": 5,
+      "type": "fact",
+      "title": "Own the final code",
+      "prompt": "Who is accountable for understanding, maintaining, and deploying AI-generated changes?",
+      "content": "The developer remains responsible for code merged, deployed, and operated regardless of who or what generated it. Do not merge code you cannot explain well enough to debug, review, or safely modify.",
+      "tags": [
+        "vibe-coding",
+        "mindset-foundations",
+        "own-the-final-code"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "mindset-foundations"
+      ]
+    },
+    {
+      "id": "vc-006",
+      "sequence": 6,
+      "type": "steps",
+      "title": "Use a risk-based workflow",
+      "prompt": "How do you select controls proportionate to the risk of an AI-authored change?",
+      "content": "Different tasks deserve different levels of autonomy and verification. Classify changes by blast radius, data sensitivity, reversibility, and user impact before choosing an AI workflow.",
+      "tags": [
+        "vibe-coding",
+        "mindset-foundations",
+        "use-a-risk-based-workflow"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "mindset-foundations"
+      ],
+      "steps": [
+        "Identify the affected users, data, permissions, and external systems.",
+        "Estimate blast radius and whether data and deployment effects can be reversed.",
+        "Choose least-privilege agent access and required human approval points.",
+        "Plan focused tests, integration evidence, and any specialist review.",
+        "Prepare rollback or recovery and record the evidence before merging."
+      ]
+    },
+    {
+      "id": "vc-007",
+      "sequence": 7,
+      "type": "concept",
+      "title": "Prefer small reversible increments",
+      "prompt": "Why is a small independently reversible change easier to investigate than a large rewrite?",
+      "content": "Small changes make intent, review, rollback, and debugging easier. Ask for one coherent slice at a time and keep each change independently testable and revertible.",
+      "tags": [
+        "vibe-coding",
+        "mindset-foundations",
+        "prefer-small-reversible-increments"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "mindset-foundations"
+      ]
+    },
+    {
+      "id": "vc-008",
+      "sequence": 8,
+      "type": "concept",
+      "title": "Preserve causality",
+      "prompt": "How do focused commits and recorded decisions preserve causal understanding during AI-assisted changes?",
+      "content": "Understanding what changed and why is essential when AI can generate large diffs quickly. Keep commits focused and record the rationale behind architectural or behavioral decisions.",
+      "tags": [
+        "vibe-coding",
+        "mindset-foundations",
+        "preserve-causality"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "mindset-foundations"
+      ]
+    },
+    {
+      "id": "vc-009",
+      "sequence": 9,
+      "type": "checklist",
+      "title": "Make hidden assumptions explicit",
+      "prompt": "Before approving a generated change, which hidden assumptions should you surface?",
+      "content": "Models often fill gaps with defaults that may not match the product or codebase. Ask the agent to list assumptions and convert important ones into requirements or tests.",
+      "tags": [
+        "vibe-coding",
+        "mindset-foundations",
+        "make-hidden-assumptions-explicit"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "mindset-foundations"
+      ],
+      "items": [
+        "Unspecified input formats and boundary conditions are documented.",
+        "Authorization, ownership, and data-retention assumptions are explicit.",
+        "Unavailable APIs, dependencies, and environment details are verified.",
+        "Failure, retry, and cancellation behavior is agreed.",
+        "Important assumptions are represented in tests or acceptance criteria."
+      ]
+    },
+    {
+      "id": "vc-010",
+      "sequence": 10,
+      "type": "concept",
+      "title": "Separate exploration from production",
+      "prompt": "Why must prototype exploration and production changes have different verification gates?",
+      "content": "Prototypes optimize learning; production code optimizes reliable operation. Label experiments clearly and deliberately harden only the approaches that survive validation.",
+      "tags": [
+        "vibe-coding",
+        "mindset-foundations",
+        "separate-exploration-from-production"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "mindset-foundations"
+      ]
+    },
+    {
+      "id": "vc-011",
+      "sequence": 11,
+      "type": "concept",
+      "title": "Use the computer as an evidence source",
+      "prompt": "Which evidence should outweigh an AI assistant's verbal claim that an implementation works?",
+      "content": "Repository files, tests, logs, type errors, and runtime behavior are more trustworthy than model confidence. Ask agents to inspect real artifacts and run checks instead of reasoning from memory when evidence is available.",
+      "tags": [
+        "vibe-coding",
+        "mindset-foundations",
+        "use-the-computer-as-an-evidence-source"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "mindset-foundations"
+      ]
+    },
+    {
+      "id": "vc-012",
+      "sequence": 12,
+      "type": "fact",
+      "title": "Iteration beats one-shot prompting",
+      "prompt": "Why is a feedback-driven development loop safer than accepting the first generated patch?",
+      "content": "Complex software rarely emerges correctly from a single prompt. Use inspect-plan-implement-verify-review cycles and refine based on observed results.",
+      "tags": [
+        "vibe-coding",
+        "mindset-foundations",
+        "iteration-beats-one-shot-prompting"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "mindset-foundations"
+      ]
+    },
+    {
+      "id": "vc-013",
+      "sequence": 13,
+      "type": "concept",
+      "title": "Constrain before accelerating",
+      "prompt": "What limits should be set before giving an agent permission to modify a repository?",
+      "content": "Clear boundaries reduce accidental scope expansion and incompatible design choices. State what must not change, what APIs are stable, and what files or systems are out of scope.",
+      "tags": [
+        "vibe-coding",
+        "mindset-foundations",
+        "constrain-before-accelerating"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "mindset-foundations"
+      ]
+    },
+    {
+      "id": "vc-014",
+      "sequence": 14,
+      "type": "concept",
+      "title": "Optimize for understanding",
+      "prompt": "Why is developer comprehension itself a requirement for maintainable AI-assisted code?",
+      "content": "A codebase that only the model can navigate is an operational risk. Keep naming, module boundaries, tests, and documentation legible to humans.",
+      "tags": [
+        "vibe-coding",
+        "mindset-foundations",
+        "optimize-for-understanding"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "mindset-foundations"
+      ]
+    },
+    {
+      "id": "vc-015",
+      "sequence": 15,
+      "type": "concept",
+      "title": "Treat generated volume as review debt",
+      "prompt": "How does generating more code increase rather than eliminate review workload?",
+      "content": "Large outputs can overwhelm human attention and hide subtle defects. Limit diff size, split work, and require summaries of behavior-changing edits.",
+      "tags": [
+        "vibe-coding",
+        "mindset-foundations",
+        "treat-generated-volume-as-review-debt"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "mindset-foundations"
+      ]
+    },
+    {
+      "id": "vc-016",
+      "sequence": 16,
+      "type": "fact",
+      "title": "Feedback quality determines output quality",
+      "prompt": "What makes feedback actionable enough to improve the model's next implementation?",
+      "content": "Models improve when they receive precise error messages, diffs, examples, and acceptance failures. Feed concrete evidence back into the next iteration rather than saying only that something is wrong.",
+      "tags": [
+        "vibe-coding",
+        "mindset-foundations",
+        "feedback-quality-determines-output-quality"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "mindset-foundations"
+      ]
+    },
+    {
+      "id": "vc-017",
+      "sequence": 17,
+      "type": "code",
+      "title": "Automate objective checks",
+      "prompt": "The snippet runs a diff check, tests, and a build. What does each gate catch, and what does a pass NOT prove?",
+      "content": "Machines are better than memory at repeatedly enforcing syntax, tests, types, linting, and policy. Make reliable checks cheap and automatic so fast iteration does not erode standards.",
+      "tags": [
+        "vibe-coding",
+        "mindset-foundations",
+        "automate-objective-checks"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "mindset-foundations"
+      ],
+      "code": {
+        "language": "bash",
+        "snippet": "git diff --check\nnpm test\nnpm run build"
+      }
+    },
+    {
+      "id": "vc-018",
+      "sequence": 18,
+      "type": "concept",
+      "title": "Retain human judgment",
+      "prompt": "Which decisions should remain with an accountable human despite capable coding agents?",
+      "content": "Product tradeoffs, ethical choices, architecture, and ambiguous user needs still require accountable judgment. Use AI to expand options and analysis, then make consequential decisions deliberately.",
+      "tags": [
+        "vibe-coding",
+        "mindset-foundations",
+        "retain-human-judgment"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "mindset-foundations"
+      ]
+    },
+    {
+      "id": "vc-019",
+      "sequence": 19,
+      "type": "concept",
+      "title": "Know your stop condition",
+      "prompt": "How do explicit stop conditions prevent endless AI patch-and-retry cycles?",
+      "content": "Unbounded prompting can create churn and regressions. Define done as acceptance criteria satisfied, validations green, diff reviewed, and risks understood.",
+      "tags": [
+        "vibe-coding",
+        "mindset-foundations",
+        "know-your-stop-condition"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "mindset-foundations"
+      ]
+    },
+    {
+      "id": "vc-020",
+      "sequence": 20,
+      "type": "concept",
+      "title": "Vibe coding should mature into engineering",
+      "prompt": "At what point should rapid AI prototyping transition into disciplined software engineering?",
+      "content": "The strongest workflow combines conversational velocity with disciplined software delivery. Use AI to compress low-value effort while strengthening specifications, tests, review, and operational readiness.",
+      "tags": [
+        "vibe-coding",
+        "mindset-foundations",
+        "vibe-coding-should-mature-into-engineering"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "mindset-foundations"
+      ]
+    },
+    {
+      "id": "vc-021",
+      "sequence": 21,
+      "type": "code",
+      "title": "Start from the user problem",
+      "prompt": "Read the user/problem/outcome/non-goal brief. What is the real problem being solved and what work is deliberately excluded?",
+      "content": "Features are valuable only when they improve a real user task or outcome. Write the affected user, current pain, desired outcome, and evidence before discussing implementation.",
+      "tags": [
+        "vibe-coding",
+        "product-problem-framing",
+        "start-from-the-user-problem"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "product-problem-framing"
+      ],
+      "code": {
+        "language": "markdown",
+        "snippet": "User: project owner\nProblem: cannot recover from failed publish\nOutcome: safe retry without duplicate side effects\nNon-goal: redesign the editor"
+      }
+    },
+    {
+      "id": "vc-022",
+      "sequence": 22,
+      "type": "fact",
+      "title": "Define the job to be done",
+      "prompt": "How does describing a job-to-be-done prevent premature commitment to a UI solution?",
+      "content": "A job describes the progress a user is trying to make, independent of a specific UI. Frame requests around the task and context so the agent can consider better solution shapes.",
+      "tags": [
+        "vibe-coding",
+        "product-problem-framing",
+        "define-the-job-to-be-done"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "product-problem-framing"
+      ]
+    },
+    {
+      "id": "vc-023",
+      "sequence": 23,
+      "type": "question",
+      "title": "Distinguish wants from requirements",
+      "prompt": "A stakeholder requests a red dashboard. What makes that request a validated requirement rather than simply a proposed solution?",
+      "content": "",
+      "tags": [
+        "vibe-coding",
+        "product-problem-framing",
+        "distinguish-wants-from-requirements"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "product-problem-framing"
+      ],
+      "question": {
+        "options": [
+          "The request appears in a stakeholder's initial roadmap.",
+          "A designer selected it in an early prototype.",
+          "It is linked to an evidenced user need and an observable outcome.",
+          "Comparable products use a similar status palette."
+        ],
+        "answerIndex": 2,
+        "explanation": "Stakeholder suggestions often mix goals with premature implementation choices. Separate mandatory outcomes and constraints from negotiable design ideas. A requested implementation detail is not itself evidence of the underlying user need."
+      }
+    },
+    {
+      "id": "vc-024",
+      "sequence": 24,
+      "type": "concept",
+      "title": "Define measurable success",
+      "prompt": "What measurable outcome would demonstrate that a new feature solves the user problem?",
+      "content": "Without success criteria, an agent can optimize the wrong behavior. Specify metrics or observable outcomes such as completion rate, latency, accuracy, or reduced steps.",
+      "tags": [
+        "vibe-coding",
+        "product-problem-framing",
+        "define-measurable-success"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "product-problem-framing"
+      ]
+    },
+    {
+      "id": "vc-025",
+      "sequence": 25,
+      "type": "steps",
+      "title": "Map the primary user journey",
+      "prompt": "How do you map a user journey into a usable engineering brief?",
+      "content": "A feature is a sequence of states and decisions, not a single screen. Describe entry, happy path, alternatives, errors, recovery, and completion.",
+      "tags": [
+        "vibe-coding",
+        "product-problem-framing",
+        "map-the-primary-user-journey"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "product-problem-framing"
+      ],
+      "steps": [
+        "Name the user and the job they are trying to accomplish.",
+        "Describe the initial state and trigger for the journey.",
+        "List the critical actions and decision points in user order.",
+        "Define successful completion and visible feedback.",
+        "Add loading, empty, denied, interrupted, and recovery states."
+      ]
+    },
+    {
+      "id": "vc-026",
+      "sequence": 26,
+      "type": "concept",
+      "title": "Identify actors and permissions",
+      "prompt": "Why must a product brief name actors and their different permissions?",
+      "content": "Different users may see or change different data. List roles, ownership rules, and prohibited actions before building interfaces or APIs.",
+      "tags": [
+        "vibe-coding",
+        "product-problem-framing",
+        "identify-actors-and-permissions"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "product-problem-framing"
+      ]
+    },
+    {
+      "id": "vc-027",
+      "sequence": 27,
+      "type": "concept",
+      "title": "Clarify scope boundaries",
+      "prompt": "What should a project's explicit in-scope and out-of-scope boundaries resolve?",
+      "content": "Vague scope invites unrelated refactors and feature creep. State in-scope behavior, explicit non-goals, and systems that must remain unchanged.",
+      "tags": [
+        "vibe-coding",
+        "product-problem-framing",
+        "clarify-scope-boundaries"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "product-problem-framing"
+      ]
+    },
+    {
+      "id": "vc-028",
+      "sequence": 28,
+      "type": "concept",
+      "title": "Capture constraints early",
+      "prompt": "Which business, technical, and operational constraints should be collected before coding?",
+      "content": "Technical, legal, accessibility, budget, and schedule constraints shape viable solutions. Place hard constraints in the task brief so the agent cannot optimize around an impossible assumption.",
+      "tags": [
+        "vibe-coding",
+        "product-problem-framing",
+        "capture-constraints-early"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "product-problem-framing"
+      ]
+    },
+    {
+      "id": "vc-029",
+      "sequence": 29,
+      "type": "fact",
+      "title": "Define data inputs and outputs",
+      "prompt": "What input and output data must be defined for each important workflow?",
+      "content": "Ambiguous data contracts lead to fragile interfaces. List required inputs, validation rules, outputs, side effects, and persistence expectations.",
+      "tags": [
+        "vibe-coding",
+        "product-problem-framing",
+        "define-data-inputs-and-outputs"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "product-problem-framing"
+      ]
+    },
+    {
+      "id": "vc-030",
+      "sequence": 30,
+      "type": "concept",
+      "title": "Design empty states",
+      "prompt": "What should an interface communicate when no records or results exist?",
+      "content": "Real products often start with no data. Specify what users see and can do before any content, configuration, or history exists. An empty state should explain why no records appear and offer a useful next action, such as creating or importing a first item, rather than leaving an unexplained blank panel.",
+      "tags": [
+        "vibe-coding",
+        "product-problem-framing",
+        "design-empty-states"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "product-problem-framing"
+      ]
+    },
+    {
+      "id": "vc-031",
+      "sequence": 31,
+      "type": "concept",
+      "title": "Design loading states",
+      "prompt": "Why should a loading state be designed before introducing asynchronous operations?",
+      "content": "Asynchronous operations create visible intermediate states. Define progress, disabled actions, cancellation, and timeout behavior where relevant.",
+      "tags": [
+        "vibe-coding",
+        "product-problem-framing",
+        "design-loading-states"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "product-problem-framing"
+      ]
+    },
+    {
+      "id": "vc-032",
+      "sequence": 32,
+      "type": "fact",
+      "title": "Design error and recovery states",
+      "prompt": "How can a user recover after a failed save without losing work?",
+      "content": "Failure is part of the user journey. Specify actionable messages, retry behavior, rollback, and what state must be preserved after failure.",
+      "tags": [
+        "vibe-coding",
+        "product-problem-framing",
+        "design-error-and-recovery-states"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "product-problem-framing"
+      ]
+    },
+    {
+      "id": "vc-033",
+      "sequence": 33,
+      "type": "concept",
+      "title": "Consider edge cases before code",
+      "prompt": "Which unusual or invalid cases should a feature brief cover before implementation?",
+      "content": "Boundary conditions discovered late often require structural rewrites. Enumerate unusual sizes, missing data, duplicate actions, concurrency, offline use, and permission changes.",
+      "tags": [
+        "vibe-coding",
+        "product-problem-framing",
+        "consider-edge-cases-before-code"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "product-problem-framing"
+      ]
+    },
+    {
+      "id": "vc-034",
+      "sequence": 34,
+      "type": "concept",
+      "title": "Prioritize the smallest useful slice",
+      "prompt": "How do you choose a minimum valuable delivery slice rather than a disconnected demo?",
+      "content": "The first implementation should prove value without committing to unnecessary complexity. Choose a vertical slice that reaches a real user outcome end-to-end.",
+      "tags": [
+        "vibe-coding",
+        "product-problem-framing",
+        "prioritize-the-smallest-useful-slice"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "product-problem-framing"
+      ]
+    },
+    {
+      "id": "vc-035",
+      "sequence": 35,
+      "type": "concept",
+      "title": "Avoid solution lock-in",
+      "prompt": "Why should early planning preserve alternatives to the first proposed architecture?",
+      "content": "Early implementation choices can hide better approaches. Ask for two or three solution options with tradeoffs before committing on consequential architecture.",
+      "tags": [
+        "vibe-coding",
+        "product-problem-framing",
+        "avoid-solution-lock-in"
+      ],
+      "difficulty": "beginner",
+      "pathIds": [
+        "product-problem-framing"
+      ]
+    },
+    {
+      "id": "vc-036",
+      "sequence": 36,
+      "type": "fact",
+      "title": "Use examples and counterexamples",
+      "prompt": "How do positive and negative examples clarify otherwise ambiguous product behavior?",
+      "content": "Concrete examples expose ambiguity faster than abstract prose. Provide representative valid cases, invalid cases, and tricky cases for important rules.",
+      "tags": [
+        "vibe-coding",
+        "product-problem-framing",
+        "use-examples-and-counterexamples"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "product-problem-framing"
+      ]
+    },
+    {
+      "id": "vc-037",
+      "sequence": 37,
+      "type": "checklist",
+      "title": "Model irreversible actions explicitly",
+      "prompt": "What must be defined before automating an irreversible product action?",
+      "content": "Deletion, billing, publication, and destructive migrations require extra safeguards. Require confirmations, permissions, auditability, and recovery plans for high-impact actions.",
+      "tags": [
+        "vibe-coding",
+        "product-problem-framing",
+        "model-irreversible-actions-explicitly"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "product-problem-framing"
+      ],
+      "items": [
+        "The authorized actor and confirmation or approval are explicit.",
+        "The affected records and downstream side effects are identified.",
+        "Retry and duplicate-action behavior is specified.",
+        "Recovery, compensation, or lack of reversibility is communicated.",
+        "The audit/event trail and validation scenarios are documented."
+      ]
+    },
+    {
+      "id": "vc-038",
+      "sequence": 38,
+      "type": "concept",
+      "title": "Define compatibility expectations",
+      "prompt": "What existing clients or user workflows could a new feature accidentally break?",
+      "content": "New features may need to preserve old URLs, data, APIs, or behavior. State backward-compatibility constraints and migration windows explicitly.",
+      "tags": [
+        "vibe-coding",
+        "product-problem-framing",
+        "define-compatibility-expectations"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "product-problem-framing"
+      ]
+    },
+    {
+      "id": "vc-039",
+      "sequence": 39,
+      "type": "concept",
+      "title": "Document unresolved questions",
+      "prompt": "How should unresolved product decisions be captured rather than guessed by an agent?",
+      "content": "Unknowns should be visible instead of silently guessed. Maintain an open-questions section and resolve blockers before irreversible implementation.",
+      "tags": [
+        "vibe-coding",
+        "product-problem-framing",
+        "document-unresolved-questions"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "product-problem-framing"
+      ]
+    },
+    {
+      "id": "vc-040",
+      "sequence": 40,
+      "type": "concept",
+      "title": "Write a decision-ready brief",
+      "prompt": "Which elements make a product brief sufficiently concrete for implementation review?",
+      "content": "A good brief lets an implementer begin without repeatedly rediscovering intent. Summarize problem, users, scope, constraints, success, acceptance criteria, risks, and open questions.",
+      "tags": [
+        "vibe-coding",
+        "product-problem-framing",
+        "write-a-decision-ready-brief"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "product-problem-framing"
+      ]
+    },
+    {
+      "id": "vc-041",
+      "sequence": 41,
+      "type": "concept",
+      "title": "Write behavior before implementation",
+      "prompt": "How does a behavioral specification differ from an implementation to-do list?",
+      "content": "A specification should describe what the system must do before prescribing internal code. Lead with observable behavior, then add implementation constraints only when they matter.",
+      "tags": [
+        "vibe-coding",
+        "specs-acceptance",
+        "write-behavior-before-implementation"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "specs-acceptance"
+      ]
+    },
+    {
+      "id": "vc-042",
+      "sequence": 42,
+      "type": "fact",
+      "title": "Use testable language",
+      "prompt": "Which wording makes a requirement verifiable rather than subjective?",
+      "content": "Words like fast, intuitive, robust, and secure are incomplete without measurable conditions. Translate adjectives into thresholds, scenarios, or explicit checks.",
+      "tags": [
+        "vibe-coding",
+        "specs-acceptance",
+        "use-testable-language"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "specs-acceptance"
+      ]
+    },
+    {
+      "id": "vc-043",
+      "sequence": 43,
+      "type": "concept",
+      "title": "Separate functional and nonfunctional requirements",
+      "prompt": "How are functional requirements different from latency or availability constraints?",
+      "content": "Correct behavior and quality attributes require different validation. List functionality separately from performance, security, accessibility, reliability, and maintainability.",
+      "tags": [
+        "vibe-coding",
+        "specs-acceptance",
+        "separate-functional-and-nonfunctional-requirements"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "specs-acceptance"
+      ]
+    },
+    {
+      "id": "vc-044",
+      "sequence": 44,
+      "type": "code",
+      "title": "Use Given-When-Then for scenarios",
+      "prompt": "Which precondition, action, visible outcome, and duplicate-side-effect invariant are specified in this Given–When–Then example?",
+      "content": "Scenario structure makes preconditions, actions, and expected outcomes explicit. Write critical acceptance cases as Given context, When action, Then observable result.",
+      "tags": [
+        "vibe-coding",
+        "specs-acceptance",
+        "use-given-when-then-for-scenarios"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "specs-acceptance"
+      ],
+      "code": {
+        "language": "gherkin",
+        "snippet": "Given a signed-in project owner\nWhen they publish a valid project\nThen the project becomes publicly accessible\nAnd exactly one publish event is recorded"
+      }
+    },
+    {
+      "id": "vc-045",
+      "sequence": 45,
+      "type": "question",
+      "title": "Specify negative requirements",
+      "prompt": "Which statement is a meaningful negative acceptance requirement for project publishing?",
+      "content": "",
+      "tags": [
+        "vibe-coding",
+        "specs-acceptance",
+        "specify-negative-requirements"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "specs-acceptance"
+      ],
+      "question": {
+        "options": [
+          "Publishing returns a success status after an authorized request.",
+          "Publishing completes within the stated latency budget.",
+          "An owner receives confirmation after successful publication.",
+          "An unauthenticated request must not publish a project or create a publish event."
+        ],
+        "answerIndex": 3,
+        "explanation": "Knowing what must never happen prevents unsafe defaults. Include forbidden states, unauthorized actions, data leaks, duplicate side effects, and destructive behavior. A negative requirement makes prohibited behavior falsifiable."
+      }
+    },
+    {
+      "id": "vc-046",
+      "sequence": 46,
+      "type": "concept",
+      "title": "Define validation rules",
+      "prompt": "How should a specification define acceptable, invalid, and boundary inputs?",
+      "content": "Inputs need authoritative shape and business constraints. Document required fields, formats, ranges, cross-field rules, and error responses.",
+      "tags": [
+        "vibe-coding",
+        "specs-acceptance",
+        "define-validation-rules"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "specs-acceptance"
+      ]
+    },
+    {
+      "id": "vc-047",
+      "sequence": 47,
+      "type": "steps",
+      "title": "Specify state transitions",
+      "prompt": "How should you specify a state machine before asking an agent to implement it?",
+      "content": "Stateful systems fail when transitions are implicit. List valid states, allowed transitions, guards, and what happens on interrupted transitions.",
+      "tags": [
+        "vibe-coding",
+        "specs-acceptance",
+        "specify-state-transitions"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "specs-acceptance"
+      ],
+      "steps": [
+        "Enumerate meaningful states and the allowed initiating actors.",
+        "List each event and its valid source and target states.",
+        "Define forbidden transitions and their returned errors.",
+        "Specify atomic side effects and behavior under repeated/concurrent events.",
+        "Turn allowed and rejected transitions into acceptance tests."
+      ]
+    },
+    {
+      "id": "vc-048",
+      "sequence": 48,
+      "type": "concept",
+      "title": "Describe API contracts",
+      "prompt": "Which request, response, error, and version details constitute an API contract?",
+      "content": "Client-server ambiguity becomes integration defects. Specify methods, routes, schemas, authentication, status codes, idempotency, and error formats.",
+      "tags": [
+        "vibe-coding",
+        "specs-acceptance",
+        "describe-api-contracts"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "specs-acceptance"
+      ]
+    },
+    {
+      "id": "vc-049",
+      "sequence": 49,
+      "type": "fact",
+      "title": "Describe database invariants",
+      "prompt": "What database constraints should remain true regardless of which client writes data?",
+      "content": "Application logic is safer when persistent truths are explicit. State uniqueness, foreign-key, nullability, ownership, and consistency rules.",
+      "tags": [
+        "vibe-coding",
+        "specs-acceptance",
+        "describe-database-invariants"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "specs-acceptance"
+      ]
+    },
+    {
+      "id": "vc-050",
+      "sequence": 50,
+      "type": "concept",
+      "title": "Define concurrency semantics",
+      "prompt": "How should simultaneous submissions and repeated requests behave?",
+      "content": "Simultaneous actions can violate assumptions that pass single-user testing. Specify conflict handling, optimistic locking, idempotency, or serialization where needed.",
+      "tags": [
+        "vibe-coding",
+        "specs-acceptance",
+        "define-concurrency-semantics"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "specs-acceptance"
+      ]
+    },
+    {
+      "id": "vc-051",
+      "sequence": 51,
+      "type": "concept",
+      "title": "Specify time behavior",
+      "prompt": "Why must retries, expiry, timeout, and timezone behavior be specified?",
+      "content": "Dates, time zones, expiry, retries, and schedules are common sources of defects. State canonical time zones, clock assumptions, deadlines, and expiration semantics.",
+      "tags": [
+        "vibe-coding",
+        "specs-acceptance",
+        "specify-time-behavior"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "specs-acceptance"
+      ]
+    },
+    {
+      "id": "vc-052",
+      "sequence": 52,
+      "type": "fact",
+      "title": "Specify file and media constraints",
+      "prompt": "What upload constraints must be defined beyond a file-extension check?",
+      "content": "Uploads need limits beyond a file picker. Define allowed types, size limits, validation, storage behavior, access, and deletion.",
+      "tags": [
+        "vibe-coding",
+        "specs-acceptance",
+        "specify-file-and-media-constraints"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "specs-acceptance"
+      ]
+    },
+    {
+      "id": "vc-053",
+      "sequence": 53,
+      "type": "concept",
+      "title": "Create accessibility acceptance criteria",
+      "prompt": "How can keyboard and assistive-technology requirements become acceptance criteria?",
+      "content": "Accessibility cannot be inferred from visual similarity. Require keyboard operation, focus behavior, semantics, labels, contrast, and screen-reader expectations.",
+      "tags": [
+        "vibe-coding",
+        "specs-acceptance",
+        "create-accessibility-acceptance-criteria"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "specs-acceptance"
+      ]
+    },
+    {
+      "id": "vc-054",
+      "sequence": 54,
+      "type": "concept",
+      "title": "Create performance budgets",
+      "prompt": "Which measurable loading or response-time thresholds belong in a performance budget?",
+      "content": "Performance goals are more enforceable when tied to budgets. Set relevant latency, bundle, query, memory, or Core Web Vitals targets.",
+      "tags": [
+        "vibe-coding",
+        "specs-acceptance",
+        "create-performance-budgets"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "specs-acceptance"
+      ]
+    },
+    {
+      "id": "vc-055",
+      "sequence": 55,
+      "type": "concept",
+      "title": "Specify observability requirements",
+      "prompt": "What event identifiers, logs, or metrics are needed to verify the feature in operation?",
+      "content": "A feature that cannot be diagnosed is incomplete operationally. Define logs, metrics, traces, audit events, and correlation fields for important flows.",
+      "tags": [
+        "vibe-coding",
+        "specs-acceptance",
+        "specify-observability-requirements"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "specs-acceptance"
+      ]
+    },
+    {
+      "id": "vc-056",
+      "sequence": 56,
+      "type": "fact",
+      "title": "Specify security requirements",
+      "prompt": "Which trust, permission, and data-handling boundaries must a specification protect?",
+      "content": "Security needs concrete trust boundaries and controls. State authorization, secret handling, data classification, rate limits, and abuse cases.",
+      "tags": [
+        "vibe-coding",
+        "specs-acceptance",
+        "specify-security-requirements"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "specs-acceptance"
+      ]
+    },
+    {
+      "id": "vc-057",
+      "sequence": 57,
+      "type": "concept",
+      "title": "Define rollback acceptance",
+      "prompt": "When is a rollback acceptable, and what conditions can make it unsafe?",
+      "content": "Deployability includes the ability to recover. Specify what can be rolled back safely and how data changes behave across versions.",
+      "tags": [
+        "vibe-coding",
+        "specs-acceptance",
+        "define-rollback-acceptance"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "specs-acceptance"
+      ]
+    },
+    {
+      "id": "vc-058",
+      "sequence": 58,
+      "type": "checklist",
+      "title": "Make completion evidence explicit",
+      "prompt": "Which completion evidence should accompany a claim that a feature is implemented?",
+      "content": "A task can appear done while key checks were never run. List the commands, test suites, screenshots, or manual scenarios required as evidence.",
+      "tags": [
+        "vibe-coding",
+        "specs-acceptance",
+        "make-completion-evidence-explicit"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "specs-acceptance"
+      ],
+      "items": [
+        "Acceptance scenarios are mapped to executed test results.",
+        "The final commit and exact test environment are identified.",
+        "Relevant failure and boundary cases have been exercised.",
+        "Accessibility, authorization, and performance conditions are checked when applicable.",
+        "Known limitations and rollback implications are explicitly reported."
+      ]
+    },
+    {
+      "id": "vc-059",
+      "sequence": 59,
+      "type": "concept",
+      "title": "Version changing specifications",
+      "prompt": "How do you preserve reviewability when specifications change during implementation?",
+      "content": "Requirements evolve and the code should not obscure which version it implements. Keep spec changes reviewable and connect implementation changes to the updated requirement.",
+      "tags": [
+        "vibe-coding",
+        "specs-acceptance",
+        "version-changing-specifications"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "specs-acceptance"
+      ]
+    },
+    {
+      "id": "vc-060",
+      "sequence": 60,
+      "type": "concept",
+      "title": "Use the spec as the review rubric",
+      "prompt": "How should reviewers use the specification to check the actual final behavior?",
+      "content": "A specification has highest leverage when it controls verification. Review the final diff against every acceptance criterion and record exceptions explicitly.",
+      "tags": [
+        "vibe-coding",
+        "specs-acceptance",
+        "use-the-spec-as-the-review-rubric"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "specs-acceptance"
+      ]
+    },
+    {
+      "id": "vc-061",
+      "sequence": 61,
+      "type": "concept",
+      "title": "State the objective first",
+      "prompt": "What outcome should the opening sentence of an AI coding brief specify?",
+      "content": "Agents perform better when the desired outcome is unambiguous. Open with the user-visible or engineering result, not a long chronology.",
+      "tags": [
+        "vibe-coding",
+        "prompting",
+        "state-the-objective-first"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "prompting"
+      ]
+    },
+    {
+      "id": "vc-062",
+      "sequence": 62,
+      "type": "fact",
+      "title": "Give relevant context",
+      "prompt": "Which repository context is necessary for an agent to make a grounded change?",
+      "content": "A model cannot infer private repository conventions it has not seen. Point to files, modules, architecture notes, examples, and existing patterns that matter.",
+      "tags": [
+        "vibe-coding",
+        "prompting",
+        "give-relevant-context"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "prompting"
+      ]
+    },
+    {
+      "id": "vc-063",
+      "sequence": 63,
+      "type": "concept",
+      "title": "Name hard constraints",
+      "prompt": "How do you express compatibility, security, and library restrictions unambiguously?",
+      "content": "Constraints reduce plausible but unacceptable solutions. Specify compatibility, libraries, security rules, performance budgets, and forbidden changes.",
+      "tags": [
+        "vibe-coding",
+        "prompting",
+        "name-hard-constraints"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "prompting"
+      ]
+    },
+    {
+      "id": "vc-064",
+      "sequence": 64,
+      "type": "concept",
+      "title": "Define scope explicitly",
+      "prompt": "How do file and subsystem boundaries prevent accidental unrelated refactoring?",
+      "content": "Agents may broaden tasks to adjacent cleanup. List the files or subsystems in scope and call out unrelated refactors as out of scope.",
+      "tags": [
+        "vibe-coding",
+        "prompting",
+        "define-scope-explicitly"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "prompting"
+      ]
+    },
+    {
+      "id": "vc-065",
+      "sequence": 65,
+      "type": "fact",
+      "title": "Provide acceptance criteria",
+      "prompt": "What measurable acceptance criteria belong in the initial request?",
+      "content": "The agent needs a concrete target for deciding whether work is complete. Include testable outcomes and failure cases in the initial prompt.",
+      "tags": [
+        "vibe-coding",
+        "prompting",
+        "provide-acceptance-criteria"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "prompting"
+      ]
+    },
+    {
+      "id": "vc-066",
+      "sequence": 66,
+      "type": "question",
+      "title": "Ask for inspection before editing",
+      "prompt": "A user reports a regression but the failing module is unknown. What should the agent do first?",
+      "content": "",
+      "tags": [
+        "vibe-coding",
+        "prompting",
+        "ask-for-inspection-before-editing"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "prompting"
+      ],
+      "question": {
+        "options": [
+          "Read the relevant code and tests, reproduce the behavior, and identify the violated invariant.",
+          "Patch the most recently changed file before reproducing the error.",
+          "Temporarily adjust the failing assertion to get CI green, then investigate.",
+          "Update the suspected dependency before comparing environments."
+        ],
+        "answerIndex": 0,
+        "explanation": "Immediate edits can encode a wrong mental model of the codebase. Require the agent to inspect relevant implementation, tests, and configuration before changing behavior. Investigation reduces the risk of treating a symptom as the cause."
+      }
+    },
+    {
+      "id": "vc-067",
+      "sequence": 67,
+      "type": "steps",
+      "title": "Request a plan for complex work",
+      "prompt": "What should a scoped implementation plan for a complex AI coding task contain?",
+      "content": "Planning exposes misunderstandings before they become large diffs. For multi-file or risky tasks, ask for a brief plan tied to requirements and validation.",
+      "tags": [
+        "vibe-coding",
+        "prompting",
+        "request-a-plan-for-complex-work"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "prompting"
+      ],
+      "steps": [
+        "State the intended user-visible outcome and acceptance criteria.",
+        "Identify affected files, upstream dependencies, and excluded areas.",
+        "Sequence changes into small, reviewable and independently testable units.",
+        "Assign a validation command and rollback consideration to each risky phase.",
+        "Require an exact-final-head audit before declaring the task complete."
+      ]
+    },
+    {
+      "id": "vc-068",
+      "sequence": 68,
+      "type": "concept",
+      "title": "Use examples strategically",
+      "prompt": "How do realistic examples and counterexamples improve a programming instruction?",
+      "content": "Examples communicate format and edge behavior efficiently. Provide one or two representative examples without overfitting the solution to a single case.",
+      "tags": [
+        "vibe-coding",
+        "prompting",
+        "use-examples-strategically"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "prompting"
+      ]
+    },
+    {
+      "id": "vc-069",
+      "sequence": 69,
+      "type": "checklist",
+      "title": "Include known failure evidence",
+      "prompt": "What constitutes usable failure evidence in a remediation prompt?",
+      "content": "Logs and reproducible symptoms are more useful than vague descriptions. Paste exact errors, failing inputs, screenshots, or steps to reproduce where possible.",
+      "tags": [
+        "vibe-coding",
+        "prompting",
+        "include-known-failure-evidence"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "prompting"
+      ],
+      "items": [
+        "Observed versus expected behavior is documented.",
+        "Exact input, environment, and reproduction sequence are included.",
+        "Full relevant error messages or logs are retained without exposing secrets.",
+        "The first known passing and failing revisions are supplied if available.",
+        "A test or diagnostic check can demonstrate whether the defect is fixed."
+      ]
+    },
+    {
+      "id": "vc-070",
+      "sequence": 70,
+      "type": "concept",
+      "title": "Ask for assumptions",
+      "prompt": "What should an agent do with ambiguous assumptions before executing a destructive change?",
+      "content": "Unstated assumptions are a major source of AI implementation drift. Have the agent list material assumptions and verify them against the repository or requirements.",
+      "tags": [
+        "vibe-coding",
+        "prompting",
+        "ask-for-assumptions"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "prompting"
+      ]
+    },
+    {
+      "id": "vc-071",
+      "sequence": 71,
+      "type": "concept",
+      "title": "Ask for minimal changes",
+      "prompt": "How do you request the smallest coherent change rather than a broad rewrite?",
+      "content": "Minimality reduces regression surface and review cost. Tell the agent to prefer the smallest coherent implementation that satisfies the spec.",
+      "tags": [
+        "vibe-coding",
+        "prompting",
+        "ask-for-minimal-changes"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "prompting"
+      ]
+    },
+    {
+      "id": "vc-072",
+      "sequence": 72,
+      "type": "fact",
+      "title": "Require existing patterns first",
+      "prompt": "Why should prompts direct agents toward established project patterns first?",
+      "content": "New abstractions are often unnecessary when the codebase already has a convention. Ask the agent to reuse established components, services, utilities, and test patterns when suitable.",
+      "tags": [
+        "vibe-coding",
+        "prompting",
+        "require-existing-patterns-first"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "prompting"
+      ]
+    },
+    {
+      "id": "vc-073",
+      "sequence": 73,
+      "type": "concept",
+      "title": "Use role instructions sparingly",
+      "prompt": "When do role-playing instructions add less value than concrete requirements and evidence?",
+      "content": "A role label is weaker than concrete constraints and evidence. Prefer precise engineering requirements over elaborate personas.",
+      "tags": [
+        "vibe-coding",
+        "prompting",
+        "use-role-instructions-sparingly"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "prompting"
+      ]
+    },
+    {
+      "id": "vc-074",
+      "sequence": 74,
+      "type": "concept",
+      "title": "Avoid contradictory prompts",
+      "prompt": "How can contradictory constraints undermine an otherwise detailed prompt?",
+      "content": "Conflicting goals force the model to guess priorities. Order priorities and explicitly state which constraint wins when tradeoffs occur.",
+      "tags": [
+        "vibe-coding",
+        "prompting",
+        "avoid-contradictory-prompts"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "prompting"
+      ]
+    },
+    {
+      "id": "vc-075",
+      "sequence": 75,
+      "type": "concept",
+      "title": "Ask for verification commands",
+      "prompt": "How should test commands and expected evidence be specified in an agent task?",
+      "content": "Agents should know how correctness will be demonstrated. Provide or request exact test, lint, typecheck, build, and focused validation commands.",
+      "tags": [
+        "vibe-coding",
+        "prompting",
+        "ask-for-verification-commands"
+      ],
+      "difficulty": "intermediate",
+      "pathIds": [
+        "prompting"
+      ]
+    },
+    {
+      "id": "vc-076",
+      "sequence": 76,
+      "type": "fact",
+      "title": "Ask for a diff summary",
+      "prompt": "What should a final diff summary disclose beyond a list of changed files?",
+      "content": "A concise behavioral summary helps review generated work. Require the agent to explain changed behavior, important design decisions, and residual risks.",
+      "tags": [
+        "vibe-coding",
+        "prompting",
+        "ask-for-a-diff-summary"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "prompting"
+      ]
+    },
+    {
+      "id": "vc-077",
+      "sequence": 77,
+      "type": "concept",
+      "title": "Use follow-up prompts with evidence",
+      "prompt": "How should follow-up prompts reference actual failures instead of restating the original goal?",
+      "content": "Feedback should close the loop on actual observed behavior. Report the failing assertion or undesired output and ask for root-cause correction rather than a random retry.",
+      "tags": [
+        "vibe-coding",
+        "prompting",
+        "use-follow-up-prompts-with-evidence"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "prompting"
+      ]
+    },
+    {
+      "id": "vc-078",
+      "sequence": 78,
+      "type": "concept",
+      "title": "Separate investigation and implementation",
+      "prompt": "Why are investigation and implementation separate phases for uncertain defects?",
+      "content": "Premature editing can contaminate diagnosis. For unclear defects, explicitly request investigation only, then implement after the cause is established.",
+      "tags": [
+        "vibe-coding",
+        "prompting",
+        "separate-investigation-and-implementation"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "prompting"
+      ]
+    },
+    {
+      "id": "vc-079",
+      "sequence": 79,
+      "type": "concept",
+      "title": "Constrain generated artifacts",
+      "prompt": "How do output format and artifact constraints prevent unusable AI responses?",
+      "content": "Generated schemas, migrations, configs, and documentation can have broad consequences. Specify exact formats, destinations, naming rules, and compatibility constraints.",
+      "tags": [
+        "vibe-coding",
+        "prompting",
+        "constrain-generated-artifacts"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "prompting"
+      ]
+    },
+    {
+      "id": "vc-080",
+      "sequence": 80,
+      "type": "code",
+      "title": "Write prompts as executable briefs",
+      "prompt": "Examine this coding brief: which lines specify objective, source context, constraints, acceptance, and validation?",
+      "content": "The strongest prompts resemble compact engineering tickets. Include objective, context, constraints, acceptance criteria, validation, and non-goals in a predictable structure.",
+      "tags": [
+        "vibe-coding",
+        "prompting",
+        "write-prompts-as-executable-briefs"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "prompting"
+      ],
+      "code": {
+        "language": "markdown",
+        "snippet": "Objective: Fix duplicate form submissions.\nContext: src/forms/submit.ts and its tests.\nConstraints: no API contract changes.\nAcceptance: one server write per user action.\nValidate: npm test -- submit"
+      }
+    },
+    {
+      "id": "vc-081",
+      "sequence": 81,
+      "type": "concept",
+      "title": "Context is a scarce resource",
+      "prompt": "Why is more context not always better for coding agents?",
+      "content": "More context is not automatically better; irrelevant material can distract the model. Supply the smallest set of authoritative files and facts needed for the decision.",
+      "tags": [
+        "vibe-coding",
+        "context-engineering",
+        "context-is-a-scarce-resource"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "context-engineering"
+      ]
+    },
+    {
+      "id": "vc-082",
+      "sequence": 82,
+      "type": "fact",
+      "title": "Prefer source-of-truth files",
+      "prompt": "Which files should win when a remembered description conflicts with current source code?",
+      "content": "Summaries can drift from implementation. Point agents to current schemas, tests, interfaces, and configuration before secondary documentation.",
+      "tags": [
+        "vibe-coding",
+        "context-engineering",
+        "prefer-source-of-truth-files"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "context-engineering"
+      ]
+    },
+    {
+      "id": "vc-083",
+      "sequence": 83,
+      "type": "code",
+      "title": "Use repository instructions",
+      "prompt": "Read the sample AGENTS.md. Which constraints are executable repository conventions rather than generic preferences?",
+      "content": "Persistent instructions make recurring conventions discoverable to coding agents. Store build commands, architecture rules, test expectations, and review standards in supported repository instruction files.",
+      "tags": [
+        "vibe-coding",
+        "context-engineering",
+        "use-repository-instructions"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "context-engineering"
+      ],
+      "code": {
+        "language": "markdown",
+        "snippet": "# AGENTS.md\n- Run `npm test` after behavior changes.\n- Keep database access in `src/data/`.\n- Never commit secrets.\n- Prefer existing UI primitives."
+      }
+    },
+    {
+      "id": "vc-084",
+      "sequence": 84,
+      "type": "concept",
+      "title": "Keep instructions actionable",
+      "prompt": "Why must repository instructions prescribe observable actions instead of vague preferences?",
+      "content": "Long philosophy documents are easy to ignore or misapply. Write short rules that tell the agent what to inspect, preserve, run, or avoid.",
+      "tags": [
+        "vibe-coding",
+        "context-engineering",
+        "keep-instructions-actionable"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "context-engineering"
+      ]
+    },
+    {
+      "id": "vc-085",
+      "sequence": 85,
+      "type": "fact",
+      "title": "Scope instructions by path",
+      "prompt": "How can path-scoped guidance prevent a rule for one subsystem from contaminating another?",
+      "content": "Different directories can have different frameworks and constraints. Use path-specific guidance where supported instead of one overloaded global instruction file.",
+      "tags": [
+        "vibe-coding",
+        "context-engineering",
+        "scope-instructions-by-path"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "context-engineering"
+      ]
+    },
+    {
+      "id": "vc-086",
+      "sequence": 86,
+      "type": "concept",
+      "title": "Document validation commands",
+      "prompt": "Why should project-specific validation commands live close to repository instructions?",
+      "content": "Agents need reliable feedback loops. List fast focused checks and the full pre-merge validation command.",
+      "tags": [
+        "vibe-coding",
+        "context-engineering",
+        "document-validation-commands"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "context-engineering"
+      ]
+    },
+    {
+      "id": "vc-087",
+      "sequence": 87,
+      "type": "concept",
+      "title": "Document architecture boundaries",
+      "prompt": "What architectural boundaries must be conveyed before automated changes?",
+      "content": "Unclear ownership encourages cross-layer coupling. State which modules own data access, domain rules, UI state, external integration, and shared utilities.",
+      "tags": [
+        "vibe-coding",
+        "context-engineering",
+        "document-architecture-boundaries"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "context-engineering"
+      ]
+    },
+    {
+      "id": "vc-088",
+      "sequence": 88,
+      "type": "concept",
+      "title": "Document generated-code boundaries",
+      "prompt": "How can agent guidance distinguish generated files from editable source files?",
+      "content": "Generated files should not be hand-edited accidentally. Mark generated artifacts and identify the source command or schema that owns them.",
+      "tags": [
+        "vibe-coding",
+        "context-engineering",
+        "document-generated-code-boundaries"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "context-engineering"
+      ]
+    },
+    {
+      "id": "vc-089",
+      "sequence": 89,
+      "type": "checklist",
+      "title": "Document secret boundaries",
+      "prompt": "Which boundaries should be checked before placing context in an AI prompt?",
+      "content": "Agents must know which values are sensitive and where they belong. State that secrets never enter source, prompts, logs, fixtures, or client bundles.",
+      "tags": [
+        "vibe-coding",
+        "context-engineering",
+        "document-secret-boundaries"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "context-engineering"
+      ],
+      "items": [
+        "Access tokens, private keys, credentials, and environment secrets are omitted.",
+        "Customer and production data are minimized or appropriately sanitized.",
+        "The recipient agent and connected tools have an appropriate data-access scope.",
+        "Only the files necessary for this task are included.",
+        "Persistent instructions do not accidentally expose privileged information."
+      ]
+    },
+    {
+      "id": "vc-090",
+      "sequence": 90,
+      "type": "concept",
+      "title": "Document migration rules",
+      "prompt": "What migration-ordering rules need to survive beyond a single agent session?",
+      "content": "Schema changes can be irreversible. Describe migration naming, backward compatibility, rollout order, and rollback expectations.",
+      "tags": [
+        "vibe-coding",
+        "context-engineering",
+        "document-migration-rules"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "context-engineering"
+      ]
+    },
+    {
+      "id": "vc-091",
+      "sequence": 91,
+      "type": "concept",
+      "title": "Document testing conventions",
+      "prompt": "Which testing conventions should be supplied as reusable project context?",
+      "content": "Agents otherwise invent new test styles. Point to representative tests and define where unit, integration, and end-to-end tests live.",
+      "tags": [
+        "vibe-coding",
+        "context-engineering",
+        "document-testing-conventions"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "context-engineering"
+      ]
+    },
+    {
+      "id": "vc-092",
+      "sequence": 92,
+      "type": "fact",
+      "title": "Document UI conventions",
+      "prompt": "What design and accessibility conventions should a frontend agent inherit?",
+      "content": "Visual consistency depends on reusable patterns. Identify design tokens, component libraries, accessibility rules, and responsive breakpoints.",
+      "tags": [
+        "vibe-coding",
+        "context-engineering",
+        "document-ui-conventions"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "context-engineering"
+      ]
+    },
+    {
+      "id": "vc-093",
+      "sequence": 93,
+      "type": "concept",
+      "title": "Use task-local context",
+      "prompt": "What task-local files or logs matter more than unrelated repository history?",
+      "content": "Persistent instructions should not carry every temporary fact. Put issue-specific reproduction steps, constraints, and decisions in the task prompt or issue.",
+      "tags": [
+        "vibe-coding",
+        "context-engineering",
+        "use-task-local-context"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "context-engineering"
+      ]
+    },
+    {
+      "id": "vc-094",
+      "sequence": 94,
+      "type": "question",
+      "title": "Refresh stale context",
+      "prompt": "An agent has been coding for hours after another PR changed the target module. What is the safest next step?",
+      "content": "",
+      "tags": [
+        "vibe-coding",
+        "context-engineering",
+        "refresh-stale-context"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "context-engineering"
+      ],
+      "question": {
+        "options": [
+          "Continue working from the initial source snapshot until the planned phase ends.",
+          "Add the previous architectural summary to the prompt but do not inspect the new commit.",
+          "Finish the prepared patch and rebase it without rechecking assumptions.",
+          "Refresh the current branch and affected files before applying the next patch."
+        ],
+        "answerIndex": 3,
+        "explanation": "Old architecture notes can be worse than missing documentation. Update instructions when commands, dependencies, directory structure, or team policy changes. Context must be refreshed when source-of-truth state changes."
+      }
+    },
+    {
+      "id": "vc-095",
+      "sequence": 95,
+      "type": "steps",
+      "title": "Resolve instruction conflicts",
+      "prompt": "How do you resolve two apparently conflicting repository instructions?",
+      "content": "Multiple instruction layers can disagree. Define precedence and keep overlapping rules consistent.",
+      "tags": [
+        "vibe-coding",
+        "context-engineering",
+        "resolve-instruction-conflicts"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "context-engineering"
+      ],
+      "steps": [
+        "Identify each instruction's origin, scope, and current version.",
+        "Determine whether one is path-specific or more authoritative for the affected subsystem.",
+        "Inspect the relevant code, tests, and explicit project policy for evidence.",
+        "Ask for clarification when the conflict changes security or required behavior.",
+        "Record the chosen interpretation before proceeding with a write."
+      ]
+    },
+    {
+      "id": "vc-096",
+      "sequence": 96,
+      "type": "fact",
+      "title": "Avoid exposing unnecessary private data",
+      "prompt": "Which private data should be excluded from an otherwise useful agent context?",
+      "content": "Context sent to models should be minimized to what the task needs. Exclude credentials, user data, unrelated proprietary documents, and sensitive logs.",
+      "tags": [
+        "vibe-coding",
+        "context-engineering",
+        "avoid-exposing-unnecessary-private-data"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "context-engineering"
+      ]
+    },
+    {
+      "id": "vc-097",
+      "sequence": 97,
+      "type": "concept",
+      "title": "Teach the agent where to look",
+      "prompt": "How should a repository map direct an agent toward authoritative implementations?",
+      "content": "Navigation guidance reduces random code search. Name entry points, key directories, test locations, and common debugging paths.",
+      "tags": [
+        "vibe-coding",
+        "context-engineering",
+        "teach-the-agent-where-to-look"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "context-engineering"
+      ]
+    },
+    {
+      "id": "vc-098",
+      "sequence": 98,
+      "type": "concept",
+      "title": "Encode invariants, not trivia",
+      "prompt": "Why are stable invariants more valuable than lengthy descriptions of transient trivia?",
+      "content": "Persistent context should focus on rules unlikely to change every day. Document durable constraints and let the agent inspect volatile implementation details.",
+      "tags": [
+        "vibe-coding",
+        "context-engineering",
+        "encode-invariants-not-trivia"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "context-engineering"
+      ]
+    },
+    {
+      "id": "vc-099",
+      "sequence": 99,
+      "type": "concept",
+      "title": "Test repository instructions",
+      "prompt": "How can you test whether repository instructions actually change agent behavior?",
+      "content": "Instructions are only useful if agents can follow them in real tasks. Periodically run representative tasks and refine ambiguous or ineffective guidance.",
+      "tags": [
+        "vibe-coding",
+        "context-engineering",
+        "test-repository-instructions"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "context-engineering"
+      ]
+    },
+    {
+      "id": "vc-100",
+      "sequence": 100,
+      "type": "concept",
+      "title": "Treat context as infrastructure",
+      "prompt": "Why should context maintenance be treated as part of engineering infrastructure?",
+      "content": "Good context engineering compounds across every AI-assisted change. Version, review, and maintain repository instructions with the same care as other development tooling.",
+      "tags": [
+        "vibe-coding",
+        "context-engineering",
+        "treat-context-as-infrastructure"
+      ],
+      "difficulty": "advanced",
+      "pathIds": [
+        "context-engineering"
+      ]
+    }
+  ]
+}

@@ -3,13 +3,14 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { validateDeck } from "../src/deck-schema.js";
 import { validateGeneratedDeckQuality } from "../src/card-generation-rules.js";
-import { VIBE_CURRICULUM_IDS } from "../src/vibe-progress.js";
+import { assembleSubtopicDeck, isSubtopicFragmentManifest } from "../src/subtopic-deck.js";
 
-const decks = await Promise.all(VIBE_CURRICULUM_IDS.map(async (id) => {
-  const deck = JSON.parse(await readFile(new URL(`../data/${id}.json`, import.meta.url), "utf8"));
-  assert.equal(deck.id, id);
-  return deck;
-}));
+const manifest = JSON.parse(await readFile(new URL("../data/vibe-coding.json", import.meta.url), "utf8"));
+const catalog = JSON.parse(await readFile(new URL("../data/decks.json", import.meta.url), "utf8"));
+const decks = await Promise.all(manifest.fragments.map(async (path) => (
+  JSON.parse(await readFile(new URL(`../data/${path}`, import.meta.url), "utf8"))
+)));
+const parent = assembleSubtopicDeck(manifest, decks);
 
 const expectedPaths = [
   ["mindset-foundations", "product-problem-framing", "specs-acceptance", "prompting", "context-engineering"],
@@ -55,10 +56,18 @@ const expectedCodeLessons = new Map([
   ["production-readiness", "Use a production-readiness review"],
 ]);
 
-test("Vibe Coding has five schema-valid 100-card topics in prerequisite order", () => {
+test("Vibe Coding is one main topic with 25 subtopics, using five internal content shards", () => {
+  assert.equal(manifest.id, "vibe-coding");
+  assert.ok(isSubtopicFragmentManifest(manifest));
+  assert.equal(parent.id, "vibe-coding");
+  assert.equal(parent.cards.length, 500, "the main topic is NOT capped at 100 cards");
+  assert.equal(parent.paths.length, 25);
+  assert.deepEqual(parent.paths.map((path) => path.id), expectedPaths.flat());
+  assert.deepEqual(parent.cards.map((card) => card.sequence), Array.from({ length: 500 }, (_, i) => i + 1));
+  assert.deepEqual(validateDeck(parent, { rejectBuiltInId: false }), []);
   assert.equal(decks.length, 5);
   decks.forEach((deck, index) => {
-    assert.equal(deck.cards.length, 100, deck.id);
+    assert.equal(deck.cards.length, 100, "the five existing source shards each happen to contain 100 cards");
     assert.equal(deck.paths.length, 5, deck.id);
     assert.deepEqual(deck.paths.map((path) => path.id), expectedPaths[index]);
     assert.deepEqual(deck.cards.map((card) => card.sequence), Array.from({ length: 100 }, (_, i) => i + 1));
@@ -81,14 +90,14 @@ test("Vibe Coding has five schema-valid 100-card topics in prerequisite order", 
   });
 });
 
-test("all original 500 card IDs and 25 path IDs are retained without duplication", () => {
-  const allCards = decks.flatMap((deck) => deck.cards);
+test("all original 500 card IDs and 25 path IDs are retained under the SINGLE main topic", () => {
+  const allCards = parent.cards;
   assert.equal(allCards.length, 500);
   assert.deepEqual(
     [...new Set(allCards.map((card) => card.id))].sort(),
     Array.from({ length: 500 }, (_, index) => `vc-${String(index + 1).padStart(3, "0")}`).sort(),
   );
-  assert.equal(new Set(decks.flatMap((deck) => deck.paths.map((path) => path.id))).size, 25);
+  assert.equal(new Set(parent.paths.map((path) => path.id)).size, 25);
 });
 
 test("fronts are authored retrieval cues with distinct, sufficiently explanatory backs", () => {
@@ -137,7 +146,7 @@ test("each path has manually contextualized code, assessment, steps, and checkli
 });
 
 test("question answer positions are not fixed and topical AI safety coverage is included", () => {
-  const questions = decks.flatMap((deck) => deck.cards.filter((card) => card.type === "question"));
+  const questions = parent.cards.filter((card) => card.type === "question");
   assert.equal(questions.length, 25);
   for (const answerIndex of [0, 1, 2, 3]) {
     assert.ok(questions.filter((question) => question.question.answerIndex === answerIndex).length >= 4,
@@ -169,7 +178,7 @@ test("expanded agent-safety lessons retain their original mastery objectives", (
 });
 
 test("direct answers address the audit's formerly under-explained scenarios", () => {
-  const cards = new Map(decks.flatMap((deck) => deck.cards.map((card) => [card.id, card])));
+  const cards = new Map(parent.cards.map((card) => [card.id, card]));
   assert.match(cards.get("vc-008").prompt, /focused commits and recorded decisions/);
   for (const code of ["400", "401", "403", "404", "200", "201"]) {
     assert.ok(cards.get("vc-164").content.includes(code), `HTTP ${code} meaning must be taught`);
@@ -181,4 +190,24 @@ test("direct answers address the audit's formerly under-explained scenarios", ()
   assert.match(cards.get("vc-460").content, /falsifiable hypothesis/);
   assert.match(cards.get("vc-302").content, /Neither proves the package is benign/);
   assert.match(cards.get("vc-358").content, /localized validation message should retain the field name/);
+});
+
+test("every subtopic independently fits the 100-card ceiling, with NO top-level duplicate entries", () => {
+  assert.deepEqual(catalog.decks.filter((id) => id.startsWith("vibe-coding")), ["vibe-coding"]);
+  for (const path of parent.paths) {
+    assert.ok(path.cardIds.length >= 1 && path.cardIds.length <= 100,
+      `${path.id}: no subtopic may contain more than 100 cards`);
+  }
+  assert.equal(new Set(parent.cards.map((card) => card.id)).size, 500);
+  assert.equal(parent.cards.length, parent.paths.reduce((n, path) => n + path.cardIds.length, 0));
+});
+
+test("obsolete standalone topic entries cannot reappear as root JSON sources", async () => {
+  for (const formerId of ["vibe-coding-agentic", "vibe-coding-application", "vibe-coding-quality", "vibe-coding-production"]) {
+    await assert.rejects(
+      readFile(new URL(`../data/${formerId}.json`, import.meta.url), "utf8"),
+      { code: "ENOENT" },
+      `${formerId} must remain an internal shard, not a second main topic`,
+    );
+  }
 });

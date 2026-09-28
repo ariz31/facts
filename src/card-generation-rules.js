@@ -1,6 +1,7 @@
 // Shared generation contract for the AI-import workflow. Legacy authored decks are not generated here.
 export const CARD_COUNT_OPTIONS = Object.freeze([25, 50, 75, 100]);
-export const MAX_GENERATED_CARDS = 100;
+// The limit belongs to each subtopic/path, NEVER to the parent topic/deck.
+export const MAX_SUBTOPIC_CARDS = 100;
 
 const AUDIENCES = new Set(["Beginner", "Intermediate", "Advanced", "Mixed levels"]);
 const NORMALIZE = (value) => String(value ?? "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim().replace(/\s+/g, " ");
@@ -11,21 +12,21 @@ const BOILERPLATE = [
   /the disciplined approach is:/i,
 ];
 
-export function makeCardGenerationPrompt(topic, audience = "Mixed levels", count = MAX_GENERATED_CARDS) {
+export function makeCardGenerationPrompt(topic, audience = "Mixed levels", count = MAX_SUBTOPIC_CARDS) {
   const subject = typeof topic === "string" ? topic.trim() : "";
   if (!subject || subject.length > 180) throw new Error("Enter a topic of up to 180 characters.");
   if (!AUDIENCES.has(audience)) throw new Error("Choose a supported learner audience.");
-  if (!Number.isInteger(count) || count < 1 || count > MAX_GENERATED_CARDS) {
-    throw new Error(`A generated topic must contain between 1 and ${MAX_GENERATED_CARDS} cards.`);
+  if (!Number.isInteger(count) || count < 1 || count > MAX_SUBTOPIC_CARDS) {
+    throw new Error(`A generated subtopic maximum must be between 1 and ${MAX_SUBTOPIC_CARDS} cards.`);
   }
 
   return `You are an expert subject-matter educator and instructional designer. Author a rigorous, accurate, progressive learning-card curriculum for the topic ${JSON.stringify(subject)}. Target audience: ${audience}.
 
-CARD LIMIT: Produce UP TO ${count} substantial, NON-REPETITIVE cards for this topic. Generate fewer when the subject cannot sustain the selected maximum without filler; never pad just to reach a number. NEVER exceed ${MAX_GENERATED_CARDS} cards in one topic/deck. Quality, conceptual coverage, and progression take priority over quantity. For a larger subject, scope this deck to a coherent part and make any additional parts separate topics (each up to ${MAX_GENERATED_CARDS} cards).
+HIERARCHY AND CARD LIMIT: Output ONE main topic/deck named for the requested subject. Its aggregate card count has NO fixed ceiling. Divide it into appropriately named guided paths, which are SUBTOPICS; each subtopic may contain UP TO ${count} substantial, NON-REPETITIVE cards, and NEVER more than ${MAX_SUBTOPIC_CARDS}. Generate fewer in any subtopic when that avoids filler; do not create multiple top-level topics solely to evade the limit. All cards from all subtopics belong to this single parent deck. Quality, breadth and learning dependencies take priority over filling quotas.
 
 PLAN THE TEACHING SEQUENCE BEFORE WRITING THE JSON (do not output the plan):
 1. Identify the topic-specific prerequisite concepts and assess the audience; do not blindly apply the same outline to every subject.
-2. Divide the material into 3–8 logically ordered guided paths with explicit, distinct learning outcomes.
+2. Divide the main topic into 3–8 logically ordered guided subtopics/paths (add more when genuinely required), with explicit, distinct learning outcomes. Every subtopic independently respects the selected maximum. Do not impose a total cap on the parent topic.
 3. Order the global card sequence as a dependency ladder: essential terminology and intuition → underlying relationships and assumptions → methods or processes → concrete worked examples → boundary cases and misconceptions → authentic application and synthesis. Adapt this order where the discipline requires it.
 4. Each card teaches or tests ONE identifiable new idea, builds on knowledge already introduced, and prepares the learner for what follows. Make transitions coherent; do not introduce undefined jargon or require future cards to understand an earlier one.
 5. Ensure genuinely broad and useful coverage within the scope. For statistics, for example, introduce data, populations/samples, variables and distributions before depending on their meanings in probability, estimation or hypothesis tests. Choose the correct dependency order for the ACTUAL requested subject.
@@ -45,14 +46,14 @@ FRONT/BACK CARD WRITING STANDARD:
 SCHEMA AND INTEGRITY:
 Return ONLY one valid JSON deck object, without Markdown fences, commentary, placeholders or trailing commas.
 Required top-level keys: id (unique lowercase kebab-case), title, category, description, estimatedMinutes (positive integer), paths (array), cards (array).
-Each path: id (lowercase kebab-case), title, description and cardIds (ordered card ID array).
+Each SUBTOPIC/path: id (lowercase kebab-case), title, description and cardIds (ordered card ID array, at most ${count} and NEVER more than ${MAX_SUBTOPIC_CARDS}).
 Every card: id (lowercase kebab-case), sequence (1-based consecutive integer), type, title, prompt, content (empty string permitted ONLY for question), tags (non-empty array of relevant tags), difficulty (beginner/intermediate/advanced) and pathIds (non-empty array).
 Allowed types: concept, fact, question, code, steps, checklist.
 Additional type fields: question requires question.options (2–12 unique choices), question.answerIndex (zero-based), question.explanation; code requires code.language and code.snippet; steps requires a non-empty steps array; checklist requires a non-empty items array.
 Every card must appear in at least one path; every path.cardIds entry must point to an existing card that lists that path in its pathIds. Sequence numbers and card IDs must be unique. Within each path, cardIds MUST follow ascending global sequence; arrange paths in teaching order. A learner studying the full deck must not encounter prerequisites after dependent concepts.
 
 FINAL SELF-AUDIT BEFORE RETURNING JSON:
-- Between 1 and ${count} cards; no more than ${MAX_GENERATED_CARDS}; correct schema and valid JSON. Fewer high-quality cards are preferable to padding.
+- Every subtopic contains 1–${count} cards (absolute maximum ${MAX_SUBTOPIC_CARDS} per subtopic), while the parent deck has NO total card cap; correct schema and valid JSON. Fewer high-quality cards in any subtopic are preferable to padding.
 - Every front asks or cues something specific and every revealed answer adds knowledge rather than repeating the front.
 - No duplicate titles, prompts, answers, near-duplicate explanations or generic templated application cards.
 - Prerequisites precede applications; each path progresses from fundamentals toward an authentic outcome.
@@ -93,6 +94,7 @@ export function validateGeneratedDeckQuality(deck) {
   }
   for (const path of deck.paths) {
     if (!path || !Array.isArray(path.cardIds)) continue;
+    if (path.cardIds.length > MAX_SUBTOPIC_CARDS) errors.push(`Subtopic ${path.id ?? "unknown"} exceeds ${MAX_SUBTOPIC_CARDS} cards.`);
     let last = 0;
     for (const id of path.cardIds) {
       const current = sequence.get(id);
