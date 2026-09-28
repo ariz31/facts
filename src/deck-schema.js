@@ -1,3 +1,5 @@
+import { validateGeneratedDeckQuality } from "./card-generation-rules.js";
+
 export const BUILT_IN_DECK_IDS = Object.freeze([
   "frontend-programming",
   "backend-programming",
@@ -17,7 +19,9 @@ export const CARD_TYPES = Object.freeze(["concept", "fact", "question", "code", 
 export const DIFFICULTIES = Object.freeze(["beginner", "intermediate", "advanced"]);
 export const IMPORT_LIMITS = Object.freeze({
   maximumDecks: 20,
-  maximumCards: 500,
+  maximumCards: 100,
+  // Temporary compatibility ceiling for existing authored masterclasses; never used for AI imports.
+  maximumLegacyBuiltInCards: 500,
   maximumPaths: 50,
   maximumJsonCharacters: 3_000_000,
   maximumTextCharacters: 12_000,
@@ -63,8 +67,11 @@ export function validateDeck(deck, { rejectBuiltInId = true } = {}) {
   }
 
   if (!Array.isArray(deck.cards) || !deck.cards.length) errors.push("The deck needs at least one card.");
-  if (Array.isArray(deck.cards) && deck.cards.length > IMPORT_LIMITS.maximumCards) {
-    errors.push(`A deck can contain at most ${IMPORT_LIMITS.maximumCards} cards.`);
+  const maximumCards = !rejectBuiltInId && BUILT_IN_IDS.has(deck.id)
+    ? IMPORT_LIMITS.maximumLegacyBuiltInCards
+    : IMPORT_LIMITS.maximumCards;
+  if (Array.isArray(deck.cards) && deck.cards.length > maximumCards) {
+    errors.push(`A deck can contain at most ${maximumCards} cards.`);
   }
   if (!Array.isArray(deck.paths) || !deck.paths.length) errors.push("The deck needs at least one guided path.");
   if (Array.isArray(deck.paths) && deck.paths.length > IMPORT_LIMITS.maximumPaths) {
@@ -151,6 +158,7 @@ export function validateDeck(deck, { rejectBuiltInId = true } = {}) {
     }
   }
 
+  if (rejectBuiltInId) errors.push(...validateGeneratedDeckQuality(deck));
   return unique(errors);
 }
 

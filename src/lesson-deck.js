@@ -45,20 +45,35 @@ export function assembleLessonDeck(manifest, fragments) {
       const type = TYPE_PATTERN[lessonIndex];
       const id = `${manifest.cardPrefix}-${String(sequence).padStart(3, "0")}`;
       const difficulty = lessonIndex < 7 ? "beginner" : lessonIndex < 14 ? "intermediate" : "advanced";
+      const subject = lesson.baseTitle ?? lesson.title;
+      const prompt = type === "question"
+        ? `Which practice most directly addresses ${subject}?`
+        : lesson.compactRole === "definition"
+          ? `What does ${subject} mean?`
+          : lesson.compactRole === "application"
+            ? `How should ${subject} guide a practical decision?`
+            : lesson.principle;
+      // Never reveal the front again as the "answer". Compact concept and application
+      // lessons separate the source's definition from its practice instead of padding
+      // a second lesson with an invented universal "correct application" paragraph.
+      const content = type === "question" ? ""
+        : lesson.compactRole === "definition" ? lesson.principle
+        : (type === "steps" || type === "checklist") ? lesson.principle
+        : lesson.practice;
       const common = {
         id,
         sequence,
         type,
         title: lesson.title,
-        prompt: lesson.principle,
-        content: type === "question" ? "" : `${lesson.principle} ${lesson.practice}`,
+        prompt,
+        content,
         tags: [manifest.id, normalized.id, slug(lesson.title)],
         difficulty,
         pathIds: [normalized.id],
       };
 
       if (type === "question") {
-        common.question = buildQuestion(lesson, lessonStyle);
+        common.question = buildQuestion(lesson, normalized.lessons, lessonIndex);
       } else if (type === "code") {
         common.code = normalized.codeExamples[codeIndex++];
       } else if (type === "steps") {
@@ -114,12 +129,8 @@ function expandTopics(topics, sourceName) {
   return topics.flatMap((topic) => {
     const base = normalizeLesson(topic, sourceName);
     return [
-      base,
-      {
-        title: `${base.title}: application`,
-        principle: `Correct application of ${base.title} requires preserving its semantics under real data, errors, boundary conditions, and runtime constraints.`,
-        practice: `${base.practice} Then verify at least one boundary or failure case with the relevant browser, runtime, test, or diagnostic tooling.`,
-      },
+      { ...base, compactRole: "definition", baseTitle: base.title },
+      { ...base, title: `${base.title}: application`, compactRole: "application", baseTitle: base.title },
     ];
   });
 }
@@ -144,21 +155,22 @@ function normalizeCodeExample(example, sourceName) {
   return normalized;
 }
 
-function buildQuestion(lesson, lessonStyle) {
-  const agentDistractors = [
-    "Ask the model to make a broad change immediately and accept the result if it looks plausible.",
-    "Skip repository evidence and rely on remembered framework behavior.",
-    "Remove validation or review steps so iteration stays as fast as possible.",
-  ];
-  const technicalDistractors = [
-    "Choose a superficially similar technique without checking its semantics, constraints, or compatibility.",
-    "Remove validation and failure handling so only the happy path remains.",
-    "Treat visual appearance or a successful build as sufficient proof that the behavior is correct.",
-  ];
+function buildQuestion(lesson, lessons, lessonIndex) {
+  // Distractors come from DIFFERENT practices in the same subject path. This
+  // avoids reusing three obviously wrong, discipline-agnostic stock answers.
+  const distractors = [...new Set(lessons
+    .filter((candidate) => candidate.practice !== lesson.practice)
+    .map((candidate) => candidate.practice.trim()))];
+  if (distractors.length < 3) {
+    throw new Error(`Lesson ${lesson.title} needs three distinct peer practices for a meaningful knowledge check.`);
+  }
+  const options = Array.from({ length: 3 }, (_, offset) => distractors[(lessonIndex + offset) % distractors.length]);
+  const answerIndex = lessonIndex % 4;
+  options.splice(answerIndex, 0, lesson.practice.trim());
   return {
-    options: [lesson.practice, ...(lessonStyle === "technical" ? technicalDistractors : agentDistractors)],
-    answerIndex: 0,
-    explanation: `The disciplined approach is: ${lesson.practice} The underlying principle is: ${lesson.principle}`,
+    options,
+    answerIndex,
+    explanation: `${lesson.principle} ${lesson.practice}`,
   };
 }
 
