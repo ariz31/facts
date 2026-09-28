@@ -934,7 +934,7 @@
       "sequence": 44,
       "type": "code",
       "title": "Use Given-When-Then for scenarios",
-      "prompt": "In this Given–When–Then example, identify the precondition, action, visible outcome, and duplicate-side-effect invariant.",
+      "prompt": "Which precondition, action, visible outcome, and duplicate-side-effect invariant are specified in this Given–When–Then example?",
       "content": "Scenario structure makes preconditions, actions, and expected outcomes explicit. Write critical acceptance cases as Given context, When action, Then observable result.",
       "tags": [
         "vibe-coding",
