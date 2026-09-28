@@ -7,15 +7,11 @@ import {
   VIBE_CURRICULUM_MIGRATION_VERSION,
 } from "../src/vibe-progress.js";
 
+const ACTUAL_DECKS = await Promise.all(VIBE_CURRICULUM_IDS.map(async (id) => (
+  JSON.parse(await readFile(new URL(`../data/${id}.json`, import.meta.url), "utf8"))
+)));
 function representativeDecks() {
-  return VIBE_CURRICULUM_IDS.map((id, index) => ({
-    id,
-    cards: [
-      { id: ["vc-001", "vc-101", "vc-141", "vc-241", "vc-361"][index] },
-      { id: ["vc-100", "vc-460", "vc-240", "vc-360", "vc-500"][index] },
-    ],
-    paths: [{ id: ["mindset-foundations", "agents-tools-mcp", "frontend-ux", "debugging", "observability"][index] }],
-  }));
+  return ACTUAL_DECKS;
 }
 
 test("migration copies prior statuses to their stable card IDs across all five topics", () => {
@@ -65,10 +61,8 @@ test("an old selected path maps to its revised owning topic without changing the
   assert.equal(state.activePathId, "agents-tools-mcp");
 });
 
-test("real curriculum migrates mastery for every one of the 500 stable historical IDs", async () => {
-  const actualDecks = await Promise.all(VIBE_CURRICULUM_IDS.map(async (id) => (
-    JSON.parse(await readFile(new URL(`../data/${id}.json`, import.meta.url), "utf8"))
-  )));
+test("real curriculum migrates mastery for every one of the 500 stable historical IDs", () => {
+  const actualDecks = representativeDecks();
   const cardIds = actualDecks.flatMap((deck) => deck.cards.map((card) => card.id));
   assert.equal(new Set(cardIds).size, 500);
   const legacy = Object.fromEntries(cardIds.map((id, i) => [id, i % 2 ? "review" : "mastered"]));
@@ -84,4 +78,23 @@ test("real curriculum migrates mastery for every one of the 500 stable historica
     }
   }
   assert.equal(migrateVibeCurriculumState(state, actualDecks), false);
+});
+
+test("incomplete or mixed-version topic data cannot silently finalize migration", () => {
+  for (const mutate of [
+    (decks) => decks[4].cards.pop(),
+    (decks) => { decks[4].cards[0].id = "vc-001"; },
+  ]) {
+    const decks = structuredClone(representativeDecks());
+    mutate(decks);
+    const state = {
+      activeDeckId: "vibe-coding", activePathId: "production-readiness",
+      vibeCurriculumMigrationVersion: 0,
+      progress: { "vibe-coding": { "vc-500": "review" } },
+    };
+    const before = structuredClone(state.progress);
+    assert.equal(migrateVibeCurriculumState(state, decks), false);
+    assert.equal(state.vibeCurriculumMigrationVersion, 0);
+    assert.deepEqual(state.progress, before);
+  }
 });
