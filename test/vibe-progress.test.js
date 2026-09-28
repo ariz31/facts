@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readFile } from "node:fs/promises";
 import {
   migrateVibeCurriculumState,
   VIBE_CURRICULUM_IDS,
@@ -62,4 +63,25 @@ test("an old selected path maps to its revised owning topic without changing the
   assert.equal(migrateVibeCurriculumState(state, representativeDecks()), true);
   assert.equal(state.activeDeckId, "vibe-coding-agentic");
   assert.equal(state.activePathId, "agents-tools-mcp");
+});
+
+test("real curriculum migrates mastery for every one of the 500 stable historical IDs", async () => {
+  const actualDecks = await Promise.all(VIBE_CURRICULUM_IDS.map(async (id) => (
+    JSON.parse(await readFile(new URL(`../data/${id}.json`, import.meta.url), "utf8"))
+  )));
+  const cardIds = actualDecks.flatMap((deck) => deck.cards.map((card) => card.id));
+  assert.equal(new Set(cardIds).size, 500);
+  const legacy = Object.fromEntries(cardIds.map((id, i) => [id, i % 2 ? "review" : "mastered"]));
+  const state = {
+    activeDeckId: "vibe-coding", activePathId: "security-privacy",
+    vibeCurriculumMigrationVersion: 0, progress: { "vibe-coding": legacy },
+  };
+  assert.equal(migrateVibeCurriculumState(state, actualDecks), true);
+  assert.equal(state.activeDeckId, "vibe-coding-application");
+  for (const deck of actualDecks) {
+    for (const card of deck.cards) {
+      assert.equal(state.progress[deck.id][card.id], legacy[card.id], `lost progress on ${card.id}`);
+    }
+  }
+  assert.equal(migrateVibeCurriculumState(state, actualDecks), false);
 });
