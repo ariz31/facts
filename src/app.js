@@ -17,7 +17,7 @@ import {
   importBackgroundFromUrl,
   saveCardBackground,
 } from "./offline-storage.js";
-import { migrateVibeCurriculumState } from "./vibe-progress.js";
+import { migrateVibeCurriculumState, LEGACY_SPLIT_TOPIC_IDS } from "./vibe-progress.js";
 
 const STORAGE_KEY = "facts-learning-state-v2";
 const GESTURE_DISTANCE = 58;
@@ -82,7 +82,7 @@ const state = {
   currentIndex: 0,
   revealedCardIds: new Set(),
   progress: isRecord(persisted.progress) ? persisted.progress : {},
-  vibeCurriculumMigrationVersion: persisted.vibeCurriculumMigrationVersion === 1 ? 1 : 0,
+  vibeCurriculumMigrationVersion: [1, 2].includes(persisted.vibeCurriculumMigrationVersion) ? persisted.vibeCurriculumMigrationVersion : 0,
   cardDesigns: isRecord(persisted.cardDesigns) ? persisted.cardDesigns : {},
   backgroundUrls: {},
   backgroundLoadTokens: {},
@@ -789,12 +789,16 @@ async function initialize() {
 
   try {
     await loadDecks();
+    const oldSplitSelection = LEGACY_SPLIT_TOPIC_IDS.includes(state.activeDeckId)
+      && state.vibeCurriculumMigrationVersion < 2;
     migrateVibeCurriculumState(state, state.decks);
-    if (!state.decks.some((deck) => deck.id === state.activeDeckId)) state.activeDeckId = state.decks[0].id;
+    const parentUnavailable = !state.decks.some((deck) => deck.id === "vibe-coding");
+    // A partial offline fetch must not overwrite a stored historical selection.
+    if (oldSplitSelection && parentUnavailable) state.activeDeckId = "vibe-coding";
+    else if (!state.decks.some((deck) => deck.id === state.activeDeckId)) state.activeDeckId = state.decks[0].id;
     const deck = activeDeck();
-    // Preserve an old selected Vibe path if its new topic is not yet cached.
     const awaitingVibeMigration = state.activeDeckId === "vibe-coding"
-      && state.vibeCurriculumMigrationVersion < 1;
+      && state.vibeCurriculumMigrationVersion < 2 && parentUnavailable;
     if (state.activePathId !== "all" && !deck.paths.some((path) => path.id === state.activePathId)
       && !awaitingVibeMigration) state.activePathId = "all";
     await loadBackgroundForDeck(state.activeDeckId);
