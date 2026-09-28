@@ -1,0 +1,117 @@
+{
+  "id": "requirements-and-scope",
+  "title": "Requirements, Scope & User Experience",
+  "description": "Translate an idea into observable requirements, user journeys, constraints, acceptance criteria, and a small implementable MVP.",
+  "lessons": [
+    {
+      "title": "Problem statements",
+      "principle": "A problem statement identifies who struggles, under which conditions, and what improvement matters.",
+      "practice": "Write a two-sentence problem statement without presupposing a framework or AI solution."
+    },
+    {
+      "title": "Distinguish needs from features",
+      "principle": "'Users lose their place' describes a need; 'add a dashboard' is only one possible solution.",
+      "practice": "Ask AI for three solution options and test them against the original user problem."
+    },
+    {
+      "title": "Stakeholders and users",
+      "principle": "Different actors may have different permissions, goals, abilities, and workflows.",
+      "practice": "Name primary users, administrators, operators, and people affected by the system."
+    },
+    {
+      "title": "Map permission-sensitive journeys",
+      "principle": "A viewer and an editor may see the same screen but must not have identical write capabilities.",
+      "practice": "Draw who can create, read, update, and delete each resource before designing screens."
+    },
+    {
+      "title": "User stories",
+      "principle": "A user story records an actor, goal, and reason; it is not a substitute for a testable contract.",
+      "practice": "Write 'As a learner, I can resume a lesson so that...' then add measurable conditions."
+    },
+    {
+      "title": "Turn stories into scenarios",
+      "principle": "Given-When-Then scenarios describe observable success and failure.",
+      "practice": "Include 'given no saved progress' and 'given a corrupted saved value' for resume behavior."
+    },
+    {
+      "title": "Functional requirements",
+      "principle": "Functional requirements define observable system behaviors and input/output contracts.",
+      "practice": "Specify actions, valid values, permissions, success states, and error states."
+    },
+    {
+      "title": "Reject vague requirements",
+      "principle": "'Fast and intuitive' needs observable thresholds or a user-testing method.",
+      "practice": "Rewrite 'search works' as a query, matching rule, empty-state behavior, and expected response limit."
+    },
+    {
+      "title": "Nonfunctional requirements",
+      "principle": "Performance, accessibility, reliability, privacy, security, and portability describe qualities of the whole solution.",
+      "practice": "Give each important quality a measurable check and deployment context."
+    },
+    {
+      "title": "Set realistic quality targets",
+      "principle": "Targets without user population, devices, or workloads can mislead optimization.",
+      "practice": "State that a task page must work with keyboard-only navigation and under a chosen representative load."
+    },
+    {
+      "title": "Scope and MVP",
+      "principle": "A minimum viable product tests a core value proposition with the smallest coherent feature set.",
+      "practice": "Split features into essential, next, and optional categories."
+    },
+    {
+      "title": "Prevent scope expansion",
+      "principle": "New AI-generated suggestions should not silently override the agreed MVP.",
+      "practice": "Keep a deferred-features list and reject unrelated edits from the initial pull request."
+    },
+    {
+      "title": "User flows and states",
+      "principle": "A screen needs navigation, loading, empty, success, error, and recovery behavior.",
+      "practice": "Sketch the main path and one failed path before coding UI."
+    },
+    {
+      "title": "Design for interruption",
+      "principle": "Network loss, double submission, stale sessions, and partial completion affect real journeys.",
+      "practice": "For save-task, define pending feedback, retry behavior, and whether duplicate tasks are possible."
+    },
+    {
+      "title": "Data and privacy requirements",
+      "principle": "Collecting personal data creates retention, permission, protection, and deletion obligations.",
+      "practice": "List the minimum fields needed and why each must be stored."
+    },
+    {
+      "title": "Limit AI input exposure",
+      "principle": "Prompts and attachments can transfer data outside the application boundary.",
+      "practice": "Use synthetic examples for model requests and avoid pasting real credentials or private user records."
+    },
+    {
+      "title": "Acceptance criteria",
+      "principle": "Acceptance criteria should make it possible for an independent person to decide whether a requirement is met.",
+      "practice": "Write positive, negative, and boundary-case examples for each feature."
+    },
+    {
+      "title": "Define an executable oracle",
+      "principle": "A test oracle is the independently specified expected output for given conditions.",
+      "practice": "For an empty title, require a visible validation message and no new stored task."
+    },
+    {
+      "title": "Specification handoff",
+      "principle": "A useful implementation brief joins scope, assumptions, interface, data, failure modes, and tests.",
+      "practice": "Ask AI to identify ambiguous areas before asking it to code."
+    },
+    {
+      "title": "Freeze a bounded work order",
+      "principle": "A good brief states in-scope files, out-of-scope systems, constraints, and acceptance checks.",
+      "practice": "Review the generated plan against the brief before implementation and update it only for evidence-based changes."
+    }
+  ],
+  "codeExamples": [
+    {
+      "language": "gherkin",
+      "snippet": "Feature: Create task\nScenario: Reject blank title\n  Given the task list is open\n  When I submit an empty title\n  Then I see a required-field message\n  And no task is saved"
+    },
+    {
+      "language": "markdown",
+      "snippet": "MVP: create and complete a task\nOut of scope: sharing, AI summaries, payments\nConstraints: mobile keyboard, offline recovery\nAcceptance: create/reload/complete + empty-input test"
+    }
+  ]
+}
