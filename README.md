@@ -4,7 +4,7 @@ Facts is an offline-first, card-based learning application. Topics are arranged 
 
 ## Included topics
 
-The historical catalog contains **16 authored topics**, including **five curated Vibe Coding modules**; the four unrelated oversized legacy courses remain under their documented compatibility limits. Previously, ten topics received 100 additional repetitive reference cards each at runtime; that automatic padding has now been retired. **Every newly generated/imported topic is limited to 100 cards** by a progressive, quality-first generation contract (see [Card generation rules](docs/CARD_GENERATION_RULES.md)). Existing larger authored curricula are preserved pending a non-destructive split into smaller topics:
+The catalog contains **16 authored topics**, **1,512 cards**, and **101 guided paths**, including **five curated Vibe Coding modules**. The three other oversized legacy curricula remain under explicitly separate compatibility limits. Previously, ten topics received 100 additional repetitive reference cards each at runtime; that automatic padding has now been retired. **Every newly generated/imported topic is limited to 100 cards** by a progressive, quality-first generation contract (see [Card generation rules](docs/CARD_GENERATION_RULES.md)). Existing larger authored curricula are preserved pending a non-destructive split into smaller topics:
 
 1. Frontend Programming
 2. Backend Programming
@@ -29,7 +29,7 @@ The Backend Programming curriculum contains **400 curated cards across 20 deep p
 
 The Docker curriculum contains 116 authored cards across 12 focused paths covering foundations, images and Dockerfiles, runtime behavior, storage, networking, Docker Compose, development workflows, security and supply chain, production operations, troubleshooting, and hands-on Node.js/API + PostgreSQL projects.
 
-Vibe Coding has been fully revised into **five independently selectable 100-card topics**, covering its original 25 focused paths. All 500 stable legacy card IDs are retained, but every front is now an authored retrieval question or task and every revealed answer is distinct. Each path has contextually authored scenarios, practical sequences, checks, and a code/example card paired with the corresponding lesson. The original generic 20-slot card-type template is not used for these curated decks. An explicit one-time progress migration preserves stored card statuses across the five topic IDs.
+Vibe Coding has been fully revised into **five independently selectable 100-card topics**, covering its original 25 focused paths. [See the Vibe Coding curriculum and migration map](docs/VIBE_CODING_CURRICULUM.md). All 500 stable legacy card IDs are retained, but every front is now an authored retrieval question or task and every revealed answer is distinct. Each path has contextually authored scenarios, practical sequences, checks, and a code/example card paired with the corresponding lesson. The original generic 20-slot card-type template is not used for these curated decks. An explicit one-time progress migration preserves stored card statuses across the five topic IDs.
 
 ## Learning journey
 
