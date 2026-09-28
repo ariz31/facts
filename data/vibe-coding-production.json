@@ -1949,10 +1949,10 @@
       ],
       "question": {
         "options": [
-          "A different font in the runbook.",
-          "A longer generated summary.",
+          "More detailed release notes without the original validation evidence.",
+          "A saved CI run without a link to the deployed commit.",
           "A provenance trail linking requirements, code revision, validation, and authorized approval.",
-          "An automatic rule to erase older incident logs."
+          "A file-change inventory without a review or permission record."
         ],
         "answerIndex": 2,
         "explanation": "Organizations may need to explain who changed what and why. Preserve version control, reviews, CI evidence, deployment records, and significant decisions. Auditability means a reviewer can reconstruct who or what changed production, why, with which checks and permissions."
