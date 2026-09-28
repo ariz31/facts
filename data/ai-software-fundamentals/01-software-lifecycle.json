@@ -1,0 +1,117 @@
+{
+  "id": "software-lifecycle",
+  "title": "Software Development & Lifecycle",
+  "description": "Understand what software teams build, the development lifecycle, changing requirements, engineering evidence, and what finished means.",
+  "lessons": [
+    {
+      "title": "Software solves a defined problem",
+      "principle": "A program transforms inputs and state into observable behavior for a user or another system.",
+      "practice": "Describe one user, one problem, and one measurable outcome before choosing technology."
+    },
+    {
+      "title": "Map a real task to software",
+      "principle": "A useful application has actors, inputs, actions, stored information, and outcomes.",
+      "practice": "For a task tracker, identify who adds tasks, what fields are stored, and what counts as completing a task."
+    },
+    {
+      "title": "Software is more than code",
+      "principle": "Documentation, tests, configuration, data, interfaces, and operations are part of a usable software product.",
+      "practice": "List all artifacts needed to run, verify, maintain, and recover a small application."
+    },
+    {
+      "title": "Avoid the one-file illusion",
+      "principle": "An isolated code sample is not a shipped product without deployment, access, data handling, and support.",
+      "practice": "Ask AI for missing delivery artifacts, then check each suggestion against the actual deployment target."
+    },
+    {
+      "title": "The software development lifecycle",
+      "principle": "Discovery, planning, design, implementation, verification, release, and maintenance form an iterative lifecycle.",
+      "practice": "State the deliverable and decision at each phase for a simple feature."
+    },
+    {
+      "title": "Trace a feature end to end",
+      "principle": "Every feature should connect a user need to a design choice, code change, test, and release result.",
+      "practice": "Follow a login feature from requirement through threat review and tests to a deployable release."
+    },
+    {
+      "title": "Roles and ownership",
+      "principle": "Product, design, engineering, testing, security, and operations contribute distinct viewpoints, even on a small team.",
+      "practice": "Assign an explicit owner for requirements, code review, user acceptance, and incident response."
+    },
+    {
+      "title": "AI is an assistant, not an owner",
+      "principle": "A model can help with many roles but cannot independently accept organizational accountability.",
+      "practice": "Name the human who approves scope, sensitive data use, merges, and production changes."
+    },
+    {
+      "title": "Iterative development",
+      "principle": "Short inspect-build-verify loops reduce uncertainty and surface mistakes before they spread.",
+      "practice": "Build the smallest end-to-end usable slice rather than generating the entire application in one pass."
+    },
+    {
+      "title": "A vertical slice example",
+      "principle": "One complete task-creation flow reveals UI, state, storage, and error-handling integration.",
+      "practice": "Implement create-task before adding search, sharing, notifications, or analytics."
+    },
+    {
+      "title": "Source, runtime, and dependencies",
+      "principle": "Source files are inputs to tools and runtimes; libraries and configuration affect the resulting behavior.",
+      "practice": "Identify how your program starts and which installed packages it needs."
+    },
+    {
+      "title": "Read a project before running it",
+      "principle": "A repository can execute scripts that change data or contact external services.",
+      "practice": "Inspect README, package scripts, environment requirements, and dependency sources before running suggested commands."
+    },
+    {
+      "title": "Evidence versus confidence",
+      "principle": "A plausible explanation or generated screen is weaker evidence than tests and observed behavior.",
+      "practice": "Replace claims such as 'it works' with named reproducible checks."
+    },
+    {
+      "title": "Build an evidence ladder",
+      "principle": "Syntax checks, unit tests, integration tests, and user-flow tests answer different questions.",
+      "practice": "Record the command, environment, result, and unresolved risk for each claim of correctness."
+    },
+    {
+      "title": "Engineering tradeoffs",
+      "principle": "Time, scope, reliability, security, accessibility, and maintainability constrain one another.",
+      "practice": "Discuss tradeoffs explicitly and reject improvements that damage non-negotiable requirements."
+    },
+    {
+      "title": "Compare two implementation options",
+      "principle": "A local-only prototype and a hosted multi-user app have different storage, auth, and operating costs.",
+      "practice": "Write a decision note that states constraints, selected approach, alternatives, and expected consequences."
+    },
+    {
+      "title": "Risk and reversibility",
+      "principle": "Changes differ in impact, exposure, cost to reverse, and possible harm.",
+      "practice": "Increase review depth for authentication, financial logic, destructive migrations, and privacy-sensitive paths."
+    },
+    {
+      "title": "Design a rollback before deployment",
+      "principle": "A rollback plan must account for persistent data and external side effects, not only source code.",
+      "practice": "For a schema change, document compatibility, backups, and what can safely be undone."
+    },
+    {
+      "title": "Definition of done",
+      "principle": "A feature is complete when agreed behavior is verified and its operational obligations are satisfied.",
+      "practice": "Include acceptance tests, documentation, accessibility, and release checks in the completion criteria."
+    },
+    {
+      "title": "Use a feature completion gate",
+      "principle": "Merge readiness is different from deployment readiness and from user acceptance.",
+      "practice": "Show the demonstrated outcome, passing checks, reviewed diff, and any known limitations before marking work done."
+    }
+  ],
+  "codeExamples": [
+    {
+      "language": "text",
+      "snippet": "Idea: a personal task list\nInput: task title and due date\nBehavior: create, complete, delete\nStorage: local initially\nEvidence: create/reload/complete tests"
+    },
+    {
+      "language": "bash",
+      "snippet": "# Inspect before running generated work\npwd\nls -la\ncat README.md\ncat package.json"
+    }
+  ]
+}
