@@ -125,7 +125,7 @@ To add another topic, create a matching JSON deck and add its filename to `data/
 
 ## AI card-generation policy
 
-The AI Deck Import dialog offers **25, 50, 75, or 100 cards**, never 200. Its prompt requires topic-specific prerequisites, 3–8 progressive guided paths, atomic learning objectives, a useful question/cue on the front and a **distinct, explanatory answer on the back**, realistic examples and distractors, and a self-audit before emitting JSON.
+The AI Deck Import dialog offers a **maximum of 25, 50, 75, or 100 cards**, never 200; it accepts fewer when that avoids filler. Its prompt requires topic-specific prerequisites, 3–8 progressive guided paths, atomic learning objectives, a useful question/cue on the front and a **distinct, explanatory answer on the back**, realistic examples and distractors, and a self-audit before emitting JSON.
 
 The import validator rejects over 100 generated cards, exact/leading front-answer echoes, duplicate titles/prompts/answers, selected generic filler, duplicate multiple-choice options, and paths in the wrong teaching order. These deterministic checks complement, rather than replace, expert review of correctness, scope, and pedagogy.
 
