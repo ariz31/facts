@@ -1,45 +1,43 @@
-# Vibe Coding curriculum v2: editorial and migration map
+# Vibe Coding — one main topic, 25 guided subtopics
 
-## Overview
+## Correct hierarchy
 
-The former 500-card single Vibe Coding deck was explicitly rewritten into **five separately selectable topics**, **100 cards per topic**, and **25 progressive guided paths**. The authored text no longer passes through the shared assembler's fixed 20-type sequence or generic procedures. Instead, the five normal JSON decks store independently reviewed, topic-specific front questions and distinct explanatory content, with one contextual scenario question, one matched code/document example, one substantive procedure, and one genuine checklist in each path.
+**Main catalog entry:** `vibe-coding` — Vibe Coding: AI-Assisted Software Engineering.
 
-All **500 original `vc-001` through `vc-500` card IDs** remain stable to migrate existing progress; `sequence` restarts at 1 in each of the five new topics. One of the 50 original samples is selected per path and paired with a genuinely corresponding lesson, rather than arbitrarily attached to the sixth or fourteenth card. Inconsistent or contextually unrelated samples are not carried forward. The original data remains retrievable through Git history rather than as obsolete live lesson fragments.
+The parent has **no total card-count limit**. The maximum of **100 cards applies independently to EACH guided subtopic/path**, not to the main topic and not to an internal storage shard. Its currently curated content is 500 cards across 25 subtopics, 20 cards each.
 
-## Recommended learning order
+The previous PR #13 accidentally created five separate top-level Vibe Coding entries. PR #14 corrects that structural interpretation **without deleting or downgrading the 500 improved cards**. The single source manifest is `data/vibe-coding.json` (`subtopic-fragments-v1`), and its five internal JSON shards are stored in `data/vibe-coding/`. Only the parent manifest appears in `data/decks.json` and `BUILT_IN_DECK_IDS`; the shards are not extra topics or five separate size quotas.
 
-| Topic ID / title | Guided paths, in reading order | Legacy card ranges used |
+## Progressive study order
+
+| Internal shard (not a top-level topic) | Guided subtopics in recommended order | Original stable card IDs |
 | --- | --- | --- |
-| `vibe-coding` — 01 Foundations, Product & Context | mindset foundations → product framing → specifications and acceptance → prompting → context engineering | 001–100 |
-| `vibe-coding-agentic` — 02 Architecture, Git & Agentic Workflows | planning/decomposition → architecture → Git and PRs → scoped agents and MCP → AI failure/recovery | 101–140, 261–280, 421–460 |
-| `vibe-coding-application` — 03 Secure Application Engineering | frontend and UX → backend/API → databases/data → security/privacy → testing | 141–240 |
-| `vibe-coding-quality` — 04 Debugging, Review & Product Quality | debugging → code review → dependencies → performance → accessibility/i18n | 241–260, 281–360 |
-| `vibe-coding-production` — 05 Environments, Delivery & Production | development environments → CI/CD/deployment → observability/operations → legacy refactoring → production readiness | 361–420, 461–500 |
+| 01 Foundations & Context | Foundations → Product Framing → Specifications & Acceptance → Prompting → Context Engineering | vc-001–vc-100 |
+| 02 Architecture & Agentic Workflows | Planning → Architecture → Git & PRs → Agents/MCP → AI Failure Recovery | vc-101–vc-140; vc-261–vc-280; vc-421–vc-460 |
+| 03 Application Engineering | Frontend/UX → Backend/API → Databases → Security/Privacy → Testing | vc-141–vc-240 |
+| 04 Engineering Quality | Debugging → Code Review → Dependencies → Performance → Accessibility/i18n | vc-241–vc-260; vc-281–vc-360 |
+| 05 Production Engineering | Environments → CI/CD → Observability → Legacy Refactoring → Production Readiness | vc-361–vc-420; vc-461–vc-500 |
 
-The new sequence deliberately covers defining the problem and accepted behavior before proposing system changes; planning and agent control precede the application build; verification and diagnostic disciplines precede production release.
+Cards are assigned global `sequence: 1..500` in the displayed parent topic; their original `vc-NNN` identifiers stay stable. Every subtopic has its own ordered `cardIds` and each card lists its owning `pathIds`. A later subtopic may contain 100 cards without changing or creating another top-level topic.
 
-## Editorial corrections
+## Content quality preserved
 
-- Every card now has a distinct, authored, discipline-specific retrieval prompt rather than placing the source principle directly on the front or asking the same generic question repeatedly.
-- The revealed content connects the actual principle to the actual practice. No steps/checklist card repeats the exact original front as an explanatory note.
-- Every multiple-choice scenario has four authored choices, explicit rationale, and a deliberately varying correct index. Distractors are tied to the specific failure or decision, not generic “accept it if it looks plausible” boilerplate.
-- Procedures and checklists contain actionable domain steps and acceptance signals; they are not the reused original “inspect/change/test/review” sequence.
-- Code snippets are shown only next to the corresponding lesson: e.g., reduced-motion CSS with reduced-motion behavior, an idempotent payments route with idempotency, an authorization test with authorization, and `git bisect` with regression isolation.
-- The agentic section explicitly covers untrusted MCP results, prompt injection and poisoned tool metadata, least-privilege, sandbox/dry-run, human review, multi-agent integration, context/cost budgets, exfiltration protection, and evidence-based evaluation.
-- Selected code samples are explanatory excerpts, not promises of a complete runnable production system. The illustrative local Compose example includes the database password required to start a developer instance and clearly separates this from real secret management.
+PR #13 revised all 500 fronts to teach or test specific knowledge, retained the relevant original principles and practices, aligned 25 code/document examples with their assigned learning objectives, and replaced repetitive steps/checklists and systematically positioned MCQ answers. Its audit also strengthened HTTP semantics, migration safety, agent evaluation, prompt injection/MCP trust, least privilege, debugging, concurrency, and evidence-based completion. PR #14 **consolidates the existing curated card content**, rather than regenerating it or forcing a global 100-card reduction.
 
-## Existing learner-progress compatibility
+Each lesson fragment is explicitly authored JSON, not the old fixed-position generic lesson generator. Automated content checks are supplemented by subject-matter review; no code-based score alone can guarantee every statement is pedagogically or factually perfect.
 
-The browser previously stored `progress["vibe-coding"][cardId] = "review" | "mastered"`. On the first successful load of **all five** new topics, `src/vibe-progress.js` copies valid statuses to each new owning topic using the **unchanged card IDs**. The original progress record is never removed. Existing destination-specific status wins over copied source status. An old selected guided path also maps to its new topic. A persisted migration version makes this one-time and prevents deleted statuses from being repopulated on subsequent launches.
+## Learner-progress migration (v2)
 
-The first topic retains the original `vibe-coding` ID, so progress on cards 001–100 continues to resolve directly. A partial offline fetch does not mark migration complete. Card-design preferences remain per-topic; the existing original topic's settings are preserved.
+Earlier versions may have retained all statuses under `progress["vibe-coding"]`; PR #13 temporarily recorded cards 101–500 under four extra entries (`vibe-coding-{agentic,application,quality,production}`). The corrected app recombines these statuses into the original `vibe-coding` key on first valid load. For cards 101–500, statuses stored in those temporary split entries are newer and override stale historical parent copies. All original status objects are retained for recovery; no card IDs change.
 
-## Files, checks, and future revisions
+The migration checks that all historical `vc-001..vc-500` IDs exist in the assembled parent before modifying saved progress. This is **a compatibility check, not a parent limit**—future additions beyond 500 remain allowed. An old active split-topic selection is mapped back to `vibe-coding`, preserving its selected guided path when that path exists. A persisted version 2 prevents old archived statuses from being reapplied after a learner clears progress.
 
-- `data/vibe-coding.json` and `data/vibe-coding-{agentic,application,quality,production}.json`: the five explicit editorial sources.
-- `data/decks.json`, `src/deck-schema.js`: updated catalog/registry, with only Frontend, Backend and Docker exempted for pre-existing size.
-- `src/vibe-progress.js`: progress/selected-path migration.
-- `test/vibe-coding-deck.test.js`, `test/vibe-progress.test.js`, `scripts/validate-data.mjs`: completeness, stable IDs, non-repetition, question coverage, code-lesson alignment, schema, and migration gates.
-- `sw.js`: new cache version; all five static deck files follow the usual catalog-based offline pre-cache.
+## Implementation invariants
 
-New edits must keep every topic under 100 cards, preserve old card IDs for unchanged learning objectives, and review the pedagogical dependency order before reordering paths. If an objective changes meaningfully, assign a new ID rather than silently transferring a user's mastery of an unrelated concept.
+- `src/subtopic-deck.js`: combines internal source shards into a **single** deck, rebases local fragment sequences, rejects malformed shards, duplicate IDs or subtopics, and validates the parent.
+- `src/deck-schema.js`: enforces `path.cardIds.length <= 100` for **every** built-in/imported path; it imposes **no aggregate parent card ceiling**.
+- `src/card-generation-rules.js` and `src/runtime-data.js`: generate/import ONE parent deck with up to the selected count in EACH subtopic; avoid filler.
+- `src/lesson-deck-runtime.js` and `sw.js`: retrieve/assemble/precache the one parent manifest and its child shards offline.
+- `test/subtopic-deck.test.js`, `test/vibe-coding-deck.test.js`, `test/vibe-progress.test.js`, `scripts/validate-data.mjs`: protect single-topic catalog structure, stable card/path relationships, content integrity, large parent support and safe migration.
+
+No future change should recreate five separate Vibe Coding entries, impose a deck-level 100-card limit, or truncate existing content to satisfy a subtopic maximum.
