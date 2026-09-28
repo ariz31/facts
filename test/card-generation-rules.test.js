@@ -22,7 +22,8 @@ test("the prompt enforces the 100-card ceiling and progressive, non-echoing lear
   assert.deepEqual(CARD_COUNT_OPTIONS, [25, 50, 75, 100]);
   assert.equal(MAX_GENERATED_CARDS, 100);
   const prompt = makeCardGenerationPrompt("Fundamental statistics", "Beginner", 100);
-  assert.match(prompt, /exactly 100 substantial/);
+  assert.match(prompt, /UP TO 100 substantial/);
+  assert.match(prompt, /Generate fewer when the subject cannot sustain/);
   assert.match(prompt, /dependency ladder/);
   assert.match(prompt, /FRONT\/BACK CARD WRITING STANDARD/);
   assert.match(prompt, /Do not simply recite the answer/);
