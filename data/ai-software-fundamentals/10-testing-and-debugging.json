@@ -1,0 +1,117 @@
+{
+  "id": "testing-and-debugging",
+  "title": "Testing, Debugging & Quality Evidence",
+  "description": "Verify expected outcomes with unit, integration, and user-flow tests; reproduce defects, investigate evidence, and validate AI-generated fixes.",
+  "lessons": [
+    {
+      "title": "Why testing matters",
+      "principle": "Testing compares actual behavior with independently specified expectations and can reveal regressions.",
+      "practice": "Write one normal, one boundary, and one invalid-input test for a function."
+    },
+    {
+      "title": "Test outcomes, not implementation trivia",
+      "principle": "Tests tied to incidental internal names can break during a safe refactor.",
+      "practice": "Assert the public result, error, or user-visible behavior unless an internal invariant is the intended contract."
+    },
+    {
+      "title": "Arrange, act, assert",
+      "principle": "A clear test prepares context, executes one meaningful action, and checks observable results.",
+      "practice": "Use simple named examples to document expected business rules."
+    },
+    {
+      "title": "Make assertions discriminating",
+      "principle": "A test that only checks the code did not crash may pass despite the wrong result.",
+      "practice": "Assert exact returned values, relevant state changes, and expected errors."
+    },
+    {
+      "title": "Unit testing",
+      "principle": "Unit tests isolate a small behavior and should run quickly and deterministically.",
+      "practice": "Test a task-title normalizer without network, DOM, or database access."
+    },
+    {
+      "title": "Use AI for case generation",
+      "principle": "AI can propose edge cases but might accidentally mirror the same mistaken implementation.",
+      "practice": "Derive expected results from requirements first and review every generated test oracle."
+    },
+    {
+      "title": "Integration testing",
+      "principle": "Integration tests exercise contracts between components such as API handlers and persistence.",
+      "practice": "Test that a valid create-task request produces a stored record and a matching response."
+    },
+    {
+      "title": "Exercise failure boundaries",
+      "principle": "Mocking every integration can hide incorrect serialization and transaction behavior.",
+      "practice": "Run at least one representative test using the real boundary or a faithful test dependency."
+    },
+    {
+      "title": "End-to-end and accessibility tests",
+      "principle": "End-to-end tests exercise workflows through the user-facing application and can reveal wiring failures.",
+      "practice": "Test add, reload, complete, and error feedback in the browser."
+    },
+    {
+      "title": "Do not equate snapshots with usability",
+      "principle": "A screenshot cannot verify keyboard interaction, permissions, or actual persistence.",
+      "practice": "Combine user-flow assertions with manual or automated keyboard and accessibility checks."
+    },
+    {
+      "title": "Reproduce before fixing",
+      "principle": "A reproducible defect has clear setup, inputs, observed behavior, and expected behavior.",
+      "practice": "Capture exact errors and the smallest failing case."
+    },
+    {
+      "title": "Create a regression test",
+      "principle": "Fixes without tests may later be undone by unrelated code changes.",
+      "practice": "Add a failing test for the root cause, confirm it fails before the fix, then verify it passes afterward."
+    },
+    {
+      "title": "Debugging with evidence",
+      "principle": "Logs, stack traces, breakpoints, network requests, and stored state answer different diagnostic questions.",
+      "practice": "Start at the earliest point where actual behavior diverges from expected behavior."
+    },
+    {
+      "title": "Do not patch symptoms blindly",
+      "principle": "Suppressing an exception or adding retries may conceal corrupt data or an incorrect contract.",
+      "practice": "Trace the input and call path until the first wrong assumption is identified."
+    },
+    {
+      "title": "Determinism and test isolation",
+      "principle": "A reliable test controls time, randomness, network fixtures, and shared state where relevant.",
+      "practice": "Reset mutated test data and avoid depending on execution order."
+    },
+    {
+      "title": "Investigate flaky failures",
+      "principle": "An intermittently passing check may indicate concurrency, timing, external dependencies, or leaked state.",
+      "practice": "Re-run the failing scenario and inspect isolation rather than simply increasing retry counts."
+    },
+    {
+      "title": "Regression and risk-based coverage",
+      "principle": "Coverage metrics measure executed lines or branches, not whether important behavior was asserted.",
+      "practice": "Prioritize high-impact permissions, data mutations, boundary cases, and compatibility."
+    },
+    {
+      "title": "Test adjacent behavior after AI edits",
+      "principle": "A small-looking generated patch may alter shared helpers used by unrelated features.",
+      "practice": "Run focused tests first, then broader checks that cover consumers of the changed code."
+    },
+    {
+      "title": "Final verification report",
+      "principle": "A review should distinguish tests executed, tests unavailable, checks skipped, and residual risks.",
+      "practice": "Report exact commands, environment, outcomes, and final commit being validated."
+    },
+    {
+      "title": "Avoid unsupported readiness claims",
+      "principle": "A hypothetical test plan is not the same as an executed passing test suite.",
+      "practice": "If checks cannot run, state why, provide a reproducible command, and leave readiness unconfirmed."
+    }
+  ],
+  "codeExamples": [
+    {
+      "language": "javascript",
+      "snippet": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { normalizeTaskTitle } from './task.js';\ntest('trims valid input', () => {\n  assert.equal(normalizeTaskTitle('  Read  '), 'Read');\n});\ntest('rejects blank input', () => {\n  assert.throws(() => normalizeTaskTitle('  '), RangeError);\n});"
+    },
+    {
+      "language": "bash",
+      "snippet": "# Reproduce on the intended final commit\ngit rev-parse HEAD\nnpm run check\n# Record exit status, errors, and any unexecuted checks."
+    }
+  ]
+}
