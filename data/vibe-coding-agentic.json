@@ -1318,13 +1318,13 @@
       "id": "vc-425",
       "sequence": 65,
       "type": "fact",
-      "title": "Treat MCP output as untrusted input",
-      "prompt": "How can a malicious MCP response or tool description redirect a coding agent, and which trust boundary blocks it?",
-      "content": "An MCP response, retrieved page, issue or repository file may contain attacker-authored instructions; tool metadata may also be poisoned. Treat those strings as task data, verify tool-server provenance, restrict privileges, and require approval for high-impact writes rather than executing instructions embedded in external content.",
+      "title": "Use MCP with trust boundaries",
+      "prompt": "What trust checks matter when connecting an MCP tool server and interpreting its responses?",
+      "content": "External tool servers can expose data or perform actions. Review server identity, permissions, data access, and tool descriptions before connecting. Treat retrieved pages, MCP output and tool metadata as untrusted task data, not executable instructions: they may contain prompt-injection or tool-poisoning attempts. Restrict write privileges and require approval for consequential actions.",
       "tags": [
         "vibe-coding-agentic",
         "agents-tools-mcp",
-        "treat-mcp-output-as-untrusted-input"
+        "use-mcp-with-trust-boundaries"
       ],
       "difficulty": "intermediate",
       "pathIds": [
@@ -1356,13 +1356,13 @@
       "id": "vc-427",
       "sequence": 67,
       "type": "steps",
-      "title": "Orchestrate independently scoped subagents",
-      "prompt": "What work can safely run across multiple coding agents, and how should their contributions be integrated?",
-      "content": "Parallel agents are useful for independent research, read-only review, and disjoint modules. Give each a bounded assignment, explicit source and write scope, and an evidence-based output contract; reconcile shared state centrally rather than allowing overlapping writes.",
+      "title": "Use subagents for independent analysis",
+      "prompt": "Which subagent tasks can run in parallel without conflicting, and how should their findings be integrated?",
+      "content": "Parallel perspectives help when tasks do not modify overlapping state. Assign research, review, or isolated modules independently and integrate centrally. Give each worker bounded deliverables, explicit sources, write scope, and evidence requirements; reconcile any shared-file changes through one integration owner and validate the combined result.",
       "tags": [
         "vibe-coding-agentic",
         "agents-tools-mcp",
-        "orchestrate-independently-scoped-subagents"
+        "use-subagents-for-independent-analysis"
       ],
       "difficulty": "intermediate",
       "pathIds": [
@@ -1475,13 +1475,13 @@
       "id": "vc-433",
       "sequence": 73,
       "type": "concept",
-      "title": "Bound agent execution, context and cost",
-      "prompt": "Which limits stop an autonomous coding agent from exhausting context, time or compute in a retry loop?",
-      "content": "Bound retry counts, tool timeouts, input/output tokens, context size, cloud/API spending and write scope. Checkpoint verified findings, retrieve current source when context grows stale, and escalate when a budget expires instead of silently repeating calls.",
+      "title": "Use timeouts and bounded operations",
+      "prompt": "Which execution, context and cost limits keep an autonomous agent from running an unbounded task?",
+      "content": "Agents can launch commands that hang or consume excessive resources. Set reasonable timeouts and avoid unbounded searches or workloads. Also cap retries, input/output tokens, stale context growth and API spending; checkpoint confirmed findings and escalate when a budget expires rather than repeating speculative calls.",
       "tags": [
         "vibe-coding-agentic",
         "agents-tools-mcp",
-        "bound-agent-execution-context-and-cost"
+        "use-timeouts-and-bounded-operations"
       ],
       "difficulty": "intermediate",
       "pathIds": [
@@ -1492,13 +1492,13 @@
       "id": "vc-434",
       "sequence": 74,
       "type": "concept",
-      "title": "Prevent exfiltration through agent context",
-      "prompt": "How can an agent unintentionally disclose credentials or user data through prompts and tool outputs?",
-      "content": "Production secrets and unnecessary personal data can escape through model context, logs, external tool servers and generated responses. Minimize or redact inputs, constrain each recipient's data access, prefer tool-side secret injection and inspect outbound data paths.",
+      "title": "Do not paste secrets into prompts",
+      "prompt": "Where can agent prompt context leak credentials or personal data, and how should that risk be controlled?",
+      "content": "Prompt context may be retained or exposed beyond intended boundaries. Use tool-side secret injection or environment references when supported. Production credentials and unnecessary personal data can also escape via logs, tool responses or connected servers: minimize and redact context, scope tool-server permissions, and inspect outbound data paths.",
       "tags": [
         "vibe-coding-agentic",
         "agents-tools-mcp",
-        "prevent-exfiltration-through-agent-context"
+        "do-not-paste-secrets-into-prompts"
       ],
       "difficulty": "intermediate",
       "pathIds": [
@@ -1543,13 +1543,13 @@
       "id": "vc-437",
       "sequence": 77,
       "type": "concept",
-      "title": "Sandbox and dry-run destructive operations",
-      "prompt": "How should an agent preview a potentially destructive tool call before mutating production state?",
-      "content": "Use a constrained sandbox or dry-run against an explicitly identified target, inspect the predicted changes, and apply least-privilege credentials. Require authorized approval where needed and verify actual persisted effects after the write; a preview alone is not proof of success.",
+      "title": "Use dry runs where available",
+      "prompt": "How can sandboxed dry-run previews reduce the risk of destructive agent actions?",
+      "content": "Previewing mutation reduces surprises. Run plans, diffs, migration previews, or deployment previews before applying consequential changes. Use a constrained sandbox and least-privilege credentials with an explicit target, review the predicted effects, obtain necessary approvals, and verify persisted state after the actual write; a dry run is not proof of success.",
       "tags": [
         "vibe-coding-agentic",
         "agents-tools-mcp",
-        "sandbox-and-dry-run-destructive-operations"
+        "use-dry-runs-where-available"
       ],
       "difficulty": "advanced",
       "pathIds": [
@@ -1914,13 +1914,13 @@
       "id": "vc-457",
       "sequence": 97,
       "type": "concept",
-      "title": "Test prompt-injection resilience",
-      "prompt": "How can a repository comment containing malicious instructions reveal an unsafe agent trust boundary?",
-      "content": "Plant a benign simulated attack instruction in a file, issue or tool response during testing. Verify that the agent interprets it as untrusted evidence, does not disclose secrets or obey unauthorized tool commands, and maintains user-approved write boundaries.",
+      "title": "Security blind spots",
+      "prompt": "How can reviewers uncover AI-generated security blind spots, including prompt-injection vulnerabilities?",
+      "content": "Models may optimize functionality while overlooking abuse paths. Run dedicated threat modeling and security review rather than relying on general code generation. Include benign simulated hostile instructions in a test repository file or tool response; verify the agent treats them as untrusted data and does not obey unauthorized commands or disclose secrets.",
       "tags": [
         "vibe-coding-agentic",
         "failure-modes",
-        "test-prompt-injection-resilience"
+        "security-blind-spots"
       ],
       "difficulty": "advanced",
       "pathIds": [
@@ -1948,13 +1948,13 @@
       "id": "vc-459",
       "sequence": 99,
       "type": "concept",
-      "title": "Evaluate agents with execution evidence",
-      "prompt": "What must an agent evaluation record before its claim of engineering task completion is credible?",
-      "content": "Use representative, repeatable tasks, actual execution against the final revision, negative/security scenarios and independent review. Record correctness, regressions, costs, failure cases and remaining limitations; an eloquent completion summary or green status from an old commit is insufficient.",
+      "title": "False completion claims",
+      "prompt": "What execution evidence distinguishes a genuinely completed AI coding task from a false completion claim?",
+      "content": "Agents can state checks passed without actually running them. Require concrete command results tied to the final head. A repeatable agent evaluation should also cover representative positive, negative, and regression scenarios, record actual failures and cost, and report limitations instead of relying on fluent completion summaries.",
       "tags": [
         "vibe-coding-agentic",
         "failure-modes",
-        "evaluate-agents-with-execution-evidence"
+        "false-completion-claims"
       ],
       "difficulty": "advanced",
       "pathIds": [
