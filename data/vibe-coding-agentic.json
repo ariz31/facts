@@ -1426,7 +1426,7 @@
       "type": "concept",
       "title": "Use database tools safely",
       "prompt": "How should an agent verify the environment and target before running a database tool?",
-      "content": "Direct queries can reveal sensitive data or mutate production. Prefer read-only or staging access and use transactions or backups for risky changes.",
+      "content": "Direct queries can reveal sensitive data or mutate production. Prefer read-only or staging access and use transactions or backups for risky changes. Before any query, confirm the exact connection host, project/database identifier, active role, and intended environment; do not infer the target from an agent's memory.",
       "tags": [
         "vibe-coding-agentic",
         "agents-tools-mcp",
@@ -1933,7 +1933,7 @@
       "type": "concept",
       "title": "Visual mismatch",
       "prompt": "How can a screenshot look convincing while keyboard and interactive behavior remain broken?",
-      "content": "Frontend code can satisfy DOM structure but not intended appearance. Use browser screenshots and interaction verification against references or design specs.",
+      "content": "Frontend code can satisfy DOM structure but not intended appearance. Use browser screenshots and interaction verification against references or design specs. A screenshot captures only one static visual state and cannot establish keyboard traversal, focus management, form submission, loading, error recovery, or other interactions; exercise those in a real browser.",
       "tags": [
         "vibe-coding-agentic",
         "failure-modes",
@@ -1967,7 +1967,7 @@
       "type": "code",
       "title": "Recover by narrowing",
       "prompt": "In the six-step recovery checklist, why are reproduction and a single falsifiable hypothesis required before another patch?",
-      "content": "When an AI-assisted change goes off course, smaller context and smaller changes restore control. Revert unsafe work, preserve useful evidence, restate the failing case, and rebuild in verified increments.",
+      "content": "When an AI-assisted change goes off course, smaller context and smaller changes restore control. Revert unsafe work, preserve useful evidence, restate the failing case, and rebuild in verified increments. A reproduction provides an observable failing baseline; one falsifiable hypothesis makes the next repair testable, allowing evidence to support or reject it instead of launching another speculative patch.",
       "tags": [
         "vibe-coding-agentic",
         "failure-modes",
