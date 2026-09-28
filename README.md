@@ -4,7 +4,7 @@ Facts is an offline-first, card-based learning application. Topics are arranged 
 
 ## Included topics
 
-The authored catalog contains **12 topics**, **1,512 source cards**, and **101 authored guided learning paths**. Ten established topics also receive 100-card reference libraries at runtime, bringing the complete learning experience to **2,512 rendered cards** and **111 guided paths**:
+The historical catalog contains **12 authored topics**, **1,512 source cards**, and **101 guided paths**. Previously, ten topics received 100 additional repetitive reference cards each at runtime; that automatic padding has now been retired. **Every newly generated/imported topic is limited to 100 cards** by a progressive, quality-first generation contract (see [Card generation rules](docs/CARD_GENERATION_RULES.md)). Existing larger authored curricula are preserved pending a non-destructive split into smaller topics:
 
 1. Frontend Programming
 2. Backend Programming
@@ -19,13 +19,13 @@ The authored catalog contains **12 topics**, **1,512 source cards**, and **101 a
 11. Docker
 12. Vibe Coding: AI-Assisted Software Engineering
 
-The Frontend Programming curriculum contains **400 curated cards across 20 deep paths** covering the web platform, semantic HTML, forms, CSS, layout, responsive design, visual systems, JavaScript, DOM and browser APIs, asynchronous data, state and component architecture, TypeScript and tooling, accessibility, routing and complete UX states, frontend security, performance, media and offline capabilities, testing and debugging, framework/rendering architecture, and production delivery. Its 100-card reference library brings the runtime deck to the schema maximum of **500 cards across 21 paths**.
+The Frontend Programming curriculum contains **400 curated cards across 20 deep paths** covering the web platform, semantic HTML, forms, CSS, layout, responsive design, visual systems, JavaScript, DOM and browser APIs, asynchronous data, state and component architecture, TypeScript and tooling, accessibility, routing and complete UX states, frontend security, performance, media and offline capabilities, testing and debugging, framework/rendering architecture, and production delivery. It remains an existing authored masterclass of **400 cards across 20 paths**; no synthetic reference-library cards are appended.
 
-The Backend Programming curriculum contains **400 curated cards across 20 deep paths** covering server/runtime behavior, HTTP semantics, API design, Node.js concurrency, routing and middleware, validation and error contracts, relational data, transactions and migrations, caching and storage, authentication, authorization and multi-tenancy, API security and abuse resistance, configuration/secrets/TLS, durable jobs and queues, streams and file processing, realtime systems and integrations, testing and contracts, observability and reliability, deployment architecture, and backup/recovery/incident operations. Its 100-card reference library brings the runtime deck to the schema maximum of **500 cards across 21 paths**.
+The Backend Programming curriculum contains **400 curated cards across 20 deep paths** covering server/runtime behavior, HTTP semantics, API design, Node.js concurrency, routing and middleware, validation and error contracts, relational data, transactions and migrations, caching and storage, authentication, authorization and multi-tenancy, API security and abuse resistance, configuration/secrets/TLS, durable jobs and queues, streams and file processing, realtime systems and integrations, testing and contracts, observability and reliability, deployment architecture, and backup/recovery/incident operations. It remains an existing authored masterclass of **400 cards across 20 paths**; no synthetic reference-library cards are appended.
 
 The Docker curriculum contains 116 authored cards across 12 focused paths covering foundations, images and Dockerfiles, runtime behavior, storage, networking, Docker Compose, development workflows, security and supply chain, production operations, troubleshooting, and hands-on Node.js/API + PostgreSQL projects.
 
-The Vibe Coding curriculum uses the deck schema's full **500-card** capacity across **25 focused paths**. It progresses from product framing, specifications, prompting, context engineering, planning, and architecture through frontend, backend, databases, security, testing, debugging, Git, review, dependency hygiene, performance, accessibility, reproducible environments, CI/CD, observability, agent/tool workflows, AI failure recovery, legacy refactoring, and production-readiness governance. Its source is split into reviewable lesson fragments and deterministically assembled into a normal Facts deck at runtime and during repository validation.
+The existing Vibe Coding curriculum retains **500 authored-source cards** across **25 focused paths** until it is split into smaller topics. It progresses from product framing, specifications, prompting, context engineering, planning, and architecture through frontend, backend, databases, security, testing, debugging, Git, review, dependency hygiene, performance, accessibility, reproducible environments, CI/CD, observability, agent/tool workflows, AI failure recovery, legacy refactoring, and production-readiness governance. Its source is split into reviewable lesson fragments and deterministically assembled into a normal Facts deck at runtime and during repository validation.
 
 ## Learning journey
 
@@ -107,7 +107,7 @@ Node.js 20 or newer is recommended.
 npm run check
 ```
 
-The check command validates JavaScript syntax, exact parity between the built-in topic registry and the 12-topic deck catalog, sharded lesson-deck assembly, every card and path relationship, runtime topic expansion, and the learning and design unit tests.
+The check command validates JavaScript syntax, catalog parity, sharded lesson-deck assembly, every card and path relationship, retirement of repetitive topic expansion, the 100-card AI import limit, content-quality checks, and the learning and design unit tests.
 
 ## Data model
 
@@ -122,3 +122,11 @@ The check command validates JavaScript syntax, exact parity between the built-in
 Large authored curricula may use the `lesson-fragments-v1` source format. A compact topic manifest lists reviewable lesson-fragment files; `src/lesson-deck.js` deterministically assembles those fragments into the same strict deck schema before validation and learning. A fragment may provide 20 explicit lessons, or a technical curriculum may provide 10 compact topics that expand into paired concept/application lessons. The service worker pre-caches both the manifest and its fragments so the assembled topic remains offline-first.
 
 To add another topic, create a matching JSON deck and add its filename to `data/decks.json`. Built-in topics must also be registered in `src/deck-schema.js`. The service worker reads the same catalog when pre-caching topics for offline use.
+
+## AI card-generation policy
+
+The AI Deck Import dialog offers **25, 50, 75, or 100 cards**, never 200. Its prompt requires topic-specific prerequisites, 3–8 progressive guided paths, atomic learning objectives, a useful question/cue on the front and a **distinct, explanatory answer on the back**, realistic examples and distractors, and a self-audit before emitting JSON.
+
+The import validator rejects over 100 generated cards, exact/leading front-answer echoes, duplicate titles/prompts/answers, selected generic filler, duplicate multiple-choice options, and paths in the wrong teaching order. These deterministic checks complement, rather than replace, expert review of correctness, scope, and pedagogy.
+
+**Legacy compatibility:** The longer existing authored Frontend, Backend, Docker, and Vibe Coding curricula are validated under a separate historical ceiling to avoid silent content deletion/truncation. The 100-card ceiling applies unconditionally to every newly generated/imported topic. Migrating the existing masterclasses into standalone topics of at most 100 cards remains a separate, content-preserving task.
