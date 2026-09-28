@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
-  CARD_COUNT_OPTIONS, MAX_GENERATED_CARDS, makeCardGenerationPrompt, validateGeneratedDeckQuality,
+  CARD_COUNT_OPTIONS, MAX_SUBTOPIC_CARDS, makeCardGenerationPrompt, validateGeneratedDeckQuality,
 } from "../src/card-generation-rules.js";
 
 function deck() {
@@ -18,12 +18,15 @@ function deck() {
   };
 }
 
-test("the prompt enforces the 100-card ceiling and progressive, non-echoing learning", () => {
+test("the prompt enforces 100 per subtopic and unlimited aggregate cards in one parent", () => {
   assert.deepEqual(CARD_COUNT_OPTIONS, [25, 50, 75, 100]);
-  assert.equal(MAX_GENERATED_CARDS, 100);
+  assert.equal(MAX_SUBTOPIC_CARDS, 100);
   const prompt = makeCardGenerationPrompt("Fundamental statistics", "Beginner", 100);
   assert.match(prompt, /UP TO 100 substantial/);
-  assert.match(prompt, /Generate fewer when the subject cannot sustain/);
+  assert.match(prompt, /single parent deck/);
+  assert.match(prompt, /NO fixed ceiling/);
+  assert.match(prompt, /NEVER more than 100/);
+  assert.match(prompt, /Generate fewer in any subtopic/);
   assert.match(prompt, /dependency ladder/);
   assert.match(prompt, /FRONT\/BACK CARD WRITING STANDARD/);
   assert.match(prompt, /Do not simply recite the answer/);
@@ -32,7 +35,7 @@ test("the prompt enforces the 100-card ceiling and progressive, non-echoing lear
   assert.doesNotMatch(prompt, /Create exactly 200 cards/);
 });
 
-test("prompt builder rejects counts outside the generated-topic ceiling", () => {
+test("prompt builder rejects counts outside the selected per-subtopic ceiling", () => {
   assert.throws(() => makeCardGenerationPrompt("Statistics", "Beginner", 101), /between 1 and 100/);
   assert.throws(() => makeCardGenerationPrompt("Statistics", "Beginner", 0), /between 1 and 100/);
   assert.throws(() => makeCardGenerationPrompt("", "Beginner", 25), /Enter a topic/);
@@ -66,4 +69,13 @@ test("the quality gate catches duplicate cards, reversed teaching paths, and rep
   assert.match(errors, /repeats another card prompt/);
   assert.match(errors, /ascending teaching sequence/);
   assert.match(errors, /repeats an answer option/);
+});
+
+test("quality checks the maximum within each subtopic, not over the parent", () => {
+  const sample = deck();
+  sample.paths[0].cardIds = Array.from({ length: 101 }, (_, i) => `card-${i + 1}`);
+  assert.match(validateGeneratedDeckQuality(sample).join(" "), /Subtopic foundations exceeds 100 cards/);
+  sample.paths[0].cardIds = ["intro"];
+  sample.paths.push({ id: "second", cardIds: ["followup"] });
+  assert.doesNotMatch(validateGeneratedDeckQuality(sample).join(" "), /exceeds 100/);
 });
