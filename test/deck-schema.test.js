@@ -145,3 +145,17 @@ test("AI-imported topics reject echoing answers and an out-of-order learning pat
   assert.match(errors, /repeats the front/);
   assert.match(errors, /ascending teaching sequence/);
 });
+
+test("retired topic URLs remain reserved and every imported id is routeable", () => {
+  for (const former of [
+    "vibe-coding-agentic", "vibe-coding-application",
+    "vibe-coding-quality", "vibe-coding-production",
+  ]) {
+    const deck = validDeck();
+    deck.id = former;
+    assert.match(validateDeck(deck).join(" "), /cannot replace a built-in/);
+  }
+  const invalid = validDeck();
+  invalid.id = "a".repeat(181);
+  assert.match(validateDeck(invalid).join(" "), /no longer than 180/);
+});
