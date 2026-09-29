@@ -174,7 +174,7 @@ async function applyHashRoute({ force = false } = {}) {
     state.currentIndex = index;
     state.studying = true;
     state.journeyStep = "ready";
-    await loadBackgroundForDeck(route.deckId);
+    if (!Object.hasOwn(state.backgroundUrls, route.deckId)) await loadBackgroundForDeck(route.deckId);
     if (token !== routeToken) return;
     document.body.classList.add("is-studying");
     elements.journeyView.hidden = true;
@@ -189,7 +189,7 @@ async function applyHashRoute({ force = false } = {}) {
   state.studying = false;
   studyScopeKey = null;
   state.journeyStep = route.view;
-  await loadBackgroundForDeck(route.deckId);
+  if (!Object.hasOwn(state.backgroundUrls, route.deckId)) await loadBackgroundForDeck(route.deckId);
   if (token !== routeToken) return;
   document.body.classList.remove("is-studying");
   elements.contentArea.hidden = true;
