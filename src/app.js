@@ -152,6 +152,7 @@ async function applyHashRoute({ force = false } = {}) {
     elements.journeyView.hidden = false;
     renderJourney();
     persistState();
+    window.dispatchEvent(new Event("facts:routechange"));
     return;
   }
 
@@ -182,10 +183,12 @@ async function applyHashRoute({ force = false } = {}) {
     elements.deckHeader.hidden = true;
     renderFocusCard();
     persistState();
+    window.dispatchEvent(new Event("facts:routechange"));
     elements.studyCard.focus({ preventScroll: true });
     return;
   }
 
+  const wasStudying = state.studying;
   state.studying = false;
   studyScopeKey = null;
   state.journeyStep = route.view;
@@ -196,6 +199,11 @@ async function applyHashRoute({ force = false } = {}) {
   elements.journeyView.hidden = false;
   renderJourney();
   persistState();
+  window.dispatchEvent(new Event("facts:routechange"));
+  if (wasStudying) {
+    (route.view === "ready" ? elements.startLearning : elements.backToTopics)
+      ?.focus({ preventScroll: true });
+  }
 }
 
 function currentCardRoute() {
