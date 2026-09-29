@@ -157,6 +157,7 @@ async function applyHashRoute({ force = false } = {}) {
     if (wasStudying) {
       elements.journeyTitle.setAttribute("tabindex", "-1");
       elements.journeyTitle.focus({ preventScroll: true });
+      window.scrollTo({ top: 0, behavior: "auto" });
     }
     return;
   }
@@ -208,6 +209,7 @@ async function applyHashRoute({ force = false } = {}) {
   if (wasStudying) {
     (route.view === "ready" ? elements.startLearning : elements.backToTopics)
       ?.focus({ preventScroll: true });
+    window.scrollTo({ top: 0, behavior: "auto" });
   }
 }
 
