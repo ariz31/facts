@@ -314,7 +314,7 @@ function renderDeckGrid() {
   elements.deckGrid.innerHTML = state.decks.map((deck) => {
     const progress = calculateProgress(deck.cards, progressForDeck(deck.id));
     return `
-      <button class="deck-choice ${deck.id === state.activeDeckId ? "is-selected" : ""}" type="button" data-deck-id="${escapeHtml(deck.id)}">
+      <a class="deck-choice ${deck.id === state.activeDeckId ? "is-selected" : ""}" href="${escapeHtml(formatRoute({ view: "paths", deckId: deck.id }))}" data-deck-id="${escapeHtml(deck.id)}">
         <span class="deck-choice-category">${escapeHtml(deck.category)}</span>
         <strong>${escapeHtml(deck.title)}</strong>
         <p>${escapeHtml(deck.description)}</p>
@@ -323,13 +323,17 @@ function renderDeckGrid() {
           <span>${deck.paths.length} paths</span>
           <span>${progress.percent}% mastered</span>
         </span>
-      </button>`;
+      </a>`;
   }).join("");
 
-  elements.deckGrid.querySelectorAll("[data-deck-id]").forEach((button) => {
-    button.addEventListener("click", () => {
-      if (!state.decks.some((deck) => deck.id === button.dataset.deckId)) return;
-      void navigateTo({ view: "paths", deckId: button.dataset.deckId });
+  elements.deckGrid.querySelectorAll("[data-deck-id]").forEach((link) => {
+    link.addEventListener("click", (event) => {
+      // Preserve native link affordances: open in new tab, copy link, etc.
+      if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey
+        || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      if (!state.decks.some((deck) => deck.id === link.dataset.deckId)) return;
+      void navigateTo({ view: "paths", deckId: link.dataset.deckId });
     });
   });
 }
@@ -356,16 +360,19 @@ function renderPathGrid() {
   };
 
   elements.pathGrid.innerHTML = [completeChoice, ...deck.paths].map((path, index) => `
-    <button class="path-choice" type="button" data-path-id="${escapeHtml(path.id)}">
+    <a class="path-choice" href="${escapeHtml(formatRoute({ view: "ready", deckId: deck.id, pathId: path.id }))}" data-path-id="${escapeHtml(path.id)}">
       <span>${String(index + 1).padStart(2, "0")}</span>
       <strong>${escapeHtml(path.title)}</strong>
       <p>${escapeHtml(path.description)}</p>
       <small>${Array.isArray(path.cardIds) ? path.cardIds.length : 0} cards</small>
-    </button>`).join("");
+    </a>`).join("");
 
-  elements.pathGrid.querySelectorAll("[data-path-id]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const pathId = button.dataset.pathId;
+  elements.pathGrid.querySelectorAll("[data-path-id]").forEach((link) => {
+    link.addEventListener("click", (event) => {
+      if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey
+        || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      const pathId = link.dataset.pathId;
       if (pathId !== "all" && !deck.paths.some((path) => path.id === pathId)) return;
       void navigateTo({ view: "ready", deckId: deck.id, pathId });
     });
