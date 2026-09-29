@@ -159,3 +159,10 @@ test("retired topic URLs remain reserved and every imported id is routeable", ()
   invalid.id = "a".repeat(181);
   assert.match(validateDeck(invalid).join(" "), /no longer than 180/);
 });
+
+test("the complete-topic path slug all cannot collide with a real subtopic", () => {
+  const deck = validDeck();
+  deck.paths[0].id = "all";
+  deck.cards.forEach((card) => { card.pathIds = ["all"]; });
+  assert.match(validateDeck(deck).join(" "), /all is reserved for complete-topic routing/);
+});
