@@ -27,6 +27,21 @@ The Docker curriculum contains 116 authored cards across 12 focused paths coveri
 
 Vibe Coding appears **once** in the main topic catalog. It contains **25 guided subtopics with 20 cards each**, for a total of 500 (the parent total is not capped). Five files under `data/vibe-coding/` are **internal storage shards, not user-visible topics or independent 100-card quotas**. [See the curriculum and migration map](docs/VIBE_CODING_CURRICULUM.md). Every stable `vc-001`–`vc-500` ID is retained with meaningful retrieval questions, distinct answers and aligned examples. A second non-destructive migration combines any mastery saved under the temporary split-topics layout of PR #13 back into the one main topic.
 
+## Stable navigation and deep links
+
+Every main topic, guided subtopic and individual card has a shareable, reloadable URL,
+with native browser Back/Forward support. Facts uses hash routing so links also work
+in offline PWA installations without extra server rewrites. Examples:
+
+- `#/topic/vibe-coding` — one comprehensive main topic.
+- `#/topic/vibe-coding/subtopic/prompting` — a selected learning path.
+- `#/topic/vibe-coding/subtopic/prompting/card/vc-062` — an exact card.
+
+Old Vibe Coding links from the temporary five-topic structure redirect to the
+canonical main topic. Future topic/subtopic/card renames must add a tested
+compatibility alias to `src/routes.js` rather than silently breaking saved links.
+See [routing and redirect conventions](docs/ROUTING.md).
+
 ## Learning journey
 
 The application uses a focused three-step journey:

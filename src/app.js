@@ -17,7 +17,8 @@ import {
   importBackgroundFromUrl,
   saveCardBackground,
 } from "./offline-storage.js";
-import { migrateVibeCurriculumState, LEGACY_SPLIT_TOPIC_IDS } from "./vibe-progress.js";
+import { migrateVibeCurriculumState } from "./vibe-progress.js";
+import { parseRoute, resolveRoute, formatRoute, LEGACY_TOPIC_ROUTES } from "./routes.js";
 
 const STORAGE_KEY = "facts-learning-state-v2";
 const GESTURE_DISTANCE = 58;
@@ -93,7 +94,135 @@ const state = {
   pointerStart: null,
   offlineReady: false,
   dataWarnings: [],
+  catalogDeckIds: [],
 };
+
+// Route state is authoritative for navigation; localStorage still owns learning
+// progress, study preferences and appearance. All navigation (including Back/
+// Forward and old shared links) flows through this one resolver.
+let routeToken = 0;
+let appliedRouteHash = null;
+let studyScopeKey = null;
+
+async function navigateTo(target, { replace = false } = {}) {
+  const canonical = formatRoute(resolveRoute(target, state.decks));
+  if (window.location.hash !== canonical) {
+    window.history[replace ? "replaceState" : "pushState"](null, "", canonical);
+  }
+  await applyHashRoute({ force: true });
+}
+
+async function applyHashRoute({ force = false } = {}) {
+  if (!state.decks.length) return;
+  const requested = parseRoute(window.location.hash);
+  const linkedDeckId = LEGACY_TOPIC_ROUTES[requested.deckId]?.deckId ?? requested.deckId;
+  // A listed deck can temporarily fail to fetch offline. Preserve its incoming
+  // deep link rather than silently turning a recoverable URL into #/topics.
+  if (requested.view !== "topics" && state.catalogDeckIds.includes(linkedDeckId)
+    && !state.decks.some((deck) => deck.id === linkedDeckId)) {
+    const token = ++routeToken;
+    appliedRouteHash = window.location.hash;
+    state.studying = false;
+    studyScopeKey = null;
+    state.journeyStep = "topics";
+    document.body.classList.remove("is-studying");
+    elements.contentArea.hidden = true;
+    elements.journeyView.hidden = false;
+    renderJourney();
+    if (token === routeToken) elements.journeyDescription.textContent =
+      "This linked topic is temporarily unavailable. Reconnect and reload to restore the exact link.";
+    return;
+  }
+  const route = resolveRoute(requested, state.decks);
+  const canonical = formatRoute(route);
+  if (window.location.hash !== canonical) window.history.replaceState(null, "", canonical);
+  // popstate and hashchange may both fire for one Back/Forward action. Check
+  // duplicates BEFORE incrementing the token or the second event would cancel
+  // the first async render and leave the UI on the previous route.
+  if (!force && canonical === appliedRouteHash) return;
+  const token = ++routeToken;
+  appliedRouteHash = canonical;
+
+  if (route.view === "topics") {
+    const wasStudying = state.studying;
+    state.studying = false;
+    studyScopeKey = null;
+    state.journeyStep = "topics";
+    document.body.classList.remove("is-studying");
+    elements.contentArea.hidden = true;
+    elements.journeyView.hidden = false;
+    renderJourney();
+    persistState();
+    window.dispatchEvent(new Event("facts:routechange"));
+    if (wasStudying) {
+      elements.journeyTitle.setAttribute("tabindex", "-1");
+      elements.journeyTitle.focus({ preventScroll: true });
+      window.scrollTo({ top: 0, behavior: "auto" });
+    }
+    return;
+  }
+
+  state.activeDeckId = route.deckId;
+  state.activePathId = route.view === "paths" ? "all" : route.pathId;
+
+  if (route.view === "study") {
+    const scope = `${route.deckId}|${route.pathId}|${route.mode}`;
+    state.studyMode = route.mode;
+    if (studyScopeKey !== scope || !state.orderedCards.length) {
+      refreshOrder();
+      studyScopeKey = scope;
+    }
+    const index = state.orderedCards.findIndex((card) => card.id === route.cardId);
+    // Never silently display a different card if the route became stale.
+    if (index < 0) {
+      await navigateTo({ view: "ready", deckId: route.deckId, pathId: route.pathId }, { replace: true });
+      return;
+    }
+    state.currentIndex = index;
+    state.journeyStep = "ready";
+    if (!Object.hasOwn(state.backgroundUrls, route.deckId)) await loadBackgroundForDeck(route.deckId);
+    if (token !== routeToken) return;
+    state.studying = true;
+    document.body.classList.add("is-studying");
+    elements.journeyView.hidden = true;
+    elements.contentArea.hidden = false;
+    elements.deckHeader.hidden = true;
+    renderFocusCard();
+    persistState();
+    window.dispatchEvent(new Event("facts:routechange"));
+    elements.studyCard.focus({ preventScroll: true });
+    return;
+  }
+
+  const wasStudying = state.studying;
+  state.studying = false;
+  studyScopeKey = null;
+  state.journeyStep = route.view;
+  if (!Object.hasOwn(state.backgroundUrls, route.deckId)) await loadBackgroundForDeck(route.deckId);
+  if (token !== routeToken) return;
+  document.body.classList.remove("is-studying");
+  elements.contentArea.hidden = true;
+  elements.journeyView.hidden = false;
+  renderJourney();
+  persistState();
+  window.dispatchEvent(new Event("facts:routechange"));
+  if (wasStudying) {
+    (route.view === "ready" ? elements.startLearning : elements.backToTopics)
+      ?.focus({ preventScroll: true });
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }
+}
+
+function currentCardRoute() {
+  const card = activeCard();
+  return card ? {
+    view: "study",
+    deckId: state.activeDeckId,
+    pathId: state.activePathId,
+    cardId: card.id,
+    mode: state.studyMode,
+  } : null;
+}
 
 async function loadDecks() {
   const catalogResponse = await fetch("./data/decks.json");
@@ -102,6 +231,7 @@ async function loadDecks() {
   if (!Array.isArray(catalog.decks) || !catalog.decks.length) throw new Error("The topic catalog is empty or invalid.");
 
   const names = [...new Set(catalog.decks.filter((name) => typeof name === "string" && name))];
+  state.catalogDeckIds = names;
   const results = await Promise.allSettled(names.map(async (deckName) => {
     const response = await fetch(`./data/${encodeURIComponent(deckName)}.json`);
     if (!response.ok) throw new Error(`${deckName}.json returned status ${response.status}`);
@@ -191,7 +321,7 @@ function renderDeckGrid() {
   elements.deckGrid.innerHTML = state.decks.map((deck) => {
     const progress = calculateProgress(deck.cards, progressForDeck(deck.id));
     return `
-      <button class="deck-choice ${deck.id === state.activeDeckId ? "is-selected" : ""}" type="button" data-deck-id="${escapeHtml(deck.id)}">
+      <a class="deck-choice ${deck.id === state.activeDeckId ? "is-selected" : ""}" href="${escapeHtml(formatRoute({ view: "paths", deckId: deck.id }))}" data-deck-id="${escapeHtml(deck.id)}">
         <span class="deck-choice-category">${escapeHtml(deck.category)}</span>
         <strong>${escapeHtml(deck.title)}</strong>
         <p>${escapeHtml(deck.description)}</p>
@@ -200,20 +330,17 @@ function renderDeckGrid() {
           <span>${deck.paths.length} paths</span>
           <span>${progress.percent}% mastered</span>
         </span>
-      </button>`;
+      </a>`;
   }).join("");
 
-  elements.deckGrid.querySelectorAll("[data-deck-id]").forEach((button) => {
-    button.addEventListener("click", async () => {
-      if (!state.decks.some((deck) => deck.id === button.dataset.deckId)) return;
-      state.activeDeckId = button.dataset.deckId;
-      state.activePathId = "all";
-      persistState();
-      syncDeckSelection();
-      await loadBackgroundForDeck(state.activeDeckId);
-      renderPathGrid();
-      renderReadySummary();
-      setJourneyStep("paths");
+  elements.deckGrid.querySelectorAll("[data-deck-id]").forEach((link) => {
+    link.addEventListener("click", (event) => {
+      // Preserve native link affordances: open in new tab, copy link, etc.
+      if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey
+        || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      if (!state.decks.some((deck) => deck.id === link.dataset.deckId)) return;
+      void navigateTo({ view: "paths", deckId: link.dataset.deckId });
     });
   });
 }
@@ -240,21 +367,21 @@ function renderPathGrid() {
   };
 
   elements.pathGrid.innerHTML = [completeChoice, ...deck.paths].map((path, index) => `
-    <button class="path-choice" type="button" data-path-id="${escapeHtml(path.id)}">
+    <a class="path-choice" href="${escapeHtml(formatRoute({ view: "ready", deckId: deck.id, pathId: path.id }))}" data-path-id="${escapeHtml(path.id)}">
       <span>${String(index + 1).padStart(2, "0")}</span>
       <strong>${escapeHtml(path.title)}</strong>
       <p>${escapeHtml(path.description)}</p>
       <small>${Array.isArray(path.cardIds) ? path.cardIds.length : 0} cards</small>
-    </button>`).join("");
+    </a>`).join("");
 
-  elements.pathGrid.querySelectorAll("[data-path-id]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const pathId = button.dataset.pathId;
+  elements.pathGrid.querySelectorAll("[data-path-id]").forEach((link) => {
+    link.addEventListener("click", (event) => {
+      if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey
+        || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      const pathId = link.dataset.pathId;
       if (pathId !== "all" && !deck.paths.some((path) => path.id === pathId)) return;
-      state.activePathId = pathId;
-      persistState();
-      renderReadySummary();
-      setJourneyStep("ready");
+      void navigateTo({ view: "ready", deckId: deck.id, pathId });
     });
   });
 }
@@ -301,33 +428,19 @@ async function startLearning() {
   try {
     refreshOrder();
     if (!state.orderedCards.length) {
-      elements.journeyDescription.textContent = "This path does not contain any available cards.";
+      elements.journeyDescription.textContent = "This subtopic does not contain any available cards.";
       return;
     }
-    await loadBackgroundForDeck(state.activeDeckId);
-    state.studying = true;
-    state.journeyStep = "ready";
-    document.body.classList.add("is-studying");
-    elements.journeyView.hidden = true;
-    elements.contentArea.hidden = false;
-    elements.deckHeader.hidden = true;
-    renderFocusCard();
-    persistState();
-    elements.studyCard.focus({ preventScroll: true });
+    studyScopeKey = `${state.activeDeckId}|${state.activePathId}|${state.studyMode}`;
+    await navigateTo(currentCardRoute());
   } finally {
     elements.startLearning.disabled = false;
   }
 }
 
 function exitLearning() {
-  state.studying = false;
   state.pointerStart = null;
-  document.body.classList.remove("is-studying");
-  elements.contentArea.hidden = true;
-  elements.journeyView.hidden = false;
-  renderJourney();
-  setJourneyStep("ready");
-  window.scrollTo({ top: 0, behavior: "auto" });
+  void navigateTo({ view: "ready", deckId: state.activeDeckId, pathId: state.activePathId });
 }
 
 function renderFocusCard() {
@@ -431,13 +544,13 @@ function goNext() {
   } else {
     state.currentIndex = nextIndex(state.currentIndex, state.orderedCards.length);
   }
-  renderFocusCard();
+  void navigateTo(currentCardRoute());
 }
 
 function goPrevious() {
   if (!state.orderedCards.length) return;
   state.currentIndex = previousIndex(state.currentIndex, state.orderedCards.length);
-  renderFocusCard();
+  void navigateTo(currentCardRoute());
 }
 
 function bindGestures() {
@@ -629,8 +742,8 @@ function bindDesignStudio() {
 }
 
 function bindJourneyEvents() {
-  elements.backToTopics.addEventListener("click", () => setJourneyStep("topics"));
-  elements.backToPaths.addEventListener("click", () => setJourneyStep("paths"));
+  elements.backToTopics.addEventListener("click", () => void navigateTo({ view: "topics" }));
+  elements.backToPaths.addEventListener("click", () => void navigateTo({ view: "paths", deckId: state.activeDeckId }));
   elements.startLearning.addEventListener("click", startLearning);
   document.querySelectorAll("[data-journey-study-mode]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -789,21 +902,13 @@ async function initialize() {
 
   try {
     await loadDecks();
-    const oldSplitSelection = LEGACY_SPLIT_TOPIC_IDS.includes(state.activeDeckId)
-      && state.vibeCurriculumMigrationVersion < 2;
     migrateVibeCurriculumState(state, state.decks);
-    const parentUnavailable = !state.decks.some((deck) => deck.id === "vibe-coding");
-    // A partial offline fetch must not overwrite a stored historical selection.
-    if (oldSplitSelection && parentUnavailable) state.activeDeckId = "vibe-coding";
-    else if (!state.decks.some((deck) => deck.id === state.activeDeckId)) state.activeDeckId = state.decks[0].id;
-    const deck = activeDeck();
-    const awaitingVibeMigration = state.activeDeckId === "vibe-coding"
-      && state.vibeCurriculumMigrationVersion < 2 && parentUnavailable;
-    if (state.activePathId !== "all" && !deck.paths.some((path) => path.id === state.activePathId)
-      && !awaitingVibeMigration) state.activePathId = "all";
-    await loadBackgroundForDeck(state.activeDeckId);
-    renderJourney();
-    persistState();
+    if (!state.decks.some((deck) => deck.id === state.activeDeckId)) state.activeDeckId = state.decks[0].id;
+    // Hash routes win over old localStorage navigation, including direct links
+    // received on a fresh device. Both native Back and edited hashes work.
+    window.addEventListener("popstate", () => void applyHashRoute());
+    window.addEventListener("hashchange", () => void applyHashRoute());
+    await applyHashRoute({ force: true });
   } catch (error) {
     elements.journeyView.innerHTML = `<div class="error-panel"><h1>Unable to load learning data</h1><p>${escapeHtml(error.message)}</p><p>Reconnect once so the app can save all topics for offline study.</p></div>`;
   }

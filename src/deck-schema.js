@@ -1,4 +1,5 @@
 import { validateGeneratedDeckQuality } from "./card-generation-rules.js";
+import { LEGACY_TOPIC_ROUTES } from "./routes.js";
 
 export const BUILT_IN_DECK_IDS = Object.freeze([
   "frontend-programming",
@@ -30,7 +31,9 @@ export const IMPORT_LIMITS = Object.freeze({
 
 const ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const RESERVED_IDS = new Set(["constructor", "prototype", "__proto__"]);
-const BUILT_IN_IDS = new Set(BUILT_IN_DECK_IDS);
+// Former built-in topic IDs remain reserved as URL redirects after a rename.
+// Allowing imports to reuse them would create an ambiguous permanent route.
+const BUILT_IN_IDS = new Set([...BUILT_IN_DECK_IDS, ...Object.keys(LEGACY_TOPIC_ROUTES)]);
 const ALLOWED_CARD_TYPES = new Set(CARD_TYPES);
 const ALLOWED_DIFFICULTIES = new Set(DIFFICULTIES);
 
@@ -79,6 +82,7 @@ export function validateDeck(deck, { rejectBuiltInId = true } = {}) {
       continue;
     }
     validateId(path.id, "Path id", errors);
+    if (path.id === "all") errors.push("Subtopic id all is reserved for complete-topic routing.");
     if (pathIds.has(path.id)) errors.push(`Duplicate path id ${path.id}.`);
     pathIds.add(path.id);
     validateText(path.title, `Path ${path.id ?? "without id"} title`, errors, { required: true, maximum: 180 });
@@ -206,8 +210,8 @@ function validateCode(card, errors) {
 }
 
 function validateId(value, label, errors) {
-  if (typeof value !== "string" || !ID_PATTERN.test(value) || RESERVED_IDS.has(value)) {
-    errors.push(`${label} must use lowercase kebab-case.`);
+  if (typeof value !== "string" || value.length > 180 || !ID_PATTERN.test(value) || RESERVED_IDS.has(value)) {
+    errors.push(`${label} must use lowercase kebab-case and be no longer than 180 characters.`);
   }
 }
 
