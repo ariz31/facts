@@ -1,4 +1,5 @@
 import { expandDeck } from "./topic-expansion.js";
+import { formatRoute, parseRoute } from "./routes.js";
 import { CARD_COUNT_OPTIONS, makeCardGenerationPrompt } from "./card-generation-rules.js";
 import {
   BUILT_IN_DECK_IDS,
@@ -232,6 +233,9 @@ function importDeck() {
     }
     imported[deck.id] = deck;
     writeImportedDecks(imported);
+    // The updated deck may have different card/path membership. Open its
+    // canonical overview after reload instead of returning to a stale card URL.
+    window.history.pushState(null, "", formatRoute({ view: "paths", deckId: deck.id }));
     setImportStatus(`${deck.title} ${existed ? "updated" : "imported"} with ${deck.cards.length} cards across ${deck.paths.length} subtopics. Reloading…`, "success");
     renderImportedDecks();
     setTimeout(() => window.location.reload(), 450);
@@ -260,8 +264,13 @@ function renderImportedDecks() {
     removeButton.addEventListener("click", () => {
       try {
         const { decks: next } = readImportedDecks();
-        delete next[removeButton.dataset.deleteImportedDeck];
+        const removedId = removeButton.dataset.deleteImportedDeck;
+        delete next[removedId];
         writeImportedDecks(next);
+        if (parseRoute(window.location.hash).deckId === removedId) {
+          // Do not leave a bookmark pointing at a deliberately deleted topic.
+          window.history.replaceState(null, "", formatRoute({ view: "topics" }));
+        }
         removeButton.disabled = true;
         setImportStatus("Imported deck removed. Reloading…", "success");
         setTimeout(() => window.location.reload(), 250);
