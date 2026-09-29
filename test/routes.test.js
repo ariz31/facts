@@ -89,3 +89,36 @@ test("every canonical route parses without network requirements or server rewrit
   assert.equal(formatRoute({ view: "study", deckId: "vibe-coding", pathId: "prompting", cardId: "bad/id" }),
     "#/topic/vibe-coding/subtopic/prompting");
 });
+
+test("future subtopic and card renames chain to a stable canonical destination", () => {
+  const aliases = {
+    subtopicAliases: { "vibe-coding": {
+      "older-prompting": "old-prompting",
+      "old-prompting": "prompting",
+    } },
+    cardAliases: { "vibe-coding": {
+      "ancient-card": "previous-card",
+      "previous-card": "vc-062",
+    } },
+  };
+  const legacy = parseRoute("#/topic/vibe-coding/subtopic/older-prompting/card/ancient-card");
+  const resolved = resolveRoute(legacy, all, aliases);
+  assert.deepEqual(resolved, {
+    view: "study", deckId: "vibe-coding", pathId: "prompting",
+    cardId: "vc-062", mode: "sequential",
+  });
+  assert.equal(formatRoute(resolved), "#/topic/vibe-coding/subtopic/prompting/card/vc-062");
+});
+
+test("bad redirect cycles and prototype property names cannot become routes", () => {
+  const badPaths = { subtopicAliases: { "vibe-coding": {
+    "older-a": "older-b",
+    "older-b": "older-a",
+  } } };
+  assert.deepEqual(resolveRoute(parseRoute("#/topic/vibe-coding/subtopic/older-a"), all, badPaths),
+    { view: "paths", deckId: "vibe-coding" });
+  const badCard = { cardAliases: { "vibe-coding": { "former-a": "former-b", "former-b": "former-a" } } };
+  assert.deepEqual(resolveRoute(parseRoute("#/topic/vibe-coding/subtopic/prompting/card/former-a"), all, badCard),
+    { view: "ready", deckId: "vibe-coding", pathId: "prompting" });
+  assert.deepEqual(resolveRoute(parseRoute("#/topic/constructor"), all), { view: "topics" });
+});
