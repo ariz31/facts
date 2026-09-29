@@ -133,6 +133,8 @@
   color: var(--text);
   background: var(--surface);
   text-align: left;
+  text-decoration: none;
+  cursor: pointer;
   box-shadow: var(--shadow-sm);
   transition: transform 180ms ease, border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
 }
