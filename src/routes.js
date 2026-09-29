@@ -51,9 +51,26 @@ export function parseRoute(hash = "") {
   return { view: "study", deckId, pathId, cardId, mode: MODES.has(requestedMode) ? requestedMode : "sequential" };
 }
 
-export function resolveRoute(requested, decks = []) {
+function resolveAlias(aliasTable, id) {
+  if (!validId(id)) return null;
+  let current = id;
+  const seen = new Set();
+  while (Object.hasOwn(aliasTable ?? {}, current)) {
+    if (seen.has(current)) return null; // A mistaken redirect cycle fails safely.
+    seen.add(current);
+    current = aliasTable[current];
+    if (!validId(current)) return null;
+  }
+  return current;
+}
+
+export function resolveRoute(requested, decks = [], {
+  topicAliases = LEGACY_TOPIC_ROUTES,
+  subtopicAliases = SUBTOPIC_ROUTE_ALIASES,
+  cardAliases = CARD_ROUTE_ALIASES,
+} = {}) {
   if (!requested || requested.view === "topics") return { view: "topics" };
-  const legacy = LEGACY_TOPIC_ROUTES[requested.deckId];
+  const legacy = Object.hasOwn(topicAliases, requested.deckId) ? topicAliases[requested.deckId] : null;
   const deckId = legacy?.deckId ?? requested.deckId;
   const deck = Array.isArray(decks) ? decks.find((item) => item?.id === deckId) : null;
   if (!deck || !Array.isArray(deck.paths) || !Array.isArray(deck.cards)) return { view: "topics" };
@@ -68,13 +85,13 @@ export function resolveRoute(requested, decks = []) {
   const requestedPath = requested.pathId;
   const pathId = requestedPath === "all"
     ? "all"
-    : SUBTOPIC_ROUTE_ALIASES[deckId]?.[requestedPath] ?? requestedPath;
+    : resolveAlias(subtopicAliases[deckId], requestedPath);
   const path = pathId === "all" ? null : deck.paths.find((candidate) => candidate?.id === pathId);
   if (pathId !== "all" && !path) return { view: "paths", deckId };
   const ready = { view: "ready", deckId, pathId };
   if (requested.view !== "study") return ready;
 
-  const cardId = CARD_ROUTE_ALIASES[deckId]?.[requested.cardId] ?? requested.cardId;
+  const cardId = resolveAlias(cardAliases[deckId], requested.cardId);
   const card = deck.cards.find((candidate) => candidate?.id === cardId);
   // A URL cannot jump into a card outside the selected subtopic.
   if (!card || (path && !path.cardIds?.includes(card.id))) return ready;
