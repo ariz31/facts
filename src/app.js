@@ -94,6 +94,7 @@ const state = {
   pointerStart: null,
   offlineReady: false,
   dataWarnings: [],
+  catalogDeckIds: [],
 };
 
 // Route state is authoritative for navigation; localStorage still owns learning
@@ -113,11 +114,38 @@ async function navigateTo(target, { replace = false } = {}) {
 
 async function applyHashRoute({ force = false } = {}) {
   if (!state.decks.length) return;
-  const token = ++routeToken;
-  const route = resolveRoute(parseRoute(window.location.hash), state.decks);
+  const requested = parseRoute(window.location.hash);
+  const linkedDeckId = {
+    "vibe-coding-agentic": "vibe-coding",
+    "vibe-coding-application": "vibe-coding",
+    "vibe-coding-quality": "vibe-coding",
+    "vibe-coding-production": "vibe-coding",
+  }[requested.deckId] ?? requested.deckId;
+  // A listed deck can temporarily fail to fetch offline. Preserve its incoming
+  // deep link rather than silently turning a recoverable URL into #/topics.
+  if (requested.view !== "topics" && state.catalogDeckIds.includes(linkedDeckId)
+    && !state.decks.some((deck) => deck.id === linkedDeckId)) {
+    const token = ++routeToken;
+    appliedRouteHash = window.location.hash;
+    state.studying = false;
+    studyScopeKey = null;
+    state.journeyStep = "topics";
+    document.body.classList.remove("is-studying");
+    elements.contentArea.hidden = true;
+    elements.journeyView.hidden = false;
+    renderJourney();
+    if (token === routeToken) elements.journeyDescription.textContent =
+      "This linked topic is temporarily unavailable. Reconnect and reload to restore the exact link.";
+    return;
+  }
+  const route = resolveRoute(requested, state.decks);
   const canonical = formatRoute(route);
   if (window.location.hash !== canonical) window.history.replaceState(null, "", canonical);
+  // popstate and hashchange may both fire for one Back/Forward action. Check
+  // duplicates BEFORE incrementing the token or the second event would cancel
+  // the first async render and leave the UI on the previous route.
   if (!force && canonical === appliedRouteHash) return;
+  const token = ++routeToken;
   appliedRouteHash = canonical;
 
   if (route.view === "topics") {
@@ -193,6 +221,7 @@ async function loadDecks() {
   if (!Array.isArray(catalog.decks) || !catalog.decks.length) throw new Error("The topic catalog is empty or invalid.");
 
   const names = [...new Set(catalog.decks.filter((name) => typeof name === "string" && name))];
+  state.catalogDeckIds = names;
   const results = await Promise.allSettled(names.map(async (deckName) => {
     const response = await fetch(`./data/${encodeURIComponent(deckName)}.json`);
     if (!response.ok) throw new Error(`${deckName}.json returned status ${response.status}`);
