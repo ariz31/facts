@@ -144,6 +144,7 @@ async function applyHashRoute({ force = false } = {}) {
   appliedRouteHash = canonical;
 
   if (route.view === "topics") {
+    const wasStudying = state.studying;
     state.studying = false;
     studyScopeKey = null;
     state.journeyStep = "topics";
@@ -153,6 +154,10 @@ async function applyHashRoute({ force = false } = {}) {
     renderJourney();
     persistState();
     window.dispatchEvent(new Event("facts:routechange"));
+    if (wasStudying) {
+      elements.journeyTitle.setAttribute("tabindex", "-1");
+      elements.journeyTitle.focus({ preventScroll: true });
+    }
     return;
   }
 
@@ -173,10 +178,10 @@ async function applyHashRoute({ force = false } = {}) {
       return;
     }
     state.currentIndex = index;
-    state.studying = true;
     state.journeyStep = "ready";
     if (!Object.hasOwn(state.backgroundUrls, route.deckId)) await loadBackgroundForDeck(route.deckId);
     if (token !== routeToken) return;
+    state.studying = true;
     document.body.classList.add("is-studying");
     elements.journeyView.hidden = true;
     elements.contentArea.hidden = false;
