@@ -18,7 +18,7 @@ import {
   saveCardBackground,
 } from "./offline-storage.js";
 import { migrateVibeCurriculumState } from "./vibe-progress.js";
-import { parseRoute, resolveRoute, formatRoute } from "./routes.js";
+import { parseRoute, resolveRoute, formatRoute, LEGACY_TOPIC_ROUTES } from "./routes.js";
 
 const STORAGE_KEY = "facts-learning-state-v2";
 const GESTURE_DISTANCE = 58;
@@ -115,12 +115,7 @@ async function navigateTo(target, { replace = false } = {}) {
 async function applyHashRoute({ force = false } = {}) {
   if (!state.decks.length) return;
   const requested = parseRoute(window.location.hash);
-  const linkedDeckId = {
-    "vibe-coding-agentic": "vibe-coding",
-    "vibe-coding-application": "vibe-coding",
-    "vibe-coding-quality": "vibe-coding",
-    "vibe-coding-production": "vibe-coding",
-  }[requested.deckId] ?? requested.deckId;
+  const linkedDeckId = LEGACY_TOPIC_ROUTES[requested.deckId]?.deckId ?? requested.deckId;
   // A listed deck can temporarily fail to fetch offline. Preserve its incoming
   // deep link rather than silently turning a recoverable URL into #/topics.
   if (requested.view !== "topics" && state.catalogDeckIds.includes(linkedDeckId)
