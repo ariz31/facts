@@ -203,6 +203,9 @@ function syncPresetButtons(forced) {
 }
 
 function bindRefreshes() {
+  // Topic changes initiated by Back/Forward or a pasted deep link are not
+  // clicks; synchronize the per-topic preset gallery for those routes too.
+  window.addEventListener("facts:routechange", syncPresetButtons);
   document.addEventListener("click", (event) => {
     if (event.target.closest("[data-deck-id], [data-path-id], #back-to-paths, #back-to-topics")) queueMicrotask(syncPresetButtons);
     if (event.target.closest("#open-design-studio, #journey-customize")) queueMicrotask(() => {
