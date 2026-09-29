@@ -122,3 +122,19 @@ test("bad redirect cycles and prototype property names cannot become routes", ()
     { view: "ready", deckId: "vibe-coding", pathId: "prompting" });
   assert.deepEqual(resolveRoute(parseRoute("#/topic/constructor"), all), { view: "topics" });
 });
+
+test("custom imported topics share the exact same route contract as built-ins", () => {
+  const imported = {
+    id: "custom-engineering", paths: [{ id: "statics", cardIds: ["force-001"] }],
+    cards: [{ id: "force-001", pathIds: ["statics"] }],
+  };
+  const hash = "#/topic/custom-engineering/subtopic/statics/card/force-001";
+  const resolved = resolveRoute(parseRoute(hash), [...all, imported]);
+  assert.deepEqual(resolved, { view: "study", deckId: "custom-engineering",
+    pathId: "statics", cardId: "force-001", mode: "sequential" });
+  assert.equal(formatRoute(resolved), hash);
+  // A hash fragment never changes the deployment pathname (also for nested PWA installs).
+  const nested = new URL(hash, "https://example.test/facts/index.html");
+  assert.equal(nested.pathname, "/facts/index.html");
+  assert.equal(nested.hash, hash);
+});
