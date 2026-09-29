@@ -82,6 +82,7 @@ export function validateDeck(deck, { rejectBuiltInId = true } = {}) {
       continue;
     }
     validateId(path.id, "Path id", errors);
+    if (path.id === "all") errors.push("Subtopic id all is reserved for complete-topic routing.");
     if (pathIds.has(path.id)) errors.push(`Duplicate path id ${path.id}.`);
     pathIds.add(path.id);
     validateText(path.title, `Path ${path.id ?? "without id"} title`, errors, { required: true, maximum: 180 });
